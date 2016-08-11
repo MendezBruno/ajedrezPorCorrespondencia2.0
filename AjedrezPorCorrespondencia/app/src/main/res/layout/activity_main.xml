@@ -56,7 +56,8 @@
         android:id="@+id/bt1"
         android:layout_below="@+id/et2"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:onClick="sumar" />
 
     <TextView
         android:layout_width="wrap_content"
