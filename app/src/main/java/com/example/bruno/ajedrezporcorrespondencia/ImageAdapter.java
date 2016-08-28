@@ -65,9 +65,9 @@ public class ImageAdapter extends BaseAdapter {
             y con recorte alrededor del centro
              */
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(90,90));
+            imageView.setLayoutParams(new GridView.LayoutParams(250,250));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(20,20,20,20);
+            imageView.setPadding(0,0,0,0);
         } else {
             imageView = (ImageView) convertView;
         }
