@@ -28,12 +28,18 @@ package com.example.bruno.ajedrezporcorrespondencia;
     }
 
     public static Pieza[] ITEMS = {
-            new Pieza("Peon",R.drawable.pw ),
-            new Pieza("Torre", R.drawable.rw),
-            new Pieza("Caballo", R.drawable.nw),
-            new Pieza("Alfil", R.drawable.bw),
-            new Pieza("Dama", R.drawable.qw),
-            new Pieza("Rey", R.drawable.kw),
+            new Pieza("PeonB",R.drawable.pw ),
+            new Pieza("TorreB", R.drawable.rw),
+            new Pieza("CaballoB", R.drawable.nw),
+            new Pieza("AlfilB", R.drawable.bw),
+            new Pieza("DamaB", R.drawable.qw),
+            new Pieza("ReyB", R.drawable.kw),
+            new Pieza("PeonN",R.drawable.pb ),
+            new Pieza("TorreN", R.drawable.rb),
+            new Pieza("CaballoN", R.drawable.nb),
+            new Pieza("AlfilN", R.drawable.bb),
+            new Pieza("DamaN", R.drawable.qb),
+            new Pieza("ReyN", R.drawable.kb),
 
     };
 
