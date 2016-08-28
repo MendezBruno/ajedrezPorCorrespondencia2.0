@@ -5,14 +5,15 @@ package com.example.bruno.ajedrezporcorrespondencia;
  * Clase que representa la existencia de un Coche
  */
 
-public class Pieza {
-    private String nombre;
-    private int idDrawable;
+    public class Pieza {
+        private String nombre;
+        private int idDrawable;
 
-    public Coche(String nombre, int idDrawable) {
+    public Pieza(String nombre, int idDrawable) {
         this.nombre = nombre;
         this.idDrawable = idDrawable;
-    }
+        }
+
 
     public String getNombre() {
         return nombre;
@@ -26,17 +27,14 @@ public class Pieza {
         return nombre.hashCode();
     }
 
-    public static Coche[] ITEMS = {
-            new Coche("Jaguar F-Type 2015", R.drawable.jaguar_f_type_2015),
-            new Coche("Mercedes AMG-GT", R.drawable.mercedes_benz_amg_gt),
-            new Coche("Mazda MX-5", R.drawable.mazda_mx5_2015),
-            new Coche("Porsche 911 GTS", R.drawable.porsche_911_gts),
-            new Coche("BMW Serie 6", R.drawable.bmw_serie6_cabrio_2015),
-            new Coche("Ford Mondeo", R.drawable.ford_mondeo),
-            new Coche("Volvo V60 Cross Country", R.drawable.volvo_v60_crosscountry),
-            new Coche("Jaguar XE", R.drawable.jaguar_xe),
-            new Coche("VW Golf R Variant", R.drawable.volkswagen_golf_r_variant_2015),
-            new Coche("Seat León ST Cupra", R.drawable.seat_leon_st_cupra),
+    public static Pieza[] ITEMS = {
+            new Pieza("Peon",R.drawable.pw ),
+            new Pieza("Torre", R.drawable.rw),
+            new Pieza("Caballo", R.drawable.nw),
+            new Pieza("Alfil", R.drawable.bw),
+            new Pieza("Dama", R.drawable.qw),
+            new Pieza("Rey", R.drawable.kw),
+
     };
 
     /**
@@ -45,8 +43,8 @@ public class Pieza {
      * @param id identificador
      * @return Coche
      */
-    public static Coche getItem(int id) {
-        for (Coche item : ITEMS) {
+    public static Pieza getItem(int id) {
+        for (Pieza item : ITEMS) {
             if (item.getId() == id) {
                 return item;
             }
