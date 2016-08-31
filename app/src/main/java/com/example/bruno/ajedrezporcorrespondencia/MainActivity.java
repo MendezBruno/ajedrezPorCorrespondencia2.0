@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
         GridView gridview = (GridView) findViewById(R.id.tablero);
         ia = new ImageAdapter(this);
         gridview.setAdapter(ia);
-        Toast toast = Toast.makeText(this,ia.getThumbId(0),Toast.LENGTH_SHORT);
-        toast.show();
+//        Toast toast = Toast.makeText(this,ia.getThumbId(0),Toast.LENGTH_SHORT);
+//        toast.show();
 
         loginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
         loginButton.setCallback(new Callback<TwitterSession>() {

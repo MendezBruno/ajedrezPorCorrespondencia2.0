@@ -19,18 +19,10 @@ public class ImageAdapter extends BaseAdapter {
     private Context mContext;
 
 
-//    // Array de identificadores
+   // Array de identificadores
       private Integer[] mThumbIds =
     {
-    R.drawable.casillero1,R.drawable.casillero2, R.drawable.casillero1, R.drawable.casillero2, R.drawable.casillero1,R.drawable.casillero2,R.drawable.casillero1,R.drawable.casillero2,
-    R.drawable.casillero2,R.drawable.casillero1, R.drawable.casillero2, R.drawable.casillero1, R.drawable.casillero2,R.drawable.casillero1,R.drawable.casillero2,R.drawable.casillero1,
-    R.drawable.casillero1,R.drawable.casillero2, R.drawable.casillero1, R.drawable.casillero2, R.drawable.casillero1,R.drawable.casillero2,R.drawable.casillero1,R.drawable.casillero2,
-    R.drawable.casillero2,R.drawable.casillero1, R.drawable.casillero2, R.drawable.casillero1, R.drawable.casillero2,R.drawable.casillero1,R.drawable.casillero2,R.drawable.casillero1,
-    R.drawable.casillero1,R.drawable.casillero2, R.drawable.casillero1, R.drawable.casillero2, R.drawable.casillero1,R.drawable.casillero2,R.drawable.casillero1,R.drawable.casillero2,
-    R.drawable.casillero2,R.drawable.casillero1, R.drawable.casillero2, R.drawable.casillero1, R.drawable.casillero2,R.drawable.casillero1,R.drawable.casillero2,R.drawable.casillero1,
-    R.drawable.casillero1,R.drawable.casillero2, R.drawable.casillero1, R.drawable.casillero2, R.drawable.casillero1,R.drawable.casillero2,R.drawable.casillero1,R.drawable.casillero2,
-    R.drawable.casillero2,R.drawable.casillero1, R.drawable.casillero2, R.drawable.casillero1, R.drawable.casillero2,R.drawable.casillero1,R.drawable.casillero2,R.drawable.casillero1
-
+  
     };
 
 
@@ -39,7 +31,7 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        return mThumbIds.length;
+        return 64;
     }
 
     public Object getItem(int position) {
@@ -50,11 +42,11 @@ public class ImageAdapter extends BaseAdapter {
         return 0;
     }
 
-    public int getThumbId(int position){
-        return mThumbIds[position];
-
-    }
-
+//    public int getThumbId(int position){
+//        return mThumbIds[position];
+//
+//    }
+    public Boolean colorBlanco= true;
     public View getView(int position, View convertView, ViewGroup parent) {
         //ImageView a retornar
         ImageView imageView;
@@ -72,8 +64,24 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
+
         //Setear la imagen desde el recurso drawable
-        imageView.setImageResource(mThumbIds[position]);
+        if ((position % 8 == 0) && position != 0 ) {
+            if (colorBlanco){
+                colorBlanco=false;
+            }else{
+            colorBlanco=true;
+            }
+        }
+
+        if(colorBlanco){
+                imageView.setImageResource(R.drawable.casillero1);
+            colorBlanco=false;
+        }else
+        {
+            imageView.setImageResource(R.drawable.casillero2);
+            colorBlanco=true;
+        }
         return imageView;
     }
 
