@@ -1,9 +1,11 @@
 package com.example.bruno.ajedrezporcorrespondencia;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -49,17 +51,23 @@ public class ImageAdapter extends BaseAdapter {
     public Boolean colorBlanco= true;
     public View getView(int position, View convertView, ViewGroup parent) {
         //ImageView a retornar
-        ImageView imageView;
+
 
         if (convertView == null) {
             /*
             Crear un nuevo Image View de 90x90
             y con recorte alrededor del centro
              */
-            imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(250,250));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(0,0,0,0);
+//            imageView = new ImageView(mContext);
+//            imageView.setLayoutParams(new GridView.LayoutParams(250,250));
+//            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//            imageView.setPadding(0,0,0,0);
+
+                LayoutInflater inflater = (LayoutInflater) mContext
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                imageView =  inflater.inflate(R.layout.grid_item, parent, false);
+            ImageView casillero = (ImageView) imageView.findViewById(R.id.casillero);
+
         } else {
             imageView = (ImageView) convertView;
         }
