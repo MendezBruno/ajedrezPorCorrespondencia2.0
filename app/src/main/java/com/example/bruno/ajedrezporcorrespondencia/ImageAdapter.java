@@ -59,11 +59,22 @@ public class ImageAdapter extends BaseAdapter {
         ImageView pieza = (ImageView) view.findViewById(R.id.pieza);
 
         //Setear la imagen desde el recurso drawable
+        Integer casillero1;
+        Integer casillero2;
+        if ((position / 8) % 2 == 0) {
+            casillero1 = R.drawable.casillero1;
+            casillero2 = R.drawable.casillero2;
+        }else{
+            casillero1 = R.drawable.casillero2;
+            casillero2 = R.drawable.casillero1;
+        }
         if (position % 2 == 0) {
-            casillero.setImageResource(R.drawable.casillero1);
-            }else{
-            casillero.setImageResource(R.drawable.casillero2);
-            }
+            casillero.setImageResource(casillero1);
+        }else{
+            casillero.setImageResource(casillero2);
+        }
+
+
 
         return view;
     }
