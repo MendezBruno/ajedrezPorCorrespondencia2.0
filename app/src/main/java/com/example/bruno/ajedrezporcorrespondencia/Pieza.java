@@ -47,7 +47,7 @@ package com.example.bruno.ajedrezporcorrespondencia;
      * Obtiene item basado en su identificador
      *
      * @param id identificador
-     * @return Coche
+     * @return Pieza
      */
     public static Pieza getItem(int id) {
         for (Pieza item : ITEMS) {
@@ -57,4 +57,6 @@ package com.example.bruno.ajedrezporcorrespondencia;
         }
         return null;
     }
+
+
 }
