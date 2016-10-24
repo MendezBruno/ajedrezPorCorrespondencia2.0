@@ -3,7 +3,7 @@ package com.example.bruno.ajedrezporcorrespondencia;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class Galeria extends AppCompatActivity {
+public class GaleriaActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

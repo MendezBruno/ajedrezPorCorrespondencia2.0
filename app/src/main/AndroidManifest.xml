@@ -18,7 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Tablero" />
+        <activity android:name=".TableroActivity" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -26,8 +26,8 @@
 
         <uses-permission android:name="android.permission.INTERNET" />
 
-        <activity android:name=".JuegoNuevo" />
-        <activity android:name=".Galeria"></activity>
+        <activity android:name=".JuegoNuevoActivity" />
+        <activity android:name=".GaleriaActivity"></activity>
     </application>
 
 </manifest>

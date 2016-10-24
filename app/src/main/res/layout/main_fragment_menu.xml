@@ -31,6 +31,8 @@
             android:layout_height="48dp"
             android:text="Partidas Empezadas"
             android:id="@+id/buttonGaleria" />
+
+
     </LinearLayout>
 
 </RelativeLayout>
