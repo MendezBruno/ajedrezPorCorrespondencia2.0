@@ -19,8 +19,6 @@ public class MainActivity extends AppCompatActivity implements MainFragmentForMa
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
     }
 
     @Override
