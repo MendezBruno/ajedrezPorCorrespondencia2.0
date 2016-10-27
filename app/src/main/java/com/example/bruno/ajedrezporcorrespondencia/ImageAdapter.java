@@ -1,24 +1,27 @@
 package com.example.bruno.ajedrezporcorrespondencia;
 
 import android.content.Context;
-import android.provider.SyncStateContract;
 import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.Toast;
+
+import com.example.bruno.ajedrezporcorrespondencia.piezas.Pieza;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Created by maria on 13/8/2016.
  */
 public class ImageAdapter extends BaseAdapter {
+
+    static int contador = 0;
     // Contexto de la aplicación
+
+
+
     static final int PEONBLANCO = 0;
     static final int TORREBLANCA = 1;
     static final int CABALLOBLANCO = 2;
@@ -32,10 +35,15 @@ public class ImageAdapter extends BaseAdapter {
     static final int DAMANEGRA = 10;
     static final int REYNEGRO = 11;
 
+
+    private HashMap<Integer,Pieza> posicionesPieza = new HashMap<>();
     private Context mContext;
 
-    public ImageAdapter(Context c) {
+    public ImageAdapter(Context c, ArrayList<Pieza> piezas) {
         mContext = c;
+        for (Pieza pieza : piezas) {
+            posicionesPieza.put(pieza.getCoordenada().getIndex(),pieza);
+        }
     }
 
     public int getCount() {
@@ -53,20 +61,13 @@ public class ImageAdapter extends BaseAdapter {
 
     public View getView(int position, View view, ViewGroup parent) {
         //ImageView a retornar
-
+        System.out.println("ejecuto get view "+contador);
+        contador++;
 
         if (view == null) {
-            /*
-            Crear un nuevo Image View de 90x90
-            y con recorte alrededor del centro
-             */
-//            ImageView  imageView; = new ImageView(mContext);
-//            imageView.setLayoutParams(new GridView.LayoutParams(250,250));
-//            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//            imageView.setPadding(0,0,0,0);
 
-                LayoutInflater inflater = (LayoutInflater) mContext
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) mContext
+            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view =  inflater.inflate(R.layout.grid_item, parent, false);
         }
         ImageView casillero = (ImageView) view.findViewById(R.id.casillero);
@@ -88,10 +89,16 @@ public class ImageAdapter extends BaseAdapter {
             casillero.setImageResource(casillero2);
         }
 
+        Pieza pieza1 = posicionesPieza.get(position);
+        if (pieza1 != null) pieza.setImageResource( pieza1.getLayoutId());
+//        if(position == piezas.get(0).getCoordenada().getIndex()){
+//            pieza.setImageResource( piezas.get(0).getIdDrawable());
+//        }
+
         //seter la imagen de las piezas de los recursos drawble
 
         //BLANCAS
-        if (position == 0 || position == 7 ){
+     /*   if (position == 0 || position == 7 ){
             Pieza item = Pieza.ITEMS[TORREBLANCA];
             pieza.setImageResource(item.getIdDrawable());
         }
@@ -154,7 +161,7 @@ public class ImageAdapter extends BaseAdapter {
                 pieza.setImageResource(reyodamaNegro.getIdDrawable());
                 break;
         }
-
+*/
 
 
 
