@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "670876001669",
+    "firebase_url": "https://androidajedrez-21362.firebaseio.com",
+    "project_id": "androidajedrez-21362",
+    "storage_bucket": "androidajedrez-21362.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670876001669:android:decf9b05326d90a9",
+        "android_client_info": {
+          "package_name": "com.example.bruno.ajedrezporcorrespondencia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "670876001669-e2sahdcml1442ice3jcs89rdhot7fbeu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAezH98f3DGjl60DWSelnc5uySZHNc6cDc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
