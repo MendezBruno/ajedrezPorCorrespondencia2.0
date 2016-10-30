@@ -5,31 +5,39 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity implements MainFragmentForMainActivity.Listener{
+public class MainActivity extends AppCompatActivity {
+
+    Button challegereButton;
+    Button galeriaButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.mainFragment, new MainFragmentForMainActivity(), "Fragment");
-            transaction.commit();
-        }
+        challegereButton = (Button) findViewById(R.id.buttonChalleger);
+        challegereButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,  JuegoNuevoActivity.class);
+
+                startActivity(intent);
+            }
+        });
+        galeriaButton = (Button) findViewById(R.id.buttonGaleria);
+        galeriaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, GaleriaActivity.class);
+
+                startActivity(intent);
+            }
+        });
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
-    @Override
-    public void navigateToGaleria() {
-        Intent intent = new Intent(this, GaleriaActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void navigateToChalleger() {
-        Intent intent = new Intent(this, JuegoNuevoActivity.class);
-        startActivity(intent);
-    }
 }
