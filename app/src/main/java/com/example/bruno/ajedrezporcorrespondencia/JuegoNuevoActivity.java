@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Alfil;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Caballo;
@@ -26,6 +28,7 @@ public class JuegoNuevoActivity extends AppCompatActivity {
     static final Boolean blanca = true;
     static final Boolean negra = false;
     ArrayList<Pieza> piezas = new ArrayList<>();
+    Juego juego;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +39,8 @@ public class JuegoNuevoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(JuegoNuevoActivity.this, TableroActivity.class);
-                piezas = crearTablero();
-                intent.putExtra("piezas",piezas);
+                juego = crearJuego();
+                intent.putExtra("juego", juego);
                 startActivity(intent);
             }
         });
@@ -102,4 +105,24 @@ public class JuegoNuevoActivity extends AppCompatActivity {
 
         return piezas;
     }
+
+    private Juego crearJuego (){
+
+        Juego juego = new Juego();
+        Jugador jugadorBlanco = new Jugador();
+        Jugador jugadorNegro = new Jugador();
+        jugadorBlanco.id = "firebaseIdBlanco";
+        jugadorNegro.id = "firebaseIdNegro";
+        juego.jugadorBlanco = jugadorBlanco;
+        juego.jugadorNegro = jugadorNegro;
+        juego.piezas = crearTablero();
+
+        RadioButton radioButtonBlancas = (RadioButton) findViewById(R.id.radioButtonBlancas);
+        //Si es true empieza el jugador nativo con blancas,
+        // si es false empieza el jugador nativo con negars
+        juego.turno = radioButtonBlancas.isSelected();
+
+        return juego;
+    }
+
 }

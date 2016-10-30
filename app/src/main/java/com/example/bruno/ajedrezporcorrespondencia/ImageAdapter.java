@@ -18,9 +18,6 @@ import java.util.HashMap;
 public class ImageAdapter extends BaseAdapter {
 
     static int contador = 0;
-    // Contexto de la aplicación
-
-
 
     static final int PEONBLANCO = 0;
     static final int TORREBLANCA = 1;
@@ -39,9 +36,9 @@ public class ImageAdapter extends BaseAdapter {
     private HashMap<Integer,Pieza> posicionesPieza = new HashMap<>();
     private Context mContext;
 
-    public ImageAdapter(Context c, ArrayList<Pieza> piezas) {
+    public ImageAdapter(Context c, Juego juego) {
         mContext = c;
-        for (Pieza pieza : piezas) {
+        for (Pieza pieza : juego.piezas) {
             posicionesPieza.put(pieza.getCoordenada().getIndex(),pieza);
         }
     }
@@ -50,8 +47,12 @@ public class ImageAdapter extends BaseAdapter {
         return 64;
     }
 
-    public Object getItem(int position) {
-        return null;
+    public Pieza getItem(int position) {
+
+        Pieza pieza1 = posicionesPieza.get(position);
+        if (pieza1 != null) return pieza1;
+        else return null;
+
     }
 
     public long getItemId(int position) {
@@ -89,83 +90,8 @@ public class ImageAdapter extends BaseAdapter {
             casillero.setImageResource(casillero2);
         }
 
-        Pieza pieza1 = posicionesPieza.get(position);
+        Pieza pieza1 = this.getItem(position);
         if (pieza1 != null) pieza.setImageResource( pieza1.getLayoutId());
-//        if(position == piezas.get(0).getCoordenada().getIndex()){
-//            pieza.setImageResource( piezas.get(0).getIdDrawable());
-//        }
-
-        //seter la imagen de las piezas de los recursos drawble
-
-        //BLANCAS
-     /*   if (position == 0 || position == 7 ){
-            Pieza item = Pieza.ITEMS[TORREBLANCA];
-            pieza.setImageResource(item.getIdDrawable());
-        }
-
-        if (position == 1 || position == 6 ){
-            Pieza item = Pieza.ITEMS[CABALLOBLANCO];
-            pieza.setImageResource(item.getIdDrawable());
-        }
-
-        if (position == 2 || position == 5 ){
-            Pieza item = Pieza.ITEMS[ALFILBLANCO];
-            pieza.setImageResource(item.getIdDrawable());
-        }
-
-        Pieza reyodama;
-        switch (position) {
-            case 3:
-                reyodama = Pieza.ITEMS[REYBLANCO];
-                 pieza.setImageResource(reyodama.getIdDrawable());
-                break;
-            case 4:
-                reyodama = Pieza.ITEMS[DAMABLANCA];
-                pieza.setImageResource(reyodama.getIdDrawable());
-                break;
-            }
-
-        if (position > 7 && position < 16 ){
-            Pieza item = Pieza.ITEMS[PEONBLANCO];
-            pieza.setImageResource(item.getIdDrawable());
-        }
-
-//        NEGRAS
-        if (position > 47 && position < 56 ){
-            Pieza item = Pieza.ITEMS[PEONNEGRO];
-            pieza.setImageResource(item.getIdDrawable());
-        }
-        if (position == 56 || position == 63 ){
-            Pieza item = Pieza.ITEMS[TORRENEGRA];
-            pieza.setImageResource(item.getIdDrawable());
-        }
-
-        if (position == 57 || position == 62 ){
-            Pieza item = Pieza.ITEMS[CABALLONEGRO];
-            pieza.setImageResource(item.getIdDrawable());
-        }
-
-        if (position == 58 || position == 61 ){
-            Pieza item = Pieza.ITEMS[ALFILNEGRO];
-            pieza.setImageResource(item.getIdDrawable());
-        }
-
-        Pieza reyodamaNegro;
-        switch (position) {
-            case 59:
-                reyodamaNegro = Pieza.ITEMS[REYNEGRO];
-                pieza.setImageResource(reyodamaNegro.getIdDrawable());
-                break;
-            case 60:
-                reyodamaNegro = Pieza.ITEMS[DAMANEGRA];
-                pieza.setImageResource(reyodamaNegro.getIdDrawable());
-                break;
-        }
-*/
-
-
-
-
         return view;
     }
 
