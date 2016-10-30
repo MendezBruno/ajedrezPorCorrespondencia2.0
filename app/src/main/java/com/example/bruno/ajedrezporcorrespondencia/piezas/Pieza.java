@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import com.example.bruno.ajedrezporcorrespondencia.Coordenada;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by bruno on 28/8/2016.
@@ -12,7 +13,7 @@ import java.io.Serializable;
  */
 
     public abstract class Pieza  implements Serializable{
-        protected Boolean esBlanca;
+        public Boolean esBlanca;
         protected Coordenada coordenada = Coordenada.A8;
 
     public Pieza(Coordenada coordenada, Boolean esBlanca) {
@@ -20,6 +21,8 @@ import java.io.Serializable;
         this.esBlanca = esBlanca;
 
         }
+
+    public abstract ArrayList<Coordenada> calcularMovimientoCoordenadas(ArrayList<Pieza> piezasJuego);
 
     public Coordenada getCoordenada() {
         return coordenada;
