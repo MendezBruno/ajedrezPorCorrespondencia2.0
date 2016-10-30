@@ -7,10 +7,34 @@
     android:fitsSystemWindows="true"
     tools:context="com.example.bruno.ajedrezporcorrespondencia.MainActivity">
 
-    <FrameLayout android:id="@+id/mainFragment"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal">
 
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:id="@+id/imageUser"
+            android:layout_gravity="center_horizontal|top"
+            android:contentDescription="@string/descripcion" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:text="Juego Nuevo"
+            android:id="@+id/buttonChalleger"
+            android:height="100dp" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:text="Partidas Empezadas"
+            android:id="@+id/buttonGaleria" />
+
+
+    </LinearLayout>
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
