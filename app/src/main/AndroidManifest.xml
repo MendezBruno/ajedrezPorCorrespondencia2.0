@@ -24,10 +24,11 @@
             android:name="io.fabric.ApiKey"
             android:value="d808bf2d3ff7eeefbc52bca6fc3f42a2ee2ca71b" />
 
-        <uses-permission android:name="android.permission.INTERNET" />
+
 
         <activity android:name=".JuegoNuevoActivity" />
         <activity android:name=".GaleriaActivity"></activity>
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
