@@ -15,11 +15,21 @@ public enum Coordenada {
     A2(48),B2(49),C2(50),D2(51),E2(52),F2(53),G2(54),H2(55),
     A1(56),B1(57),C1(58),D1(59),E1(60),F1(61),G1(62),H1(63);
 
-
     private final int index;
 
     Coordenada(int index){
     this.index = index;
+    }
+
+    public static Coordenada getCoordenada(int indexTablero) {
+        if (indexTablero >= values().length || indexTablero < 0) {
+            return A1;
+        }
+        return values()[indexTablero];
+    }
+
+    private Coordenada getCoordenada(String fila, String columna) {
+        return valueOf(columna+fila);
     }
 
     int getIndex(){
@@ -34,5 +44,29 @@ public enum Coordenada {
     @NonNull
     String getColumna() {
         return this.name().substring(0,1);
+    }
+
+    public Coordenada arriba(int lugares) throws CoordenadaAlgebraException {
+        int fila = Integer.parseInt(getFila());
+        if (fila + lugares > 8) throw new CoordenadaAlgebraException();
+        return getCoordenada(( fila + lugares )+"",getColumna());
+    }
+
+    public Coordenada abajo(int lugares) throws CoordenadaAlgebraException {
+        int fila = Integer.parseInt(getFila());
+        if (fila - lugares < 1) throw new CoordenadaAlgebraException();
+        return getCoordenada(( fila - lugares )+"",getColumna());
+    }
+
+    public Coordenada izquierda(int lugares) throws CoordenadaAlgebraException {
+        char c = getColumna().charAt(0);
+        if (c - lugares < 'A') throw new CoordenadaAlgebraException();
+        return getCoordenada(getFila(),Character.toString((char)(c-lugares)));
+    }
+
+    public Coordenada derecha(int lugares) throws CoordenadaAlgebraException {
+        char c = getColumna().charAt(0);
+        if (c + lugares > 'H') throw new CoordenadaAlgebraException();
+        return getCoordenada(getFila(),Character.toString((char)(c+lugares)));
     }
 }
