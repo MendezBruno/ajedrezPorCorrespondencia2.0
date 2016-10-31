@@ -2,6 +2,7 @@ package com.example.bruno.ajedrezporcorrespondencia;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -15,13 +16,14 @@ import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EligiendoPieza;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EnEspera;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.JuegoState;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Created by maria on 13/8/2016.
  */
-public class ImageAdapter extends BaseAdapter {
+public class ImageAdapter extends BaseAdapter implements Serializable{
 
     static int contador = 0;
 
@@ -45,7 +47,7 @@ public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     private JuegoState estado;
 
-    public ImageAdapter(Context c, final Juego juego, final GridView gridview) {
+    public ImageAdapter(Context c, final Juego juego, final GridView gridview, final Bundle savedInstanceState) {
         mContext = c;
         for (Pieza pieza : juego.piezas) {
             posicionesPieza.put(pieza.getCoordenada().getIndex(),pieza);
@@ -64,7 +66,7 @@ public class ImageAdapter extends BaseAdapter {
                             //obtener coordenadas de movimiento de pieza
                             for (Coordenada coordDestino : miPieza.calcularMovimientoCoordenadas(juego.piezas)) {
                                 ImageView seleccion = (ImageView) posicionesCeldas.get(coordDestino.getIndex())
-                                        .findViewById(R.id.seleccion);
+                                  .findViewById(R.id.seleccion);
                                 seleccion.setImageResource(R.drawable.select_blue);
                             }
                             //pintar en la grilla las coordenadas obtenidas
@@ -74,9 +76,11 @@ public class ImageAdapter extends BaseAdapter {
                     ImageView seleccion = (ImageView) posicionesCeldas.get(coordenada.getIndex())
                             .findViewById(R.id.seleccion);
                     seleccion.setImageResource(R.drawable.select_light);
+                    savedInstanceState.putInt("indiceSeleccionado",coordenada.getIndex());
                 }
             }
         });
+
     }
 
     public int getCount() {
@@ -135,6 +139,11 @@ public class ImageAdapter extends BaseAdapter {
 
     public void setEstado(JuegoState estado) {
         this.estado = estado;
+
+    }
+
+    public JuegoState getEstado() {
+        return this.estado;
     }
 }
 
