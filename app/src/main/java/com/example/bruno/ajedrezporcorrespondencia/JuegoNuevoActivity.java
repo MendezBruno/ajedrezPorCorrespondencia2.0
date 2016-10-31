@@ -120,7 +120,7 @@ public class JuegoNuevoActivity extends AppCompatActivity {
         RadioButton radioButtonBlancas = (RadioButton) findViewById(R.id.radioButtonBlancas);
         //Si es true empieza el jugador nativo con blancas,
         // si es false empieza el jugador nativo con negars
-        juego.turno = radioButtonBlancas.isSelected();
+        juego.turno = radioButtonBlancas.isChecked();
 
         return juego;
     }

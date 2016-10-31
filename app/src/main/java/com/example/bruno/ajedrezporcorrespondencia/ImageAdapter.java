@@ -1,13 +1,19 @@
 package com.example.bruno.ajedrezporcorrespondencia;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Pieza;
+import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EligiendoPieza;
+import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EnEspera;
+import com.example.bruno.ajedrezporcorrespondencia.stateJuego.JuegoState;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,13 +40,43 @@ public class ImageAdapter extends BaseAdapter {
 
 
     private HashMap<Integer,Pieza> posicionesPieza = new HashMap<>();
+    private HashMap<Integer,View> posicionesCeldas = new HashMap<>();
+    private ArrayList<Pieza> misPiezas = new ArrayList<>();
     private Context mContext;
+    private JuegoState estado;
 
-    public ImageAdapter(Context c, Juego juego) {
+    public ImageAdapter(Context c, final Juego juego, final GridView gridview) {
         mContext = c;
         for (Pieza pieza : juego.piezas) {
             posicionesPieza.put(pieza.getCoordenada().getIndex(),pieza);
+            //Todo Verificar que el color coincida con el del jugador
+            if (pieza.esBlanca)
+                misPiezas.add(pieza);
         }
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                if (estado instanceof EnEspera) return;
+                if (estado instanceof EligiendoPieza) {
+                    //Hay bardo
+                    Coordenada coordenada = Coordenada.getCoordenada(position);
+                    for (Pieza miPieza : misPiezas) {
+                        if (miPieza.getCoordenada() == coordenada) {
+                            //obtener coordenadas de movimiento de pieza
+                            for (Coordenada coordDestino : miPieza.calcularMovimientoCoordenadas(juego.piezas)) {
+                                ImageView seleccion = (ImageView) posicionesCeldas.get(coordDestino.getIndex())
+                                        .findViewById(R.id.seleccion);
+                                seleccion.setImageResource(R.drawable.select_blue);
+                            }
+                            //pintar en la grilla las coordenadas obtenidas
+                            //pintar la coordenada que se hizo clic (con otro color para que sea mas pro)
+                        }
+                    }
+                    ImageView seleccion = (ImageView) posicionesCeldas.get(coordenada.getIndex())
+                            .findViewById(R.id.seleccion);
+                    seleccion.setImageResource(R.drawable.select_light);
+                }
+            }
+        });
     }
 
     public int getCount() {
@@ -70,6 +106,7 @@ public class ImageAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) mContext
             .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view =  inflater.inflate(R.layout.grid_item, parent, false);
+            posicionesCeldas.put(position,view);
         }
         ImageView casillero = (ImageView) view.findViewById(R.id.casillero);
         ImageView pieza = (ImageView) view.findViewById(R.id.pieza);
@@ -92,8 +129,12 @@ public class ImageAdapter extends BaseAdapter {
 
         Pieza pieza1 = this.getItem(position);
         if (pieza1 != null) pieza.setImageResource( pieza1.getLayoutId());
+
         return view;
     }
 
+    public void setEstado(JuegoState estado) {
+        this.estado = estado;
+    }
 }
 

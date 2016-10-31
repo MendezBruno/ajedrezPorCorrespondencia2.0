@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.example.bruno.ajedrezporcorrespondencia.piezas.AdapterController;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Pieza;
+import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EligiendoPieza;
+import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EnEspera;
 
 
 import java.util.ArrayList;
@@ -24,26 +26,23 @@ public class TableroActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.tablero_activity);
+        //new ImageAdapter(this);
+        ImageAdapter ia;
+//        Toast toast = Toast.makeText(this, "llego hasta aca", Toast.LENGTH_SHORT);
+//        toast.show();
+        GridView gridview = (GridView) findViewById(R.id.tablero);
+        Juego juego = (Juego)getIntent().getExtras().getSerializable("juego");
+        //ArrayList<Pieza> piezas =
+        ia = new ImageAdapter(this, juego, gridview);
+        gridview.setAdapter(ia);
 
-            setContentView(R.layout.tablero_activity);
-            //new ImageAdapter(this);
-            ImageAdapter ia;
-    //        Toast toast = Toast.makeText(this, "llego hasta aca", Toast.LENGTH_SHORT);
-    //        toast.show();
-            GridView gridview = (GridView) findViewById(R.id.tablero);
-            Juego juego = (Juego)getIntent().getExtras().getSerializable("juego");
-            //ArrayList<Pieza> piezas =
-            ia = new ImageAdapter(this, juego);
-            gridview.setAdapter(ia);
-            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                  // unAlgo =() parent.getItemAtPosition(position);
-                }
-            });
-
+        if (juego.turno){
+            ia.setEstado(new EligiendoPieza());
+        } else{
+            ia.setEstado(new EnEspera());
         }
-
-
+    }
 }
 
 
