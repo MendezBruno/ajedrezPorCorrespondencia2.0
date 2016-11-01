@@ -14,4 +14,8 @@ public class Juego implements Serializable{
    public Jugador jugadorNegro;
    public ArrayList<Pieza> piezas = new ArrayList<>();
    public Boolean turno;
+
+    public boolean esMiPieza(Pieza pieza) {
+        return true;
+    }
 }

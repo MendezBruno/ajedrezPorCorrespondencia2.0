@@ -1,11 +1,13 @@
 package com.example.bruno.ajedrezporcorrespondencia;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.bruno.ajedrezporcorrespondencia.piezas.AdapterController;
@@ -17,15 +19,22 @@ import com.example.bruno.ajedrezporcorrespondencia.stateJuego.JuegoState;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
-public class TableroActivity extends AppCompatActivity {
+public class TableroActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private EditText et1, et2;
     private TextView tv3;
     private AdapterController adapterController;
     static final String juegoState = "juegoState";
     static final String casillaSeleccionada = "indiceSeleccionado";
+
+    private HashMap<Integer,Pieza> posicionesPieza = new HashMap<>();
+    private HashMap<Integer,View> posicionesCeldas = new HashMap<>();
+    private ArrayList<Pieza> misPiezas = new ArrayList<>();
+    private JuegoState estado;
+    private Juego juego = new Juego();
 
 
     @Override
@@ -38,30 +47,77 @@ public class TableroActivity extends AppCompatActivity {
 //        Toast toast = Toast.makeText(this, "llego hasta aca", Toast.LENGTH_SHORT);
 //        toast.show();
             GridView gridview = (GridView) findViewById(R.id.tablero);
-            Juego juego = (Juego)getIntent().getExtras().getSerializable("juego");
+            juego = (Juego)getIntent().getExtras().getSerializable("juego");
             //ArrayList<Pieza> piezas =
-            ia = new ImageAdapter(this, juego, gridview, savedInstanceState);
+            ia = new ImageAdapter(this, juego);
             gridview.setAdapter(ia);
-
-
-
-
-
-        if (savedInstanceState != null) {
-            // Restore value of members from saved state
-            JuegoState estado = (JuegoState) savedInstanceState.getSerializable(juegoState);
-            ia.setEstado(estado);
-        } else {
-            if (juego.turno){
-                ia.setEstado(new EligiendoPieza());
-            } else{
-                ia.setEstado(new EnEspera());
-            }
-            savedInstanceState.putSerializable(juegoState,(Serializable) ia.getEstado());
+            gridview.setOnItemClickListener(this);
+        for (Pieza pieza : juego.piezas) {
+            posicionesPieza.put(pieza.getCoordenada().getIndex(),pieza);
+            //Todo Verificar que el color coincida con el del jugador
+            if (pieza.esBlanca)
+                misPiezas.add(pieza);
         }
-        super.onSaveInstanceState(savedInstanceState);
+        if (juego.turno){
+                this.setEstado(new EligiendoPieza());
+            } else{
+                this.setEstado(new EnEspera());
+            }
+
+       //        if (savedInstanceState != null) {
+//            // Restore value of members from saved state
+//            JuegoState estado = (JuegoState) savedInstanceState.getSerializable(juegoState);
+//            ia.setEstado(estado);
+//        } else {
+//            if (juego.turno){
+//                ia.setEstado(new EligiendoPieza());
+//            } else{
+//                ia.setEstado(new EnEspera());
+//            }
+////            savedInstanceState.putSerializable(juegoState,(Serializable) ia.getEstado());
+//        }
+//        super.onSaveInstanceState(savedInstanceState);
 
 
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+        if (estado instanceof EnEspera) return;
+        if (estado instanceof EligiendoPieza) {
+            //Hay bardo
+            Pieza pieza  = (Pieza) parent.getItemAtPosition(position);
+            Coordenada coordenada = Coordenada.getCoordenada(position);
+//            ImageView selecciona  = (ImageView) parent.getItemAtPosition(position);
+            if ( pieza != null && juego.esMiPieza(pieza)) {
+                    //obtener coordenadas de movimiento de pieza
+                    for (Coordenada coordDestino : pieza.calcularMovimientoCoordenadas(juego.piezas)) {
+                        ImageView seleccion = (ImageView) parent.getChildAt(position)
+                                .findViewById(R.id.seleccion);
+                        seleccion.setImageResource(R.drawable.select_blue);
+                    }
+                    //pintar en la grilla las coordenadas obtenidas
+                    //pintar la coordenada que se hizo clic (con otro color para que sea mas pro)
+                }
+
+//            ImageView seleccion = (ImageView) posicionesCeldas.get(coordenada.getIndex())
+//                    .findViewById(R.id.seleccion);
+//            seleccion.setImageResource(R.drawable.select_light);
+//                    savedInstanceState.putInt("indiceSeleccionado",coordenada.getIndex());
+        }
+    }
+
+
+
+    public void setEstado(JuegoState estado) {
+        this.estado = estado;
+
+    }
+
+    public JuegoState getEstado() {
+        return this.estado;
     }
 }
 

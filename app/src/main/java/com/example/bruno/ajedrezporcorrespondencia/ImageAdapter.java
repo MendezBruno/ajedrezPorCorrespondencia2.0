@@ -46,40 +46,19 @@ public class ImageAdapter extends BaseAdapter implements Serializable{
     private ArrayList<Pieza> misPiezas = new ArrayList<>();
     private Context mContext;
     private JuegoState estado;
+    private Juego mJuego;
 
-    public ImageAdapter(Context c, final Juego juego, final GridView gridview, final Bundle savedInstanceState) {
+
+
+    public ImageAdapter(Context c, Juego juego) {
         mContext = c;
+        mJuego = juego;
         for (Pieza pieza : juego.piezas) {
             posicionesPieza.put(pieza.getCoordenada().getIndex(),pieza);
             //Todo Verificar que el color coincida con el del jugador
             if (pieza.esBlanca)
                 misPiezas.add(pieza);
         }
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                if (estado instanceof EnEspera) return;
-                if (estado instanceof EligiendoPieza) {
-                    //Hay bardo
-                    Coordenada coordenada = Coordenada.getCoordenada(position);
-                    for (Pieza miPieza : misPiezas) {
-                        if (miPieza.getCoordenada() == coordenada) {
-                            //obtener coordenadas de movimiento de pieza
-                            for (Coordenada coordDestino : miPieza.calcularMovimientoCoordenadas(juego.piezas)) {
-                                ImageView seleccion = (ImageView) posicionesCeldas.get(coordDestino.getIndex())
-                                  .findViewById(R.id.seleccion);
-                                seleccion.setImageResource(R.drawable.select_blue);
-                            }
-                            //pintar en la grilla las coordenadas obtenidas
-                            //pintar la coordenada que se hizo clic (con otro color para que sea mas pro)
-                        }
-                    }
-                    ImageView seleccion = (ImageView) posicionesCeldas.get(coordenada.getIndex())
-                            .findViewById(R.id.seleccion);
-                    seleccion.setImageResource(R.drawable.select_light);
-                    savedInstanceState.putInt("indiceSeleccionado",coordenada.getIndex());
-                }
-            }
-        });
 
     }
 
@@ -137,13 +116,6 @@ public class ImageAdapter extends BaseAdapter implements Serializable{
         return view;
     }
 
-    public void setEstado(JuegoState estado) {
-        this.estado = estado;
-
-    }
-
-    public JuegoState getEstado() {
-        return this.estado;
-    }
+    public Juego getmJuego (){return this.mJuego;}
 }
 
