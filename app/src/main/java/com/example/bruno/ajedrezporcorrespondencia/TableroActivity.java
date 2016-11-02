@@ -88,19 +88,21 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
         if (estado instanceof EnEspera) return;
         if (estado instanceof EligiendoPieza) {
             //Hay bardo
+
             Pieza pieza  = (Pieza) parent.getItemAtPosition(position);
             Coordenada coordenada = Coordenada.getCoordenada(position);
 //            ImageView selecciona  = (ImageView) parent.getItemAtPosition(position);
             if ( pieza != null && juego.esMiPieza(pieza)) {
                     //obtener coordenadas de movimiento de pieza
                     for (Coordenada coordDestino : pieza.calcularMovimientoCoordenadas(juego.piezas)) {
-                        ImageView seleccion = (ImageView) parent.getChildAt(position)
+                        ImageView seleccion = (ImageView) parent.getChildAt(coordDestino.getIndex())
                                 .findViewById(R.id.seleccion);
                         seleccion.setImageResource(R.drawable.select_blue);
                     }
                     //pintar en la grilla las coordenadas obtenidas
                     //pintar la coordenada que se hizo clic (con otro color para que sea mas pro)
-                }
+                    //pasar a estado pieza seleccionada  todo NOTA Mental: el estado pieza seleccionada tiene un bluce si selecciona otra pieza de el o una casilla invalida
+            }
 
 //            ImageView seleccion = (ImageView) posicionesCeldas.get(coordenada.getIndex())
 //                    .findViewById(R.id.seleccion);

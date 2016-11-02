@@ -37,12 +37,12 @@ public enum Coordenada {
     }
 
     @NonNull
-    String getFila(){
+    public String  getFila(){
         return this.name().substring(1,2);
     }
 
     @NonNull
-    String getColumna() {
+    public String getColumna() {
         return this.name().substring(0,1);
     }
 

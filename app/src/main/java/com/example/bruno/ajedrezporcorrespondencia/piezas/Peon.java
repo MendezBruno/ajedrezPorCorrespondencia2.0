@@ -19,6 +19,16 @@ public class Peon  extends Pieza{
     @Override
     public ArrayList<Coordenada> calcularMovimientoCoordenadas(ArrayList<Pieza> piezasJuego) {
         ArrayList<Coordenada> coordenadas = new ArrayList<>();
+        if (esBlanca &&  ( coordenada.getFila().equals("2") )) {
+            try {
+                coordenadas.add(coordenada.arriba(2));
+            }catch (CoordenadaAlgebraException e) {
+                e.printStackTrace();
+                coordenadas.add(coordenada);
+                return coordenadas;
+            }
+        }
+
         try {
             coordenadas.add(coordenada.arriba(1));
             return coordenadas;
