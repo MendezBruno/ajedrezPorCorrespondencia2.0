@@ -2,13 +2,13 @@ package com.example.bruno.ajedrezporcorrespondencia;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -40,10 +40,14 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private TwitterSession session;
 
+    private long sessionID;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
         mAuth = FirebaseAuth.getInstance();
@@ -53,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,  JuegoNuevoActivity.class);
-
+                intent.putExtra("sessionID", sessionID);
                 startActivity(intent);
             }
         });
@@ -73,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             public void success(Result<TwitterSession> result) {
                 handleTwitterAccessToken(result);
                 session = Twitter.getSessionManager().getActiveSession();
-                new TwitterWrapper(session);
+                sessionID = session.getId();
             }
             @Override
             public void failure(TwitterException exception) {

@@ -1,5 +1,7 @@
 package com.example.bruno.ajedrezporcorrespondencia;
 
+import android.graphics.Bitmap;
+
 import com.google.gson.annotations.SerializedName;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
@@ -26,45 +28,9 @@ public class TwitterWrapper {
 
     private TwitterSession session_abierta;
 
-    TwitterWrapper(TwitterSession session){
+    TwitterWrapper(long sessionID){
 
-        session_abierta = session;
-
-        Call<User> call = Twitter.getApiClient(session).getAccountService().verifyCredentials(true, false);
-
-        call.enqueue(new Callback<User>() {
-
-            @Override
-
-            public void failure(TwitterException e) {
-                //If any error occurs handle it here
-            }
-
-            public void success(Result<User> userResult) {
-                //If it succeeds creating a User object from userResult.data
-                User user = userResult.data;
-
-                MyTwitterApiClient apiclients=new MyTwitterApiClient(session_abierta);
-
-                apiclients.getCustomService().show(userResult.data.getId(), null, true, true, 100).enqueue( new Callback < Followers > () {
-
-                    @Override
-                    public void success(Result < Followers > result) {
-
-                        // obtener nombre y apellido, usuario twitter y ubicacion de la foto
-
-
-
-                    }
-
-                    @Override
-                    public void failure(TwitterException e) {
-
-                    }
-                });
-
-            }
-        });
+        session_abierta = Twitter.getSessionManager().getSession(sessionID);
 
     }
 
@@ -86,6 +52,58 @@ public class TwitterWrapper {
 
         });
 
+    }
+
+    public void obtenerFollowers (final List<Contrincante> contlist){
+
+
+
+        //    final List<Contrincante> contlist = new ArrayList<Contrincante>();
+
+        Call<User> call = Twitter.getApiClient(session_abierta).getAccountService().verifyCredentials(true, false);
+
+        call.enqueue(new Callback<User>() {
+
+            @Override
+
+            public void failure(TwitterException e) {
+                //If any error occurs handle it here
+            }
+
+            public void success(Result<User> userResult) {
+                //If it succeeds creating a User object from userResult.data
+                User user = userResult.data;
+
+                MyTwitterApiClient apiclients=new MyTwitterApiClient(session_abierta);
+
+                apiclients.getCustomService().show(userResult.data.getId(), null, true, true, 100).enqueue( new Callback < Followers > () {
+
+                    @Override
+                    public void success(Result < Followers > result) {
+
+                        Utils utilidades = new Utils();
+
+                        for(User user:result.data.users){
+
+                            Bitmap imagenUsuario = utilidades.descargarImagen(user.profileImageUrl);
+
+                            Contrincante contrincante = new Contrincante(imagenUsuario,user.name,user.screenName);
+
+                            contlist.add(contrincante);
+                        }
+
+                    }
+
+                    @Override
+                    public void failure(TwitterException e) {
+
+                    }
+                });
+
+            }
+        });
+
+     //   return contlist;
     }
 
     public class Followers {

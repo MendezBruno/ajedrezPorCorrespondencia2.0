@@ -1,14 +1,12 @@
 package com.example.bruno.ajedrezporcorrespondencia;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Alfil;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Caballo;
@@ -17,9 +15,9 @@ import com.example.bruno.ajedrezporcorrespondencia.piezas.Peon;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Pieza;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Rey;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Torre;
+import com.twitter.sdk.android.core.TwitterSession;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class JuegoNuevoActivity extends AppCompatActivity {
 
@@ -29,10 +27,14 @@ public class JuegoNuevoActivity extends AppCompatActivity {
     static final Boolean negra = false;
     ArrayList<Pieza> piezas = new ArrayList<>();
     Juego juego;
+    private TwitterSession session;
+    private long sessionID;
+    private TwitterWrapper tw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sessionID = getIntent().getExtras().getLong("sessionID");
         setContentView(R.layout.activity_juego_nuevo);
         botonJuegoNuevo = (Button) findViewById(R.id.buttonRetarJugador);
         botonJuegoNuevo.setOnClickListener(new View.OnClickListener() {
@@ -46,22 +48,15 @@ public class JuegoNuevoActivity extends AppCompatActivity {
         });
 
         lv = (ListView) findViewById(R.id.listUsers);
+        tw = new TwitterWrapper(sessionID);
 
-        // Instanciating an array list (you don't need to do this,
-        // you already have yours).
-        List<String> your_array_list = new ArrayList<String>();
-        your_array_list.add("foo");
-        your_array_list.add("bar");
+        ArrayList<Contrincante> listaContrincantes = new ArrayList<Contrincante>();
 
-        // This is the array adapter, it takes the context of the activity as a
-        // first parameter, the type of list view as a second parameter and your
-        // array as a third parameter.
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                your_array_list );
+        tw.obtenerFollowers(listaContrincantes);
 
-        lv.setAdapter(arrayAdapter);
+        userAdapter adapter = new userAdapter(this,listaContrincantes);
+
+        lv.setAdapter(adapter);
     }
 
     private ArrayList<Pieza> crearTablero() {
