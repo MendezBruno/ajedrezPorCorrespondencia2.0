@@ -18,6 +18,7 @@ import com.example.bruno.ajedrezporcorrespondencia.piezas.Torre;
 import com.twitter.sdk.android.core.TwitterSession;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class JuegoNuevoActivity extends AppCompatActivity {
 
@@ -50,13 +51,17 @@ public class JuegoNuevoActivity extends AppCompatActivity {
         lv = (ListView) findViewById(R.id.listUsers);
         tw = new TwitterWrapper(sessionID);
 
-        ArrayList<Contrincante> listaContrincantes = new ArrayList<Contrincante>();
+        final ArrayList<Contrincante> listaContrincantes = new ArrayList<Contrincante>();
+        final JuegoNuevoActivity self = this;
+        tw.obtenerFollowers(listaContrincantes, new CallBack() {
+            @Override
+            public void aceptar() {
+                userAdapter adapter = new userAdapter(self,listaContrincantes);
+                lv.setAdapter(adapter);
+            }
+        });
 
-        tw.obtenerFollowers(listaContrincantes);
 
-        userAdapter adapter = new userAdapter(this,listaContrincantes);
-
-        lv.setAdapter(adapter);
     }
 
     private ArrayList<Pieza> crearTablero() {

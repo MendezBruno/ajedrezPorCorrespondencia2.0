@@ -19,6 +19,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 /**
  * Created by maria on 31/10/2016.
@@ -41,20 +42,19 @@ public class TwitterWrapper {
         statusesService.update("@" + persona + mensaje,null,null,null,null,null,null,null,null).enqueue(new Callback<Tweet>() {
             @Override
             public void success(Result<Tweet> tweetResult) {
-                //...
+              //...
             }
 
             @Override
             public void failure(TwitterException e) {
-
-                //...
+              //.....
             }
 
         });
 
     }
 
-    public void obtenerFollowers (final List<Contrincante> contlist){
+    public void obtenerFollowers (final List<Contrincante> contlist, final CallBack callBack){
 
 
 
@@ -80,30 +80,21 @@ public class TwitterWrapper {
 
                     @Override
                     public void success(Result < Followers > result) {
-
-                        Utils utilidades = new Utils();
-
                         for(User user:result.data.users){
-
-                            Bitmap imagenUsuario = utilidades.descargarImagen(user.profileImageUrl);
-
+                            String imagenUsuario = user.profileImageUrl;
                             Contrincante contrincante = new Contrincante(imagenUsuario,user.name,user.screenName);
-
                             contlist.add(contrincante);
                         }
-
+                        callBack.aceptar();
                     }
 
                     @Override
                     public void failure(TwitterException e) {
-
                     }
                 });
-
             }
         });
 
-     //   return contlist;
     }
 
     public class Followers {

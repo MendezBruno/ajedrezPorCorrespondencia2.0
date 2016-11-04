@@ -1,6 +1,7 @@
 package com.example.bruno.ajedrezporcorrespondencia;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -37,14 +41,16 @@ public class userAdapter extends ArrayAdapter<Contrincante> {
         }
 
         // Referencias UI.
-        ImageView imageUser = (ImageView) convertView.findViewById(R.id.imageUser);
+        ImageView imageUser = (ImageView) convertView.findViewById(R.id.UserFoto);
         TextView name = (TextView) convertView.findViewById(R.id.userName);
 
         // Lead actual.
+
         Contrincante contrincante = getItem(position);
 
-        // Setup.
-        Glide.with(getContext()).load(contrincante.imagen).into(imageUser);
+        Glide.with(getContext())
+             .load(contrincante.imagen)
+             .into(imageUser);
         name.setText(contrincante.nombre);
 
         return convertView;
