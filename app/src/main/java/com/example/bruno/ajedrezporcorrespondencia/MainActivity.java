@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 tw.obtenerMisDatos(jugador, new CallBack() {
                     @Override
                     public void aceptar() {
-                        savedInstanceState.putSerializable("jugador",jugador);
+               //         savedInstanceState.putSerializable("jugador",jugador);
                         // todo*  Aca tengo que obtener mis datos del firebase...
                     }
                 });

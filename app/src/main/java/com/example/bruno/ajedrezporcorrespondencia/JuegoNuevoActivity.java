@@ -1,8 +1,6 @@
 package com.example.bruno.ajedrezporcorrespondencia;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 
+import com.bumptech.glide.Glide;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Alfil;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Caballo;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Dama;
@@ -20,9 +19,6 @@ import com.example.bruno.ajedrezporcorrespondencia.piezas.Rey;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Torre;
 import com.twitter.sdk.android.core.TwitterSession;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class JuegoNuevoActivity extends AppCompatActivity {
@@ -37,11 +33,13 @@ public class JuegoNuevoActivity extends AppCompatActivity {
     private long sessionID;
     private TwitterWrapper tw;
     private ImageView miImagen;
+    private Jugador jugador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sessionID = getIntent().getExtras().getLong("sessionID");
+        jugador = (Jugador) getIntent().getExtras().getSerializable("jugador");
         setContentView(R.layout.activity_juego_nuevo);
         botonJuegoNuevo = (Button) findViewById(R.id.buttonRetarJugador);
         miImagen = (ImageView) findViewById(R.id.imageViewLocalUser);
@@ -69,12 +67,17 @@ public class JuegoNuevoActivity extends AppCompatActivity {
             }
         });
 
+        Glide.with(this)
+                .load(jugador.imagenJugador)
+                .into(miImagen);
+
+/*
         URL imageUrl = null;
         HttpURLConnection conn = null;
 
         try {
 
-            imageUrl = new URL(tw.ObtenerUbicacionFoto());
+            imageUrl = new URL();
             conn = (HttpURLConnection) imageUrl.openConnection();
             conn.connect();
             Bitmap imagen = BitmapFactory.decodeStream(conn.getInputStream());
@@ -86,6 +89,8 @@ public class JuegoNuevoActivity extends AppCompatActivity {
 
             }
 
+
+*/
 
     }
     private ArrayList<Pieza> crearTablero() {
