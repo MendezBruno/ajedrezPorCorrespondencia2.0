@@ -1,19 +1,12 @@
 package com.example.bruno.ajedrezporcorrespondencia;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ImageView;
-
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Pieza;
-import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EligiendoPieza;
-import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EnEspera;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.JuegoState;
 
 import java.io.Serializable;
@@ -93,6 +86,7 @@ public class ImageAdapter extends BaseAdapter implements Serializable{
         }
         ImageView casillero = (ImageView) view.findViewById(R.id.casillero);
         ImageView pieza = (ImageView) view.findViewById(R.id.pieza);
+        ImageView seleccion = (ImageView) view.findViewById(R.id.seleccion);
 
         //Setear la imagen de los casillero desde el recurso drawable
         Integer casillero1;
@@ -112,6 +106,10 @@ public class ImageAdapter extends BaseAdapter implements Serializable{
 
         Pieza pieza1 = this.getItem(position);
         if (pieza1 != null) pieza.setImageResource( pieza1.getLayoutId());
+
+
+        if (getmJuego().casillasPintadas.contains(Coordenada.getCoordenada(position)))
+            seleccion.setImageResource(R.drawable.select_blue);
 
         return view;
     }

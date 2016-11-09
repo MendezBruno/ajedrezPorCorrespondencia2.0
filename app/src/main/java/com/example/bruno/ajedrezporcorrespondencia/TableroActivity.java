@@ -36,6 +36,7 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
     private ArrayList<Pieza> misPiezas = new ArrayList<>();
     private JuegoState estado;
     private Juego juego = new Juego();
+    private ImageAdapter ia;
 
 
     @Override
@@ -44,7 +45,7 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
 
             setContentView(R.layout.tablero_activity);
             //new ImageAdapter(this);
-            ImageAdapter ia;
+
 //        Toast toast = Toast.makeText(this, "llego hasta aca", Toast.LENGTH_SHORT);
 //        toast.show();
             GridView gridview = (GridView) findViewById(R.id.tablero);
@@ -88,6 +89,8 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
 
         Pieza pieza  = (Pieza) parent.getItemAtPosition(position);
         juego.jugada(pieza, position);
+//        parent.vi
+        ia.notifyDataSetChanged();
 
 
 

@@ -17,6 +17,8 @@ import com.example.bruno.ajedrezporcorrespondencia.piezas.Peon;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Pieza;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Rey;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Torre;
+import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EligiendoPieza;
+import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EnEspera;
 import com.twitter.sdk.android.core.TwitterSession;
 
 import java.util.ArrayList;
@@ -150,6 +152,9 @@ public class JuegoNuevoActivity extends AppCompatActivity {
         //Si es true empieza el jugador nativo con blancas,
         // si es false empieza el jugador nativo con negars
         juego.turno = radioButtonBlancas.isChecked();
+
+        if(juego.turno) juego.juegoState = new EligiendoPieza();
+        else juego.juegoState = new EnEspera();
 
         return juego;
     }
