@@ -39,18 +39,29 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private TwitterSession session;
-
     private long sessionID;
-
+    private Jugador jugador;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        jugador = new Jugador();
+        //Tengo algo salvado
+        if(savedInstanceState != null){
+            jugador = (Jugador) savedInstanceState.getSerializable("jugador");
+        }
+
+
+        //Esto es para algo que explotaba fiero
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        //Configuramos la interfaz con las aplicaciones
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
         mAuth = FirebaseAuth.getInstance();
+
+        //Generamos los botones principales
         setContentView(R.layout.activity_main);
         challegereButton = (Button) findViewById(R.id.buttonChalleger);
         challegereButton.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,  JuegoNuevoActivity.class);
                 intent.putExtra("sessionID", sessionID);
+                intent.putExtra("jugador", jugador);
                 startActivity(intent);
             }
         });
@@ -78,6 +90,14 @@ public class MainActivity extends AppCompatActivity {
                 handleTwitterAccessToken(result);
                 session = Twitter.getSessionManager().getActiveSession();
                 sessionID = session.getId();
+                TwitterWrapper tw = new TwitterWrapper(sessionID);
+                tw.obtenerMisDatos(jugador, new CallBack() {
+                    @Override
+                    public void aceptar() {
+                        savedInstanceState.putSerializable("jugador",jugador);
+                        // todo*  Aca tengo que obtener mis datos del firebase...
+                    }
+                });
             }
             @Override
             public void failure(TwitterException exception) {
@@ -87,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         logOut = (Button) findViewById(R.id.buttonLogOut);
-
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

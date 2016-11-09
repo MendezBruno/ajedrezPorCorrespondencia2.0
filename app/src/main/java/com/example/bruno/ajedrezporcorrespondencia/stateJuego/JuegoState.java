@@ -1,5 +1,8 @@
 package com.example.bruno.ajedrezporcorrespondencia.stateJuego;
 
+import com.example.bruno.ajedrezporcorrespondencia.Juego;
+import com.example.bruno.ajedrezporcorrespondencia.piezas.Pieza;
+
 import java.io.Serializable;
 
 /**
@@ -7,4 +10,5 @@ import java.io.Serializable;
  */
 
 public interface JuegoState extends Serializable{
+    void jugada(Pieza pieza, int position, Juego juego);
 }

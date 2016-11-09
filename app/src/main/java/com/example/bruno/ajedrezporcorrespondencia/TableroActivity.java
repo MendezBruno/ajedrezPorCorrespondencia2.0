@@ -53,7 +53,7 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
             ia = new ImageAdapter(this, juego);
             gridview.setAdapter(ia);
             gridview.setOnItemClickListener(this);
-        
+
         for (Pieza pieza : juego.piezas) {
             posicionesPieza.put(pieza.getCoordenada().getIndex(),pieza);
             //Todo Verificar que el color coincida con el del jugador
@@ -86,43 +86,49 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+        Pieza pieza  = (Pieza) parent.getItemAtPosition(position);
+        juego.jugada(pieza, position);
+
+
+
 
         if (estado instanceof EnEspera) return;
-        if (estado instanceof EligiendoPieza) {
-            //Hay bardo
-            Pieza pieza  = (Pieza) parent.getItemAtPosition(position);
-            if ( pieza != null && juego.esMiPieza(pieza)) {
-                    //obtener coordenadas de movimiento de pieza
-                    //pintar en la grilla las coordenadas obtenidas
-                    for (Coordenada coordDestino : pieza.calcularMovimientoCoordenadas(juego.piezas)) {
-                        ImageView seleccion = (ImageView) parent.getChildAt(coordDestino.getIndex())
-                                .findViewById(R.id.seleccion);
-                        seleccion.setImageResource(R.drawable.select_blue);
-                    }
-                //pintar la coordenada que se hizo clic (con otro color para que sea mas pro)
-                ImageView seleccion = (ImageView) parent.getChildAt(position).findViewById(R.id.seleccion);
-                                    seleccion.setImageResource(R.drawable.select_light);
-                //pasar a estado pieza seleccionada  todo NOTA Mental: el estado pieza seleccionada tiene un bluce si selecciona otra pieza de el o una casilla invalida
-                setEstado(new PiezaSeleccionada());
-                juego.piezaSeleccionada = pieza;
-            }
-        }
-        if (estado instanceof PiezaSeleccionada){
-            Pieza pieza  = (Pieza) parent.getItemAtPosition(position);
-            if ( pieza != null && juego.esMiPieza(pieza)) return;
-            else {
-                if(juego.piezaSeleccionada
-                        .calcularMovimientoCoordenadas(juego.piezas)
-                        .contains(Coordenada
-                                .getCoordenada(position))) {
-                    //Limpiar las casillas azules
-                    //mover la pieza
-                    //cambiar estado
-                }
-                else return;
-            }
 
-        }
+//        if (estado instanceof EligiendoPieza) {
+//            //Hay bardo
+//            Pieza pieza  = (Pieza) parent.getItemAtPosition(position);
+//            if ( pieza != null && juego.esMiPieza(pieza)) {
+//                    //obtener coordenadas de movimiento de pieza
+//                    //pintar en la grilla las coordenadas obtenidas
+//                    for (Coordenada coordDestino : pieza.calcularMovimientoCoordenadas(juego.piezas)) {
+//                        ImageView seleccion = (ImageView) parent.getChildAt(coordDestino.getIndex())
+//                                .findViewById(R.id.seleccion);
+//                        seleccion.setImageResource(R.drawable.select_blue);
+//                    }
+//                //pintar la coordenada que se hizo clic (con otro color para que sea mas pro)
+//                ImageView seleccion = (ImageView) parent.getChildAt(position).findViewById(R.id.seleccion);
+//                                    seleccion.setImageResource(R.drawable.select_light);
+//                //pasar a estado pieza seleccionada  todo NOTA Mental: el estado pieza seleccionada tiene un bluce si selecciona otra pieza de el o una casilla invalida
+//                setEstado(new PiezaSeleccionada());
+//                juego.piezaSeleccionada = pieza;
+//            }
+//        }
+
+//        if (estado instanceof PiezaSeleccionada){
+//            Pieza pieza  = (Pieza) parent.getItemAtPosition(position);
+//            if ( pieza != null && juego.esMiPieza(pieza)) return;
+//            else {
+//                if(juego.piezaSeleccionada
+//                        .calcularMovimientoCoordenadas(juego.piezas)
+//                        .contains(Coordenada
+//                                .getCoordenada(position))) {
+//                    //Limpiar las casillas azules
+//                    //mover la pieza
+//                    //cambiar estado
+//                }
+//                else return;
+//            }
+//        }
     }
 
 

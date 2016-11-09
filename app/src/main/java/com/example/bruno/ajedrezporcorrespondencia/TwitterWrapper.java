@@ -54,14 +54,9 @@ public class TwitterWrapper {
 
     }
 
-    public void obtenerFollowers (final List<Contrincante> contlist, final CallBack callBack){
-
-
-
-        //    final List<Contrincante> contlist = new ArrayList<Contrincante>();
+    public void obtenerMisDatos (final Jugador jugador, final CallBack callBack){
 
         Call<User> call = Twitter.getApiClient(session_abierta).getAccountService().verifyCredentials(true, false);
-
         call.enqueue(new Callback<User>() {
 
             @Override
@@ -73,28 +68,33 @@ public class TwitterWrapper {
             public void success(Result<User> userResult) {
                 //If it succeeds creating a User object from userResult.data
                 User user = userResult.data;
-
-                MyTwitterApiClient apiclients=new MyTwitterApiClient(session_abierta);
-
-                apiclients.getCustomService().show(userResult.data.getId(), null, true, true, 100).enqueue( new Callback < Followers > () {
-
-                    @Override
-                    public void success(Result < Followers > result) {
-                        for(User user:result.data.users){
-                            String imagenUsuario = user.profileImageUrl;
-                            Contrincante contrincante = new Contrincante(imagenUsuario,user.name,user.screenName);
-                            contlist.add(contrincante);
-                        }
-                        callBack.aceptar();
-                    }
-
-                    @Override
-                    public void failure(TwitterException e) {
-                    }
-                });
+                jugador.idTwitter = user.id;
+                jugador.imagenJugador = user.profileImageUrl;
+                callBack.aceptar();
             }
         });
 
+    }
+
+    public void obtenerFollowers (final List<Contrincante> contlist, final CallBack callBack){
+
+        MyTwitterApiClient apiclients=new MyTwitterApiClient(session_abierta);
+        apiclients.getCustomService().show(session_abierta.getUserId(), null, true, true, 100).enqueue( new Callback < Followers > () {
+
+            @Override
+            public void success(Result < Followers > result) {
+                for(User user:result.data.users){
+                    String imagenUsuario = user.profileImageUrl;
+                    Contrincante contrincante = new Contrincante(imagenUsuario,user.name,user.screenName);
+                    contlist.add(contrincante);
+                }
+                callBack.aceptar();
+            }
+
+            @Override
+            public void failure(TwitterException e) {
+            }
+        });
     }
 
     public class Followers {
