@@ -1,7 +1,5 @@
 package com.example.bruno.ajedrezporcorrespondencia;
 
-import android.graphics.Bitmap;
-
 import com.google.gson.annotations.SerializedName;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;

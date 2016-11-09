@@ -1,10 +1,13 @@
 package com.example.bruno.ajedrezporcorrespondencia;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 
@@ -17,8 +20,10 @@ import com.example.bruno.ajedrezporcorrespondencia.piezas.Rey;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Torre;
 import com.twitter.sdk.android.core.TwitterSession;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class JuegoNuevoActivity extends AppCompatActivity {
 
@@ -31,6 +36,7 @@ public class JuegoNuevoActivity extends AppCompatActivity {
     private TwitterSession session;
     private long sessionID;
     private TwitterWrapper tw;
+    private ImageView miImagen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,8 @@ public class JuegoNuevoActivity extends AppCompatActivity {
         sessionID = getIntent().getExtras().getLong("sessionID");
         setContentView(R.layout.activity_juego_nuevo);
         botonJuegoNuevo = (Button) findViewById(R.id.buttonRetarJugador);
+        miImagen = (ImageView) findViewById(R.id.imageViewLocalUser);
+
         botonJuegoNuevo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,9 +69,25 @@ public class JuegoNuevoActivity extends AppCompatActivity {
             }
         });
 
+        URL imageUrl = null;
+        HttpURLConnection conn = null;
+
+        try {
+
+            imageUrl = new URL(tw.ObtenerUbicacionFoto());
+            conn = (HttpURLConnection) imageUrl.openConnection();
+            conn.connect();
+            Bitmap imagen = BitmapFactory.decodeStream(conn.getInputStream());
+            miImagen.setImageBitmap(imagen);
+
+            } catch (IOException e) {
+
+            e.printStackTrace();
+
+            }
+
 
     }
-
     private ArrayList<Pieza> crearTablero() {
         ArrayList<Pieza> piezas = new ArrayList<>();
         /***************Piezas Blancas**********************/

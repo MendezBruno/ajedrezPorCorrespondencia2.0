@@ -135,6 +135,9 @@ public class MainActivity extends AppCompatActivity {
     private void handleTwitterAccessToken(Result<TwitterSession> result) {
         AuthCredential credential =  TwitterAuthProvider.getCredential(result.data.getAuthToken().token, result.data.getAuthToken().secret);
 
+
+
+
         mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener() {
 
             @Override
