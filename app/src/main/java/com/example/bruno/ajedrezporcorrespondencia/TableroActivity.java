@@ -89,13 +89,7 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
 
         Pieza pieza  = (Pieza) parent.getItemAtPosition(position);
         juego.jugada(pieza, position);
-//        parent.vi
         ia.notifyDataSetChanged();
-
-
-
-
-        if (estado instanceof EnEspera) return;
 
 //        if (estado instanceof EligiendoPieza) {
 //            //Hay bardo

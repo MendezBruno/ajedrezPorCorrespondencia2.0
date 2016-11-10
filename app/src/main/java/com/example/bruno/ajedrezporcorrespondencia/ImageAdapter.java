@@ -106,6 +106,7 @@ public class ImageAdapter extends BaseAdapter implements Serializable{
 
         Pieza pieza1 = this.getItem(position);
         if (pieza1 != null) pieza.setImageResource( pieza1.getLayoutId());
+            else  seleccion.setImageDrawable(null);
 
 
         if (getmJuego().casillasPintadas.contains(Coordenada.getCoordenada(position)))
