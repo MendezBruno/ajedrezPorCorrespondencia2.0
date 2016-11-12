@@ -42,7 +42,7 @@ import java.util.ArrayList;
         }
     }
 
-    private Pieza findByCoordenada(Coordenada coord, ArrayList<Pieza> piezasJuego) {
+    public Pieza findByCoordenada(Coordenada coord, ArrayList<Pieza> piezasJuego) {
 
         for (Pieza pieza:piezasJuego) if (pieza.getCoordenada() == coord) return pieza;
 
@@ -133,8 +133,8 @@ import java.util.ArrayList;
             e.printStackTrace();
         }
         if (!this.tienePiezaEn(coordenada,piezasJuego,dir) && coordenadaDireccion != null ) {
-                coordenadas.add(coordenadaDireccion);
-                pedirProximaCasilla(coordenadas, coordenadaDireccion, piezasJuego, dir);
+            coordenadas.add(coordenadaDireccion);
+            pedirProximaCasilla(coordenadas, coordenadaDireccion, piezasJuego, dir);
         }else {
             Pieza piezaEnPosSiguiente = null;
             try {
@@ -144,9 +144,11 @@ import java.util.ArrayList;
             }
             if (piezaEnPosSiguiente != null)
                 if (this.esBlanca && !piezaEnPosSiguiente.esBlanca && coordenadaDireccion != null) coordenadas.add(coordenadaDireccion);
-            else return;
+                else return;
         }
     }
+
+
 
 //    /**
 //     * Obtiene item basado en su identificador

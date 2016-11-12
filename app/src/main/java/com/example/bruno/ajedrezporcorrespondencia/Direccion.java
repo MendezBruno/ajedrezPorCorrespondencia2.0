@@ -5,5 +5,6 @@ package com.example.bruno.ajedrezporcorrespondencia;
  */
 
 public enum Direccion {
-    DiagonalArribaDerecha, DiagonalArribaIzquierda, DiagonalAbajoDerecha, DiagonalAbajoIzquierda, Arriba, Abajo, Derecha, Izquierda
+    DiagonalArribaDerecha, DiagonalArribaIzquierda, DiagonalAbajoDerecha,
+    DiagonalAbajoIzquierda, Arriba, Abajo, Derecha, Izquierda
 }

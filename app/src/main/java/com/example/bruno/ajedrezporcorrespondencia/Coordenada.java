@@ -2,6 +2,10 @@ package com.example.bruno.ajedrezporcorrespondencia;
 
 import android.support.annotation.NonNull;
 
+import com.example.bruno.ajedrezporcorrespondencia.piezas.Caballo;
+
+import java.util.ArrayList;
+
 /**
  * Created by bruno on 27/10/2016.
  */
@@ -141,6 +145,30 @@ public enum Coordenada {
                 break;
             case Izquierda:
                 coordenadaDireccion = this.izquierda(1);
+                break;
+        }
+
+        return coordenadaDireccion;
+    }
+
+    public ArrayList<Coordenada> dameCoordenadaCaballo(Caballo.DireccionCaballo direccion) throws CoordenadaAlgebraException {
+        ArrayList<Coordenada> coordenadaDireccion = new ArrayList<>();
+        switch (direccion) {
+            case ELEABAJO:
+                coordenadaDireccion.add((this.abajo(2)).derecha(1));
+                coordenadaDireccion.add((this.abajo(2)).izquierda(1));
+                break;
+            case ELEARRIBA:
+                coordenadaDireccion.add((this.arriba(2)).derecha(1));
+                coordenadaDireccion.add((this.arriba(2)).izquierda(1));
+                break;
+            case ELEDERECHA:
+                coordenadaDireccion.add((this.derecha(2)).abajo(1));
+                coordenadaDireccion.add((this.derecha(2)).arriba(1));
+                break;
+            case ELEIZQUIERDA:
+                coordenadaDireccion.add((this.izquierda(2)).abajo(1));
+                coordenadaDireccion.add((this.izquierda(2)).arriba(1));
                 break;
         }
 
