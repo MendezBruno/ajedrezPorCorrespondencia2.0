@@ -20,8 +20,13 @@ public class Alfil extends Pieza {
     public ArrayList<Coordenada> calcularMovimientoCoordenadas(ArrayList<Pieza> piezasJuego) {
 
         ArrayList<Coordenada> coordenadas = new ArrayList<>();
+        ArrayList<Direccion> direcciones = new ArrayList<Direccion>();
+        direcciones.add(Direccion.DiagonalAbajoDerecha);
+        direcciones.add(Direccion.DiagonalAbajoIzquierda);
+        direcciones.add(Direccion.DiagonalArribaDerecha);
+        direcciones.add(Direccion.DiagonalArribaIzquierda);
 
-        for (Direccion dir : Direccion.values()) {
+        for (Direccion dir : direcciones) {
 
          this.pedirProximaCasilla(coordenadas,coordenada,piezasJuego,dir);
 

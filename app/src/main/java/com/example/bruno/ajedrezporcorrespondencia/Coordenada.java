@@ -92,6 +92,8 @@ public enum Coordenada {
 
     }
 
+
+
     public Coordenada diagonalInfDerecha(int i) {
         try {
             return (this.abajo(i)).derecha(i);
@@ -112,7 +114,7 @@ public enum Coordenada {
 
     }
 
-    public Coordenada dameCoordenada(Direccion direccion) {
+    public Coordenada dameCoordenada(Direccion direccion) throws CoordenadaAlgebraException {
         Coordenada coordenadaDireccion = Coordenada.getCoordenada(1);
 
         switch (direccion) {
@@ -127,6 +129,18 @@ public enum Coordenada {
                 break;
             case DiagonalAbajoIzquierda:
                 coordenadaDireccion = this.diagonalInfIzquierda(1);
+                break;
+            case Arriba:
+                coordenadaDireccion = this.arriba(1);
+                break;
+            case Abajo:
+                coordenadaDireccion = this.abajo(1);
+                break;
+            case Derecha:
+                coordenadaDireccion = this.derecha(1);
+                break;
+            case Izquierda:
+                coordenadaDireccion = this.izquierda(1);
                 break;
         }
 

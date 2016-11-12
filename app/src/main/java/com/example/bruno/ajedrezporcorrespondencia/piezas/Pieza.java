@@ -81,7 +81,7 @@ import java.util.ArrayList;
         return findByCoordenada(coordenadaDeAbajo, piezasJuego) != null;
     }
 
-    public Pieza piezaEnLaPosicion (Coordenada coordenada, ArrayList<Pieza> piezasJuego, Direccion direccion) {
+    public Pieza piezaEnLaPosicion (Coordenada coordenada, ArrayList<Pieza> piezasJuego, Direccion direccion) throws CoordenadaAlgebraException {
         Coordenada coordenadaDireccion = null;
 
         switch (direccion) {
@@ -97,6 +97,19 @@ import java.util.ArrayList;
             case DiagonalAbajoIzquierda:
                 coordenadaDireccion = coordenada.diagonalInfIzquierda(1);
                 break;
+            case Abajo:
+                coordenadaDireccion = coordenada.abajo(1);
+                break;
+            case Arriba:
+                coordenadaDireccion = coordenada.arriba(1);
+                break;
+            case Derecha:
+                coordenadaDireccion = coordenada.derecha(1);
+                break;
+            case Izquierda:
+                coordenadaDireccion = coordenada.izquierda(1);
+                break;
+
         }
 
         return findByCoordenada(coordenadaDireccion, piezasJuego);
@@ -104,18 +117,33 @@ import java.util.ArrayList;
 
 
     public boolean tienePiezaEn(Coordenada coordenada, ArrayList<Pieza> piezasJuego, Direccion direccion){
-        return piezaEnLaPosicion(coordenada,piezasJuego,direccion) != null;
+        try {
+            return piezaEnLaPosicion(coordenada,piezasJuego,direccion) != null;
+        } catch (CoordenadaAlgebraException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public void pedirProximaCasilla(ArrayList<Coordenada> coordenadas,Coordenada coordenada, ArrayList<Pieza> piezasJuego, Direccion dir) {
-        Coordenada coordenadaDireccion = coordenada.dameCoordenada(dir);
+        Coordenada coordenadaDireccion = null;
+        try {
+            coordenadaDireccion = coordenada.dameCoordenada(dir);
+        } catch (CoordenadaAlgebraException e) {
+            e.printStackTrace();
+        }
         if (!this.tienePiezaEn(coordenada,piezasJuego,dir) && coordenadaDireccion != null ) {
                 coordenadas.add(coordenadaDireccion);
                 pedirProximaCasilla(coordenadas, coordenadaDireccion, piezasJuego, dir);
         }else {
-            Pieza piezaEnPosSiguiente = piezaEnLaPosicion(coordenada,piezasJuego,dir);
+            Pieza piezaEnPosSiguiente = null;
+            try {
+                piezaEnPosSiguiente = piezaEnLaPosicion(coordenada,piezasJuego,dir);
+            } catch (CoordenadaAlgebraException e) {
+                e.printStackTrace();
+            }
             if (piezaEnPosSiguiente != null)
-                if (this.esBlanca && !piezaEnPosSiguiente.esBlanca && coordenadaDireccion != null) coordenadas.add(coordenada.dameCoordenada(dir));
+                if (this.esBlanca && !piezaEnPosSiguiente.esBlanca && coordenadaDireccion != null) coordenadas.add(coordenadaDireccion);
             else return;
         }
     }
