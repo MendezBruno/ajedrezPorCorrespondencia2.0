@@ -17,7 +17,7 @@ public class Juego implements Serializable{
    public Boolean turno;
    public Pieza piezaSeleccionada;
    public ArrayList<Coordenada> casillasPintadas = new ArrayList<>();
-   public transient JuegoState juegoState;
+   public JuegoState juegoState;
 
     public boolean esMiPieza(Pieza pieza) {
 //        return true;

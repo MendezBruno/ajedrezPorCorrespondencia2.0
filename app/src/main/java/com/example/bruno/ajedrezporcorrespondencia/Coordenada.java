@@ -111,4 +111,25 @@ public enum Coordenada {
         }
 
     }
+
+    public Coordenada dameCoordenada(Direccion direccion) {
+        Coordenada coordenadaDireccion = Coordenada.getCoordenada(1);
+
+        switch (direccion) {
+            case DiagonalArribaDerecha:
+                coordenadaDireccion = this.diagonalSupDerecha(1);
+                break;
+            case DiagonalArribaIzquierda:
+                coordenadaDireccion = this.diagonalSupIzquierda(1);
+                break;
+            case DiagonalAbajoDerecha:
+                coordenadaDireccion = this.diagonalInfDerecha(1);
+                break;
+            case DiagonalAbajoIzquierda:
+                coordenadaDireccion = this.diagonalInfIzquierda(1);
+                break;
+        }
+
+        return coordenadaDireccion;
+    }
 }

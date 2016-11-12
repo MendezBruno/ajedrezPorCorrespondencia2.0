@@ -1,9 +1,8 @@
 package com.example.bruno.ajedrezporcorrespondencia.piezas;
 
-import android.content.res.TypedArray;
-
 import com.example.bruno.ajedrezporcorrespondencia.Coordenada;
 import com.example.bruno.ajedrezporcorrespondencia.CoordenadaAlgebraException;
+import com.example.bruno.ajedrezporcorrespondencia.Direccion;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -82,6 +81,44 @@ import java.util.ArrayList;
         return findByCoordenada(coordenadaDeAbajo, piezasJuego) != null;
     }
 
+    public Pieza piezaEnLaPosicion (Coordenada coordenada, ArrayList<Pieza> piezasJuego, Direccion direccion) {
+        Coordenada coordenadaDireccion = null;
+
+        switch (direccion) {
+            case DiagonalArribaDerecha:
+                coordenadaDireccion = coordenada.diagonalSupDerecha(1);
+                break;
+            case DiagonalArribaIzquierda:
+                coordenadaDireccion = coordenada.diagonalSupIzquierda(1);
+                break;
+            case DiagonalAbajoDerecha:
+                coordenadaDireccion = coordenada.diagonalInfDerecha(1);
+                break;
+            case DiagonalAbajoIzquierda:
+                coordenadaDireccion = coordenada.diagonalInfIzquierda(1);
+                break;
+        }
+
+        return findByCoordenada(coordenadaDireccion, piezasJuego);
+    }
+
+
+    public boolean tienePiezaEn(Coordenada coordenada, ArrayList<Pieza> piezasJuego, Direccion direccion){
+        return piezaEnLaPosicion(coordenada,piezasJuego,direccion) != null;
+    }
+
+    public void pedirProximaCasilla(ArrayList<Coordenada> coordenadas,Coordenada coordenada, ArrayList<Pieza> piezasJuego, Direccion dir) {
+        Coordenada coordenadaDireccion = coordenada.dameCoordenada(dir);
+        if (!this.tienePiezaEn(coordenada,piezasJuego,dir) && coordenadaDireccion != null ) {
+                coordenadas.add(coordenadaDireccion);
+                pedirProximaCasilla(coordenadas, coordenadaDireccion, piezasJuego, dir);
+        }else {
+            Pieza piezaEnPosSiguiente = piezaEnLaPosicion(coordenada,piezasJuego,dir);
+            if (piezaEnPosSiguiente != null)
+                if (this.esBlanca && !piezaEnPosSiguiente.esBlanca && coordenadaDireccion != null) coordenadas.add(coordenada.dameCoordenada(dir));
+            else return;
+        }
+    }
 
 //    /**
 //     * Obtiene item basado en su identificador
