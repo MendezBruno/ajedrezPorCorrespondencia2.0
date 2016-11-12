@@ -19,27 +19,61 @@ public class Peon  extends Pieza{
     @Override
     public ArrayList<Coordenada> calcularMovimientoCoordenadas(ArrayList<Pieza> piezasJuego) {
         ArrayList<Coordenada> coordenadas = new ArrayList<>();
-        if (esBlanca &&  ( coordenada.getFila().equals("2") )) {
-            try {
-                coordenadas.add(coordenada.arriba(2));
-            }catch (CoordenadaAlgebraException e) {
-                e.printStackTrace();
-                coordenadas.add(coordenada);
-                return coordenadas;
+        if (esBlanca ) {
+            if (this.tienePiezaDiagonalArribaDerecha(coordenada,piezasJuego)) coordenadas.add(coordenada.diagonalSupDerecha(1));
+            if (this.tienePiezaDiagonalArribaIzquierda(coordenada,piezasJuego)) coordenadas.add(coordenada.diagonalSupIzquierda(1));
+            //si no tiene una pieza en frente se puede mover 2 o 1
+            if (!this.tienePiezaArriba(coordenada, piezasJuego)) {
+                if ((coordenada.getFila().equals("2"))) {
+                    try {
+                        coordenadas.add(coordenada.arriba(2));
+                    } catch (CoordenadaAlgebraException e) {
+                        e.printStackTrace();
+                        coordenadas.add(coordenada);
+                        return coordenadas;
+                    }
+                }
+                try {
+                    coordenadas.add(coordenada.arriba(1));
+                    return coordenadas;
+                } catch (CoordenadaAlgebraException e) {
+                    e.printStackTrace();
+                    coordenadas.add(coordenada);
+                    return coordenadas;
+                }
             }
-        }
 
-        try {
-            coordenadas.add(coordenada.arriba(1));
-            return coordenadas;
-        } catch (CoordenadaAlgebraException e) {
-            e.printStackTrace();
-            coordenadas.add(coordenada);
-            return coordenadas;
+            return  coordenadas;
+
+        }else { //Es negra
+            if (this.tienePiezaDiagonalAbajoDerecha(coordenada,piezasJuego)) coordenadas.add(coordenada.diagonalSupDerecha(1));
+            if (this.tienePiezaDiagonalAbajoIzquierda(coordenada,piezasJuego)) coordenadas.add(coordenada.diagonalSupIzquierda(1));
+            if (!this.tienePiezaAbajo(coordenada, piezasJuego)) {
+                if ((coordenada.getFila().equals("7"))) {
+                    try {
+                        coordenadas.add(coordenada.abajo(2));
+                    } catch (CoordenadaAlgebraException e) {
+                        e.printStackTrace();
+                        coordenadas.add(coordenada);
+                        return coordenadas;
+                    }
+                }
+                try {
+                    coordenadas.add(coordenada.abajo(1));
+
+                    return coordenadas;
+                } catch (CoordenadaAlgebraException e) {
+                    e.printStackTrace();
+                    coordenadas.add(coordenada);
+                    return coordenadas;
+                }
+
+
+            }
+
         }
+    return coordenadas;
     }
-
-    private boolean esPrimerMovimiento = true;
 
     @Override
     public int getLayoutId() {

@@ -46,8 +46,9 @@ public class ImageAdapter extends BaseAdapter implements Serializable{
     public ImageAdapter(Context c, Juego juego) {
         mContext = c;
         mJuego = juego;
-        for (Pieza pieza : juego.piezas) {
-            posicionesPieza.put(pieza.getCoordenada().getIndex(),pieza);
+        for (Pieza pieza : mJuego.piezas) {
+            if (mJuego.soyElBlanco()) posicionesPieza.put(pieza.getCoordenada().getIndex(),pieza);
+            else  posicionesPieza.put(pieza.getCoordenada().getOpuesto(),pieza);
             //Todo Verificar que el color coincida con el del jugador
             if (pieza.esBlanca)
                 misPiezas.add(pieza);
@@ -61,7 +62,7 @@ public class ImageAdapter extends BaseAdapter implements Serializable{
 
     public Pieza getItem(int position) {
 
-        Pieza pieza1 = posicionesPieza.get(position);
+        Pieza pieza1 = mJuego.findPiezaByPosition(position);
         if (pieza1 != null) return pieza1;
         else return null;
 
@@ -104,13 +105,21 @@ public class ImageAdapter extends BaseAdapter implements Serializable{
             casillero.setImageResource(casillero2);
         }
 
+        if(position == 52){
+            pieza.getDrawable();
+        }
+
         Pieza pieza1 = this.getItem(position);
         if (pieza1 != null) pieza.setImageResource( pieza1.getLayoutId());
-            else  seleccion.setImageDrawable(null);
+            else  {
+//            seleccion.setImageDrawable(null);
+            pieza.setImageDrawable(null);
+        }
 
 
         if (getmJuego().casillasPintadas.contains(Coordenada.getCoordenada(position)))
             seleccion.setImageResource(R.drawable.select_blue);
+        else seleccion.setImageDrawable(null);
 
         return view;
     }

@@ -16,16 +16,42 @@ public class Juego implements Serializable{
    public ArrayList<Pieza> piezas = new ArrayList<>();
    public Boolean turno;
    public Pieza piezaSeleccionada;
-    public ArrayList<Coordenada> casillasPintadas = new ArrayList<>();
-    public JuegoState juegoState;
+   public ArrayList<Coordenada> casillasPintadas = new ArrayList<>();
+   public transient JuegoState juegoState;
 
     public boolean esMiPieza(Pieza pieza) {
-        return true;
+//        return true;
+        //todo ver si es mi pieza por el id del jugadors
+        return pieza.esBlanca;
+
     }
 
 
     public void jugada(Pieza pieza, int position) {
 
         juegoState.jugada(pieza, position, this);
+    }
+
+    public Coordenada eliminarPieza(int position) {
+        Coordenada coord = Coordenada.getCoordenada(position);
+        Pieza pieza = this.findByCoordenada(coord);
+        piezas.remove(pieza);
+        return coord;
+    }
+
+    private Pieza findByCoordenada(Coordenada coord) {
+
+        for (Pieza pieza:piezas) if (pieza.getCoordenada() == coord) return pieza;
+
+        return null;
+    }
+
+    public boolean soyElBlanco() {
+        return true;
+    }
+
+    public Pieza findPiezaByPosition(int position) {
+
+        return this.findByCoordenada(Coordenada.getCoordenada(position));
     }
 }
