@@ -1,6 +1,7 @@
 package com.example.bruno.ajedrezporcorrespondencia.piezas;
 
 import com.example.bruno.ajedrezporcorrespondencia.Coordenada;
+import com.example.bruno.ajedrezporcorrespondencia.Direccion;
 import com.example.bruno.ajedrezporcorrespondencia.R;
 
 import java.util.ArrayList;
@@ -15,8 +16,13 @@ public class Dama extends Pieza {
 
     @Override
     public ArrayList<Coordenada> calcularMovimientoCoordenadas(ArrayList<Pieza> piezasJuego) {
-        return null;
-    }
+        ArrayList<Coordenada> coordenadas = new ArrayList<>();
+
+    for (Direccion dir : Direccion.values())
+            this.pedirProximaCasilla(coordenadas,coordenada,piezasJuego,dir);
+
+    return coordenadas;
+}
 
     @Override
     public int getLayoutId() {

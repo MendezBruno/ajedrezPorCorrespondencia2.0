@@ -26,11 +26,10 @@ public class Alfil extends Pieza {
         direcciones.add(Direccion.DiagonalArribaDerecha);
         direcciones.add(Direccion.DiagonalArribaIzquierda);
 
-        for (Direccion dir : direcciones) {
-
+        for (Direccion dir : direcciones)
          this.pedirProximaCasilla(coordenadas,coordenada,piezasJuego,dir);
 
-        }
+
         return coordenadas;
     }
 
