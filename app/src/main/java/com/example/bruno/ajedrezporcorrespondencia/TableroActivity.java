@@ -43,12 +43,20 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
         Pieza pieza  = (Pieza) parent.getItemAtPosition(position);
         juego.jugada(pieza, position, jugadorId);
         ia.notifyDataSetChanged();
+
+        //verificar que jugó
+        //El jugador Realiza la jugada cuando el juego pasa al state en espera
+        if(juego.juegoState == new EnEspera()) {
         /*
         todo Actualizar base de datos firebase
         */
         /*
         todo Enviar twiter de que ya se realizo movimiento
         */
+        /*
+        todo: Notifica al contrincante mediante firebase
+        */
+        }
 
     }
 
