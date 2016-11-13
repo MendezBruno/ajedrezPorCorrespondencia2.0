@@ -40,4 +40,14 @@ public class Alfil extends Pieza {
             return R.drawable.bb;
 
     }
+
+    @Override
+    public boolean esEnroqueLargo(Coordenada coord, ArrayList<Pieza> piezas) {
+        return false;
+    }
+
+    @Override
+    public boolean esEnroqueCorto(Coordenada coord, ArrayList<Pieza> piezas) {
+        return false;
+    }
 }

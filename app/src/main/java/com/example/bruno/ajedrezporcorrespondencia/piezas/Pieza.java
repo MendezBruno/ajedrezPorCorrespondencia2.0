@@ -148,6 +148,9 @@ import java.util.ArrayList;
         }
     }
 
+    public abstract boolean esEnroqueLargo(Coordenada coord, ArrayList<Pieza> piezas);
+
+    public abstract boolean esEnroqueCorto(Coordenada coord, ArrayList<Pieza> piezas);
 
 
 //    /**

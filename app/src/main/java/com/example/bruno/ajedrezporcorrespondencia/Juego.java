@@ -1,6 +1,8 @@
 package com.example.bruno.ajedrezporcorrespondencia;
 
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Pieza;
+import com.example.bruno.ajedrezporcorrespondencia.piezas.Rey;
+import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EnEspera;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.JuegoState;
 
 import java.io.Serializable;
@@ -53,5 +55,17 @@ public class Juego implements Serializable{
     public Pieza findPiezaByPosition(int position) {
 
         return this.findByCoordenada(Coordenada.getCoordenada(position));
+    }
+
+
+
+
+
+    public boolean esEnroqueLargo(Coordenada coord, ArrayList<Pieza> piezas) {
+        return piezaSeleccionada.esEnroqueLargo(coord, piezas);
+    }
+
+    public boolean esEnroqueCorto(Coordenada coord, ArrayList<Pieza> piezas) {
+        return piezaSeleccionada.esEnroqueCorto(coord, piezas);
     }
 }

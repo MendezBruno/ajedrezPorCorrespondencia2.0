@@ -81,5 +81,15 @@ public class Peon  extends Pieza{
         return R.drawable.pb;
     }
 
+    @Override
+    public boolean esEnroqueLargo(Coordenada coord, ArrayList<Pieza> piezas) {
+        return false;
+    }
+
+    @Override
+    public boolean esEnroqueCorto(Coordenada coord, ArrayList<Pieza> piezas) {
+        return false;
+    }
+
 
 }

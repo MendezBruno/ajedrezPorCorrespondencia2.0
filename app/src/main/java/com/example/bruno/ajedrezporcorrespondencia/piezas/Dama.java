@@ -29,4 +29,14 @@ public class Dama extends Pieza {
         if(esBlanca) return R.drawable.qw;
         return R.drawable.qb;
     }
+
+    @Override
+    public boolean esEnroqueLargo(Coordenada coord, ArrayList<Pieza> piezas) {
+        return false;
+    }
+
+    @Override
+    public boolean esEnroqueCorto(Coordenada coord, ArrayList<Pieza> piezas) {
+        return false;
+    }
 }

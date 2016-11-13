@@ -36,4 +36,14 @@ public class Torre extends Pieza {
             return R.drawable.rb;
         }
     }
+
+    @Override
+    public boolean esEnroqueLargo(Coordenada coord, ArrayList<Pieza> piezas) {
+        return false;
+    }
+
+    @Override
+    public boolean esEnroqueCorto(Coordenada coord, ArrayList<Pieza> piezas) {
+        return false;
+    }
 }

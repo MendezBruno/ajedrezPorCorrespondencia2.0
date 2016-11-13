@@ -61,4 +61,14 @@ public class Caballo extends Pieza {
             if(esBlanca) return R.drawable.nw;
             return R.drawable.nb;
         }
+
+    @Override
+    public boolean esEnroqueLargo(Coordenada coord, ArrayList<Pieza> piezas) {
+        return false;
+    }
+
+    @Override
+    public boolean esEnroqueCorto(Coordenada coord, ArrayList<Pieza> piezas) {
+        return false;
+    }
 }
