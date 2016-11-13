@@ -45,6 +45,7 @@ public class JuegoNuevoActivity extends AppCompatActivity {
     private ImageView miImagen;
     private ImageView retadorImagen;
     private Jugador jugador;
+    private Contrincante contrincante;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,9 @@ public class JuegoNuevoActivity extends AppCompatActivity {
                 Intent intent = new Intent(JuegoNuevoActivity.this, TableroActivity.class);
                 juego = crearJuego();
 
-                juego.jugadorBlanco.id = jugador.id;
+                //reparto los id de los jugadores en los juegos
+                if(juego.turno) juego.jugadorBlanco = jugador.id;
+                else juego.jugadorNegro = jugador.id;
 
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference("message").child("users");
@@ -80,6 +83,7 @@ public class JuegoNuevoActivity extends AppCompatActivity {
                 myRef.setValue(map);
 
                 intent.putExtra("juego", juego);
+                intent.putExtra("idJugador",jugador.id);
                 startActivity(intent);
             }
         });
@@ -97,42 +101,16 @@ public class JuegoNuevoActivity extends AppCompatActivity {
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                        Contrincante contrincante = (Contrincante)parent.getItemAtPosition(position);
-
+                        contrincante = (Contrincante)parent.getItemAtPosition(position);
                         Glide.with(JuegoNuevoActivity.this).load(contrincante.imagen).into(retadorImagen);
-
                     }
                 });
-
-
             }
         });
 
         Glide.with(this)
                 .load(jugador.imagenJugador)
                 .into(miImagen);
-
-/*
-        URL imageUrl = null;
-        HttpURLConnection conn = null;
-
-        try {
-
-            imageUrl = new URL();
-            conn = (HttpURLConnection) imageUrl.openConnection();
-            conn.connect();
-            Bitmap imagen = BitmapFactory.decodeStream(conn.getInputStream());
-            miImagen.setImageBitmap(imagen);
-
-            } catch (IOException e) {
-
-            e.printStackTrace();
-
-            }
-
-
-*/
 
     }
     private ArrayList<Pieza> crearTablero() {
@@ -180,12 +158,6 @@ public class JuegoNuevoActivity extends AppCompatActivity {
     private Juego crearJuego (){
 
         Juego juego = new Juego();
-        Jugador jugadorBlanco = new Jugador();
-        Jugador jugadorNegro = new Jugador();
-        jugadorBlanco.id = "firebaseIdBlanco";
-        jugadorNegro.id = "firebaseIdNegro";
-        juego.jugadorBlanco = jugadorBlanco;
-        juego.jugadorNegro = jugadorNegro;
         juego.piezas = crearTablero();
 
         RadioButton radioButtonBlancas = (RadioButton) findViewById(R.id.radioButtonBlancas);

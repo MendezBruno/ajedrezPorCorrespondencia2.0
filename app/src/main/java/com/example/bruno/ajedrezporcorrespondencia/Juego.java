@@ -13,8 +13,8 @@ import java.util.ArrayList;
  */
 
 public class Juego implements Serializable{
-   public Jugador jugadorBlanco;
-   public Jugador jugadorNegro;
+   public String jugadorBlanco;
+   public String jugadorNegro;
    public ArrayList<Pieza> piezas = new ArrayList<>();
    public Boolean turno;
    public Pieza piezaSeleccionada;
