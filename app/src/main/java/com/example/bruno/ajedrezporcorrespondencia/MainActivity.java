@@ -61,8 +61,7 @@ public class MainActivity extends AppCompatActivity {
             jugador = (Jugador) savedInstanceState.getSerializable("jugador");
         }
 
-
-        //Esto es para algo que explotaba fiero
+        //Esto es para algo que explotaba fiero (creo que era el Glide)
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
@@ -91,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Generamos los botones principales
         setContentView(R.layout.activity_main);
+        //Boton para retar a un jugador
         challegereButton = (Button) findViewById(R.id.buttonChalleger);
-        challegereButton.setEnabled(false);
         challegereButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,17 +101,20 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        challegereButton.setEnabled(false);
+
+        //Boton para ir a la galería
         galeriaButton = (Button) findViewById(R.id.buttonGaleria);
-        galeriaButton.setEnabled(false);
         galeriaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, GaleriaActivity.class);
-
                 startActivity(intent);
             }
         });
+        galeriaButton.setEnabled(false);
 
+        //Boton para realizar el login a twiter
         loginButton = (TwitterLoginButton) findViewById(R.id.twitterlogin);
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
@@ -133,12 +135,11 @@ public class MainActivity extends AppCompatActivity {
                               FirebaseDatabase database = FirebaseDatabase.getInstance();
                               final DatabaseReference myRef = database.getReference().child(user.getUid());
                               myRef.addValueEventListener(new ValueEventListener() {
+
                                   @Override
                                   public void onDataChange(DataSnapshot dataSnapshot) {
                                        Jugador unJugador = dataSnapshot.getValue(Jugador.class);
-
                                       if (unJugador == null){
-
                                           jugador.id = user.getUid();
                                           myRef.setValue(jugador);
                                       }
@@ -152,12 +153,9 @@ public class MainActivity extends AppCompatActivity {
                                       // Failed to read value
                                   }
                               });
-
                           } else {
                             // User is signed out
                         }
-
-
                     }
                 });
             }
