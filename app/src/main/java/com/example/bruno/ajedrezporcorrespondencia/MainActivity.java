@@ -109,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, GaleriaActivity.class);
+                intent.putExtra("sessionID", sessionID);
+                intent.putExtra("jugador", jugador);
                 startActivity(intent);
             }
         });

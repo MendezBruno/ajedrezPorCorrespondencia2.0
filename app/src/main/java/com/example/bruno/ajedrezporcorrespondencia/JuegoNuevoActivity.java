@@ -66,8 +66,14 @@ public class JuegoNuevoActivity extends AppCompatActivity {
                 botonJuegoNuevo.setEnabled(false);
                 juego = crearJuego();
                 //reparto los id de los jugadores en los juegos
-                if(juego.turno) juego.jugadorBlanco = jugador.id;
-                else juego.jugadorNegro = jugador.id;
+                if(juego.turno){
+                    juego.jugadorBlanco = jugador.id;
+                    juego.jugadorNegro = buscarIdFirebase(contrincante.idTwitter);
+                }
+                else {
+                    juego.jugadorNegro = jugador.id;
+                    juego.jugadorBlanco = buscarIdFirebase(contrincante.idTwitter);
+                }
                 //guardo el juego nuevo en firebase
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference("message").child("users");
@@ -89,9 +95,9 @@ public class JuegoNuevoActivity extends AppCompatActivity {
             }
         });
 
+        //Cargando list view con los followers
         lv = (ListView) findViewById(R.id.listUsers);
         tw = new TwitterWrapper(sessionID);
-
         final ArrayList<Contrincante> listaContrincantes = new ArrayList<Contrincante>();
         final JuegoNuevoActivity self = this;
         tw.obtenerFollowers(listaContrincantes, new CallBack() {
@@ -109,12 +115,16 @@ public class JuegoNuevoActivity extends AppCompatActivity {
                 });
             }
         });
-
         Glide.with(this)
                 .load(jugador.imagenJugador)
                 .into(miImagen);
 
     }
+
+    private String buscarIdFirebase(long idTwitter) {
+        return null;
+    }
+
     private ArrayList<Pieza> crearTablero() {
         ArrayList<Pieza> piezas = new ArrayList<>();
         /***************Piezas Blancas**********************/

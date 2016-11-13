@@ -7,10 +7,12 @@ public class Contrincante {
     String imagen;
     String nombre;
     String usuario;
+    public long idTwitter;
 
-    Contrincante(String imagen,String nombre,String usuario) {
+    Contrincante(String imagen,String nombre,String usuario,  long idTwitter) {
         this.imagen = imagen;
         this.nombre = nombre;
         this.usuario = usuario;
+        this.idTwitter = idTwitter;
     }
 }

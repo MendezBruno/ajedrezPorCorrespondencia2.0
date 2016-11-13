@@ -83,7 +83,7 @@ public class TwitterWrapper {
             public void success(Result < Followers > result) {
                 for(User user:result.data.users){
                     String imagenUsuario = user.profileImageUrl;
-                    Contrincante contrincante = new Contrincante(imagenUsuario,user.name,user.screenName);
+                    Contrincante contrincante = new Contrincante(imagenUsuario,user.name,user.screenName,user.id);
                     contlist.add(contrincante);
                 }
                 callBack.aceptar();
