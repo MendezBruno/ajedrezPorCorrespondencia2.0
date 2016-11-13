@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class Juego implements Serializable{
    public String jugadorBlanco;
    public String jugadorNegro;
+   public String jugadorNativo;
    public ArrayList<Pieza> piezas = new ArrayList<>();
    public Boolean turno;
    public Pieza piezaSeleccionada;
@@ -22,15 +23,19 @@ public class Juego implements Serializable{
    public JuegoState juegoState;
 
     public boolean esMiPieza(Pieza pieza) {
-//        return true;
-        //todo ver si es mi pieza por el id del jugadors
+
+        //TODO:  UTILIZAR ESTO PARA JUEGO REAL
+        //if (pieza.esBlanca) return jugadorBlanco.equals(jugadorNativo);
+        //else return jugadorNegro.equals(jugadorNativo)
+
+        //TODO UTILIZAR ESTO PARA JUGAR MUCHAS VECES MI TURNO (ES COMO UN MODO PRUEBA)
         return pieza.esBlanca;
 
     }
 
 
-    public void jugada(Pieza pieza, int position) {
-
+    public void jugada(Pieza pieza, int position, String idjugador) {
+        jugadorNativo = idjugador;
         juegoState.jugada(pieza, position, this);
     }
 
@@ -49,17 +54,20 @@ public class Juego implements Serializable{
     }
 
     public boolean soyElBlanco() {
+
+        //TODO:  UTILIZAR ESTO PARA JUEGO REAL
+        // return jugadorBlanco.equals(jugadorNativo);
+
         return true;
     }
 
     public Pieza findPiezaByPosition(int position) {
 
-        return this.findByCoordenada(Coordenada.getCoordenada(position));
+        int posicionOpuesta = Coordenada.getCoordenada(position).getOpuesto();
+
+        if(soyElBlanco()) return this.findByCoordenada(Coordenada.getCoordenada(position));
+        else return this.findByCoordenada(Coordenada.getCoordenada(posicionOpuesta));
     }
-
-
-
-
 
     public boolean esEnroqueLargo(Coordenada coord, ArrayList<Pieza> piezas) {
         return piezaSeleccionada.esEnroqueLargo(coord, piezas);

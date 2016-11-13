@@ -19,41 +19,12 @@ import java.util.HashMap;
 public class ImageAdapter extends BaseAdapter implements Serializable{
 
     static int contador = 0;
-
-    static final int PEONBLANCO = 0;
-    static final int TORREBLANCA = 1;
-    static final int CABALLOBLANCO = 2;
-    static final int ALFILBLANCO = 3;
-    static final int DAMABLANCA = 4;
-    static final int REYBLANCO = 5;
-    static final int PEONNEGRO = 6;
-    static final int TORRENEGRA = 7;
-    static final int CABALLONEGRO = 8;
-    static final int ALFILNEGRO = 9;
-    static final int DAMANEGRA = 10;
-    static final int REYNEGRO = 11;
-
-
-    private HashMap<Integer,Pieza> posicionesPieza = new HashMap<>();
-    private HashMap<Integer,View> posicionesCeldas = new HashMap<>();
-    private ArrayList<Pieza> misPiezas = new ArrayList<>();
     private Context mContext;
-    private JuegoState estado;
     private Juego mJuego;
-
-
 
     public ImageAdapter(Context c, Juego juego) {
         mContext = c;
         mJuego = juego;
-        for (Pieza pieza : mJuego.piezas) {
-            if (mJuego.soyElBlanco()) posicionesPieza.put(pieza.getCoordenada().getIndex(),pieza);
-            else  posicionesPieza.put(pieza.getCoordenada().getOpuesto(),pieza);
-            //Todo Verificar que el color coincida con el del jugador
-            if (pieza.esBlanca)
-                misPiezas.add(pieza);
-        }
-
     }
 
     public int getCount() {
@@ -83,7 +54,6 @@ public class ImageAdapter extends BaseAdapter implements Serializable{
             LayoutInflater inflater = (LayoutInflater) mContext
             .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view =  inflater.inflate(R.layout.grid_item, parent, false);
-            posicionesCeldas.put(position,view);
         }
         ImageView casillero = (ImageView) view.findViewById(R.id.casillero);
         ImageView pieza = (ImageView) view.findViewById(R.id.pieza);

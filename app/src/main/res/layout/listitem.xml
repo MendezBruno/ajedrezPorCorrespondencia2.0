@@ -12,7 +12,7 @@
 
     <TextView
         android:text="TextView"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="45dp"
         android:id="@+id/userName"
         android:layout_weight="0.02" />
