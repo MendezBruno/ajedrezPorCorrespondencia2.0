@@ -18,6 +18,8 @@ import java.util.List;
 
 public class userAdapter extends ArrayAdapter<Contrincante> {
 
+    public Contrincante contrincante;
+
     public  userAdapter(Context context, List<Contrincante> objects) {
         super(context, 0, objects);
     }
@@ -42,7 +44,7 @@ public class userAdapter extends ArrayAdapter<Contrincante> {
 
         // Lead actual.
 
-        Contrincante contrincante = getItem(position);
+        contrincante = getItem(position);
 
         Glide.with(getContext())
              .load(contrincante.imagen)

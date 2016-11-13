@@ -1,10 +1,6 @@
 package com.example.bruno.ajedrezporcorrespondencia.stateJuego;
 
-import android.widget.ImageView;
-
-import com.example.bruno.ajedrezporcorrespondencia.Coordenada;
 import com.example.bruno.ajedrezporcorrespondencia.Juego;
-import com.example.bruno.ajedrezporcorrespondencia.R;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Pieza;
 
 import java.io.Serializable;

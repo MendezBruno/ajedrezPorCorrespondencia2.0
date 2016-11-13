@@ -1,13 +1,11 @@
 package com.example.bruno.ajedrezporcorrespondencia;
 
-import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.bruno.ajedrezporcorrespondencia.piezas.AdapterController;
@@ -15,10 +13,7 @@ import com.example.bruno.ajedrezporcorrespondencia.piezas.Pieza;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EligiendoPieza;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EnEspera;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.JuegoState;
-import com.example.bruno.ajedrezporcorrespondencia.stateJuego.PiezaSeleccionada;
 
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 

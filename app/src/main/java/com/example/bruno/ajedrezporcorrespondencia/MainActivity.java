@@ -1,5 +1,6 @@
 package com.example.bruno.ajedrezporcorrespondencia;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -14,7 +15,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.TwitterAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -41,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
     private TwitterSession session;
     private long sessionID;
     private Jugador jugador;
+    private ProgressDialog progress;
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -61,9 +71,28 @@ public class MainActivity extends AppCompatActivity {
         Fabric.with(this, new Twitter(authConfig));
         mAuth = FirebaseAuth.getInstance();
 
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+
+                    jugador.id=user.getUid();
+
+                } else {
+                    // User is signed out
+
+                }
+                // ...
+            }
+        };
+
+
         //Generamos los botones principales
         setContentView(R.layout.activity_main);
         challegereButton = (Button) findViewById(R.id.buttonChalleger);
+        challegereButton.setEnabled(false);
         challegereButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         galeriaButton = (Button) findViewById(R.id.buttonGaleria);
+        galeriaButton.setEnabled(false);
         galeriaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
+                progress = ProgressDialog.show(MainActivity.this, "Ajedrez Por Correspondencia", "Cargando");
                 handleTwitterAccessToken(result);
                 session = Twitter.getSessionManager().getActiveSession();
                 sessionID = session.getId();
@@ -95,7 +126,38 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void aceptar() {
                //         savedInstanceState.putSerializable("jugador",jugador);
-                        // todo*  Aca tengo que obtener mis datos del firebase...
+                          final FirebaseUser user = mAuth.getCurrentUser();
+                          if (user != null) {
+                          // User is signed in
+                              // Obtener datos de firebase con el UID
+                              FirebaseDatabase database = FirebaseDatabase.getInstance();
+                              final DatabaseReference myRef = database.getReference().child(user.getUid());
+                              myRef.addValueEventListener(new ValueEventListener() {
+                                  @Override
+                                  public void onDataChange(DataSnapshot dataSnapshot) {
+                                       Jugador unJugador = dataSnapshot.getValue(Jugador.class);
+
+                                      if (unJugador == null){
+
+                                          jugador.id = user.getUid();
+                                          myRef.setValue(jugador);
+                                      }
+                                      challegereButton.setEnabled(true);
+                                      galeriaButton.setEnabled(true);
+                                      progress.dismiss();
+                                  }
+                                  @Override
+                                  public void onCancelled(DatabaseError error) {
+                                      progress.dismiss();
+                                      // Failed to read value
+                                  }
+                              });
+
+                          } else {
+                            // User is signed out
+                        }
+
+
                     }
                 });
             }
@@ -104,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Login with Twitter failure", Toast.LENGTH_LONG).show();
             }
         });
+
 
 
         logOut = (Button) findViewById(R.id.buttonLogOut);
@@ -119,8 +182,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-
     }
 
     @Override
@@ -131,13 +192,25 @@ public class MainActivity extends AppCompatActivity {
         loginButton.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
+
+
+
 
     private void handleTwitterAccessToken(Result<TwitterSession> result) {
         AuthCredential credential =  TwitterAuthProvider.getCredential(result.data.getAuthToken().token, result.data.getAuthToken().secret);
-
-
-
-
         mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener() {
 
             @Override
@@ -145,12 +218,10 @@ public class MainActivity extends AppCompatActivity {
 
                 if (!task.isSuccessful()) {
                     Toast.makeText(getApplicationContext(), "Authentication failed.",Toast.LENGTH_SHORT).show();
+
                 }
-
             }
-
-            });
-
-        }
+        });
+    }
 
 }

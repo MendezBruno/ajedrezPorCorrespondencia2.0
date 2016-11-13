@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -19,9 +20,16 @@ import com.example.bruno.ajedrezporcorrespondencia.piezas.Rey;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Torre;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EligiendoPieza;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EnEspera;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.twitter.sdk.android.core.TwitterSession;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JuegoNuevoActivity extends AppCompatActivity {
 
@@ -35,6 +43,7 @@ public class JuegoNuevoActivity extends AppCompatActivity {
     private long sessionID;
     private TwitterWrapper tw;
     private ImageView miImagen;
+    private ImageView retadorImagen;
     private Jugador jugador;
 
     @Override
@@ -45,12 +54,31 @@ public class JuegoNuevoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_juego_nuevo);
         botonJuegoNuevo = (Button) findViewById(R.id.buttonRetarJugador);
         miImagen = (ImageView) findViewById(R.id.imageViewLocalUser);
+        retadorImagen = (ImageView) findViewById(R.id.imageViewOtherUser);
 
         botonJuegoNuevo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(JuegoNuevoActivity.this, TableroActivity.class);
                 juego = crearJuego();
+
+                juego.jugadorBlanco.id = jugador.id;
+
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("message").child("users");
+
+                GsonBuilder gsonBilder = new GsonBuilder();
+
+                gsonBilder.registerTypeAdapter(Pieza.class, new AbstractAdapter());
+
+                Gson gson = gsonBilder.create();
+
+                String json = gson.toJson(juego);
+
+                Map<String, Object> map = gson.fromJson(json, new TypeToken<HashMap<String, Object>>() {}.getType());
+
+                myRef.setValue(map);
+
                 intent.putExtra("juego", juego);
                 startActivity(intent);
             }
@@ -66,6 +94,18 @@ public class JuegoNuevoActivity extends AppCompatActivity {
             public void aceptar() {
                 userAdapter adapter = new userAdapter(self,listaContrincantes);
                 lv.setAdapter(adapter);
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        Contrincante contrincante = (Contrincante)parent.getItemAtPosition(position);
+
+                        Glide.with(JuegoNuevoActivity.this).load(contrincante.imagen).into(retadorImagen);
+
+                    }
+                });
+
+
             }
         });
 
