@@ -25,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -71,11 +72,21 @@ public class JuegoNuevoActivity extends AppCompatActivity {
                 //reparto los id de los jugadores en los juegos
                 if(juego.turno){
                     juego.jugadorBlanco = jugador.id;
-                    juego.jugadorNegro = buscarIdFirebase(contrincante.idTwitter);
+                    buscarIdFirebase(contrincante.idTwitter, false, new CallBack() {
+                        @Override
+                        public void aceptar() {
+//                            juego.jugadorNegro = id;
+                        }
+                    });
                 }
                 else {
                     juego.jugadorNegro = jugador.id;
-                    juego.jugadorBlanco = buscarIdFirebase(contrincante.idTwitter);
+                    buscarIdFirebase(contrincante.idTwitter, true, new CallBack() {
+                        @Override
+                        public void aceptar() {
+//                            juego.jugadorBlanco = jugador.id;
+                        }
+                    });
                 }
                 //guardo el juego nuevo en firebase
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -124,38 +135,33 @@ public class JuegoNuevoActivity extends AppCompatActivity {
 
     }
 
-    private String buscarIdFirebase(long idTwitter) {
+    private void buscarIdFirebase(final long idTwitter, Boolean esBlanco, CallBack callBack) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("Usuarios");
-        myRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    dataSnapshot.getValue();
-            }
+        String firebase;
+        myRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Get user value
+                        // User user = dataSnapshot.getValue(User.class);
+                        ArrayList<Jugador> jugadores = new ArrayList<Jugador>();
+                        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                            Jugador jugador = postSnapshot.getValue(Jugador.class);
+                            jugadores.add(jugador);
+                        }
+//                        tratar de sacar el id que esta adentro de este callback
+//                     return (jugadores.findByIdTwiter(idTwitter)).id;
+                        // ...
+                    }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                dataSnapshot.getValue();
-            }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+//                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                        // ...
+                    }
+                });
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                dataSnapshot.getValue();
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                dataSnapshot.getValue();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-        return null;
     }
 
     private ArrayList<Pieza> crearTablero() {
