@@ -51,6 +51,7 @@ public class JuegoNuevoActivity extends AppCompatActivity {
     private Jugador jugador;
     private Contrincante contrincante;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,49 +64,47 @@ public class JuegoNuevoActivity extends AppCompatActivity {
 
 
         /*Listeners de Para retar a un jugador */
+
         botonJuegoNuevo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                botonJuegoNuevo.setEnabled(false);
-                juego = crearJuego();
-                //reparto los id de los jugadores en los juegos
-                if(juego.turno){
-                    juego.jugadorBlanco = jugador.id;
-                    buscarIdFirebase(contrincante.idTwitter, false, new CallBack() {
-                        @Override
-                        public void aceptar() {
-//                            juego.jugadorNegro = id;
+                buscarIdFirebase(contrincante.idTwitter, new CallBack() {
+                    @Override
+                    public void aceptar() {
+                        botonJuegoNuevo.setEnabled(false);
+                        juego = crearJuego();
+                        //reparto los id de los jugadores en los juegos
+                        if(juego.turno){
+                            juego.jugadorBlanco = jugador.id;
+                            juego.jugadorNegro = contrincante.usuario;
                         }
-                    });
-                }
-                else {
-                    juego.jugadorNegro = jugador.id;
-                    buscarIdFirebase(contrincante.idTwitter, true, new CallBack() {
-                        @Override
-                        public void aceptar() {
-//                            juego.jugadorBlanco = jugador.id;
+                        else {
+                            juego.jugadorBlanco = contrincante.usuario;
+                            juego.jugadorNegro = jugador.id;
                         }
-                    });
-                }
-                //guardo el juego nuevo en firebase
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("message").child("users");
-                GsonBuilder gsonBilder = new GsonBuilder();
-                gsonBilder.registerTypeAdapter(Pieza.class, new AbstractAdapter());
-                Gson gson = gsonBilder.create();
-                String json = gson.toJson(juego);
-                Map<String, Object> map = gson.fromJson(json, new TypeToken<HashMap<String, Object>>() {}.getType());
-                myRef.setValue(map);
-                //Envio twitter a mi contrincante para avisarle que lo estoy retando a jugar
+                        //guardo el juego nuevo en firebase
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference myRef = database.getReference("juegos");
+                        GsonBuilder gsonBilder = new GsonBuilder();
+                        gsonBilder.registerTypeAdapter(Pieza.class, new AbstractAdapter());
+                        Gson gson = gsonBilder.create();
+                        String json = gson.toJson(juego);
+                        Map<String, Object> map = gson.fromJson(json, new TypeToken<HashMap<String, Object>>() {}.getType());
+                        myRef.setValue(map);
+                        //Envio twitter a mi contrincante para avisarle que lo estoy retando a jugar
                 /*
                 todo: Poner codigo aca enviando un mensaje al tw del contrincante
                 */
-                //Esto va para el activity siguiente
-                Intent intent = new Intent(JuegoNuevoActivity.this, TableroActivity.class);
-                intent.putExtra("juego", juego);
-                intent.putExtra("idJugador",jugador.id);
-                startActivity(intent);
+                        //Esto va para el activity siguiente
+                        Intent intent = new Intent(JuegoNuevoActivity.this, TableroActivity.class);
+                        intent.putExtra("juego", juego);
+                        intent.putExtra("idJugador",jugador.id);
+                        startActivity(intent);
+                    }
+                });
+
+
             }
         });
 
@@ -135,7 +134,7 @@ public class JuegoNuevoActivity extends AppCompatActivity {
 
     }
 
-    private void buscarIdFirebase(final long idTwitter, Boolean esBlanco, CallBack callBack) {
+    private void buscarIdFirebase(final long idTwitter, final CallBack callBack) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("Usuarios");
         String firebase;
@@ -146,13 +145,18 @@ public class JuegoNuevoActivity extends AppCompatActivity {
                         // Get user value
                         // User user = dataSnapshot.getValue(User.class);
                         ArrayList<Jugador> jugadores = new ArrayList<Jugador>();
-                        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                            Jugador jugador = postSnapshot.getValue(Jugador.class);
-                            jugadores.add(jugador);
+                        for (DataSnapshot postSnapshot: dataSnapshot.getChildren())
+                            jugadores.add(postSnapshot.getValue(Jugador.class));
+
+                        Jugador jugador =  (findJugadorByIdTwiter(jugadores, idTwitter));
+                        if(jugador != null) {
+                            contrincante.usuario = jugador.id;
+                            callBack.aceptar();
+                        }else {
+                            //todo Avisar que el jugador no tiene la aplicacion, (invitarlo?)
                         }
-//                        tratar de sacar el id que esta adentro de este callback
-//                     return (jugadores.findByIdTwiter(idTwitter)).id;
-                        // ...
+
+
                     }
 
                     @Override
@@ -162,6 +166,14 @@ public class JuegoNuevoActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    private Jugador findJugadorByIdTwiter(ArrayList<Jugador> jugadores, long idTwitter) {
+        Jugador jugadorBuscado = null;
+        for(Jugador jugador: jugadores){
+             if(jugador.idTwitter == idTwitter) jugadorBuscado = jugador;
+        }
+        return jugadorBuscado;
     }
 
     private ArrayList<Pieza> crearTablero() {

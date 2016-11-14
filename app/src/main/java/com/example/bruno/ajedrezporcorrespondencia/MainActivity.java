@@ -59,7 +59,11 @@ public class MainActivity extends AppCompatActivity {
         //Tengo algo salvado
         if(savedInstanceState != null){
             jugador = (Jugador) savedInstanceState.getSerializable("jugador");
+            SessionUsuario.sessionUsuario = (SessionUsuario) savedInstanceState.getSerializable("session");
+        }else{
+        SessionUsuario sessionUsuario = new SessionUsuario();
         }
+
 
         //Esto es para algo que explotaba fiero (creo que era el Glide)
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -78,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null) {
 
                     jugador.id=user.getUid();
-
+                    SessionUsuario.sessionUsuario.jugador = jugador;
                 } else {
                     // User is signed out
 
@@ -129,8 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 tw.obtenerMisDatos(jugador, new CallBack() {
                     @Override
                     public void aceptar() {
-               //         savedInstanceState.putSerializable("jugador",jugador);
-                          final FirebaseUser user = mAuth.getCurrentUser();
+                final FirebaseUser user = mAuth.getCurrentUser();
                           if (user != null) {
                           // User is signed in
                               // Obtener datos de firebase con el UID
@@ -144,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
                                       if (unJugador == null){
                                           jugador.id = user.getUid();
                                           myRef.setValue(jugador);
+                                          SessionUsuario.sessionUsuario.jugador = jugador;
+                                          //savedInstanceState.putSerializable("session",SessionUsuario.sessionUsuario);
                                       }
                                       challegereButton.setEnabled(true);
                                       galeriaButton.setEnabled(true);

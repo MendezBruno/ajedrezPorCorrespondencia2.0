@@ -15,7 +15,6 @@ import java.util.ArrayList;
 public class Juego implements Serializable{
    public String jugadorBlanco;
    public String jugadorNegro;
-   public String jugadorNativo;
    public ArrayList<Pieza> piezas = new ArrayList<>();
    public Boolean turno;
    public Pieza piezaSeleccionada;
@@ -25,8 +24,8 @@ public class Juego implements Serializable{
     public boolean esMiPieza(Pieza pieza) {
 
         //TODO:  UTILIZAR ESTO PARA JUEGO REAL
-        //if (pieza.esBlanca) return jugadorBlanco.equals(jugadorNativo);
-        //else return jugadorNegro.equals(jugadorNativo)
+//        if (pieza.esBlanca) return jugadorBlanco.equals(SessionUsuario.sessionUsuario.jugador);
+//        else return jugadorNegro.equals(SessionUsuario.sessionUsuario.jugador);
 
         //TODO UTILIZAR ESTO PARA JUGAR MUCHAS VECES MI TURNO (ES COMO UN MODO PRUEBA)
         return pieza.esBlanca;
@@ -35,8 +34,7 @@ public class Juego implements Serializable{
 
 
     public void jugada(Pieza pieza, int position, String idjugador) {
-        jugadorNativo = idjugador;
-        juegoState.jugada(pieza, position, this);
+       juegoState.jugada(pieza, position, this);
     }
 
     public Coordenada eliminarPieza(int position) {
@@ -56,7 +54,7 @@ public class Juego implements Serializable{
     public boolean soyElBlanco() {
 
         //TODO:  UTILIZAR ESTO PARA JUEGO REAL
-        // return jugadorBlanco.equals(jugadorNativo);
+//         return jugadorBlanco.equals(SessionUsuario.sessionUsuario.jugador.id);
 
         return true;
     }
