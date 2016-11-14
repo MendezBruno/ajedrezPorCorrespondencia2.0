@@ -173,9 +173,7 @@ public class MainActivity extends AppCompatActivity {
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Twitter.getSessionManager().clearActiveSession();
-                Twitter.logOut();
+            MainActivity.this.finish();
             }
         });
 
