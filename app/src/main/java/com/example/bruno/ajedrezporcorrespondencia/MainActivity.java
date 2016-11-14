@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                           // User is signed in
                               // Obtener datos de firebase con el UID
                               FirebaseDatabase database = FirebaseDatabase.getInstance();
-                              final DatabaseReference myRef = database.getReference().child(user.getUid());
+                              final DatabaseReference myRef = database.getReference("Usuarios").child(user.getUid());
                               myRef.addValueEventListener(new ValueEventListener() {
 
                                   @Override
