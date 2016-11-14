@@ -18,43 +18,52 @@ import java.util.List;
 
 public class userAdapter extends ArrayAdapter<Contrincante> {
 
-    public Contrincante contrincante;
+    // Usen el inflater como atributo, para evitar buscarlo cada vez.
+    private LayoutInflater inflater;
 
     public  userAdapter(Context context, List<Contrincante> objects) {
         super(context, 0, objects);
+        inflater = LayoutInflater.from(context);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Obtener inflater.
-        LayoutInflater inflater = (LayoutInflater) getContext()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+        final ViewHolder vh;
         // ¿Existe el view actual?
         if (null == convertView) {
             convertView = inflater.inflate(
                     R.layout.listitem,
                     parent,
                     false);
-        }
 
-        // Referencias UI.
-        ImageView imageUser = (ImageView) convertView.findViewById(R.id.UserFoto);
-        TextView name = (TextView) convertView.findViewById(R.id.userName);
+            // Referencias UI.
+            // Acá usen siempre ViewHolders. El ViewHolder permite guardar las referencias a las
+            // vistas que se usan para evitar buscarlas cada vez. RecyclerView ya les trae una
+            // implementación de ViewHolder, pero ListView no. Tienen que hacerlo a mano.
+            // Les pongo un ejemplo:
+            vh = new ViewHolder();
+            vh.imageUser = (ImageView) convertView.findViewById(R.id.UserFoto);
+            vh.name = (TextView) convertView.findViewById(R.id.userName);
+            convertView.setTag(vh);
+        }
+        else {
+            vh = (ViewHolder) convertView.getTag();
+        }
 
         // Lead actual.
 
-        contrincante = getItem(position);
+        Contrincante contrincante = getItem(position);
 
         Glide.with(getContext())
              .load(contrincante.imagen)
-             .into(imageUser);
-        name.setText(contrincante.nombre);
+             .into(vh.imageUser);
+        vh.name.setText(contrincante.nombre);
 
         return convertView;
     }
 
-
-
-
+    private class ViewHolder {
+        ImageView imageUser;
+        TextView name;
+    }
 }
