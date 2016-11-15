@@ -2,18 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="45dp"
+    android:orientation="horizontal"
+    android:gravity="center">
 
     <ImageView
         android:layout_width="62dp"
-        android:layout_height="45dp"
+        android:layout_height="match_parent"
         app:srcCompat="@drawable/userpancho"
         android:id="@+id/UserFoto" />
 
     <TextView
         android:text="TextView"
-        android:layout_width="fill_parent"
-        android:layout_height="45dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:id="@+id/userName"
-        android:layout_weight="0.02" />
+        android:layout_weight="1" />
 </LinearLayout>
