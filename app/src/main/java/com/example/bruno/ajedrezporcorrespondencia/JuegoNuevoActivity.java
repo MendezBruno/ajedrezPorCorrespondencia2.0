@@ -69,13 +69,13 @@ public class JuegoNuevoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                buscarIdFirebase(contrincante.idTwitter, new CallBack() {
+                this.buscarIdFirebase(contrincante.idTwitter, new CallBack() {
                     @Override
                     public void aceptar() {
                         botonJuegoNuevo.setEnabled(false);
                         juego = crearJuego();
                         //reparto los id de los jugadores en los juegos
-                        if(juego.turno){
+                        if(juego.turno.equals(SessionUsuario.sessionUsuario.jugador.id)){
                             juego.jugadorBlanco = jugador.id;
                             juego.jugadorNegro = contrincante.usuario;
                         }
@@ -85,13 +85,14 @@ public class JuegoNuevoActivity extends AppCompatActivity {
                         }
                         //guardo el juego nuevo en firebase
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        DatabaseReference myRef = database.getReference("juegos");
+                        DatabaseReference myRef = database.getReference("juegos").push();
                         GsonBuilder gsonBilder = new GsonBuilder();
                         gsonBilder.registerTypeAdapter(Pieza.class, new AbstractAdapter());
                         Gson gson = gsonBilder.create();
                         String json = gson.toJson(juego);
                         Map<String, Object> map = gson.fromJson(json, new TypeToken<HashMap<String, Object>>() {}.getType());
                         myRef.setValue(map);
+
                         //Envio twitter a mi contrincante para avisarle que lo estoy retando a jugar
                 /*
                 todo: Poner codigo aca enviando un mensaje al tw del contrincante
@@ -106,6 +107,40 @@ public class JuegoNuevoActivity extends AppCompatActivity {
 
 
             }
+
+            private void buscarIdFirebase(final long idTwitter, final CallBack callBack) {
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                final DatabaseReference myRef = database.getReference("Usuarios");
+                myRef.addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                // Get user value
+                                // User user = dataSnapshot.getValue(User.class);
+                                ArrayList<Jugador> jugadores = new ArrayList<Jugador>();
+                                for (DataSnapshot postSnapshot: dataSnapshot.getChildren())
+                                    jugadores.add(postSnapshot.getValue(Jugador.class));
+
+                                Jugador jugadorDos =  (findJugadorByIdTwiter(jugadores, idTwitter));
+                                if(jugadorDos != null) {
+                                    contrincante.usuario = jugadorDos.id;
+                                    callBack.aceptar();
+                                }else {
+                                    //todo Avisar que el jugador no tiene la aplicacion, (invitarlo?)
+                                }
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+//                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                                // ...
+                            }
+                        });
+
+            }
+
         });
 
         //Cargando list view con los followers
@@ -134,39 +169,7 @@ public class JuegoNuevoActivity extends AppCompatActivity {
 
     }
 
-    private void buscarIdFirebase(final long idTwitter, final CallBack callBack) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference myRef = database.getReference("Usuarios");
-        String firebase;
-        myRef.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // Get user value
-                        // User user = dataSnapshot.getValue(User.class);
-                        ArrayList<Jugador> jugadores = new ArrayList<Jugador>();
-                        for (DataSnapshot postSnapshot: dataSnapshot.getChildren())
-                            jugadores.add(postSnapshot.getValue(Jugador.class));
 
-                        Jugador jugador =  (findJugadorByIdTwiter(jugadores, idTwitter));
-                        if(jugador != null) {
-                            contrincante.usuario = jugador.id;
-                            callBack.aceptar();
-                        }else {
-                            //todo Avisar que el jugador no tiene la aplicacion, (invitarlo?)
-                        }
-
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-//                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
-                        // ...
-                    }
-                });
-
-    }
 
     private Jugador findJugadorByIdTwiter(ArrayList<Jugador> jugadores, long idTwitter) {
         Jugador jugadorBuscado = null;
@@ -226,11 +229,13 @@ public class JuegoNuevoActivity extends AppCompatActivity {
         RadioButton radioButtonBlancas = (RadioButton) findViewById(R.id.radioButtonBlancas);
         //Si es true empieza el jugador nativo con blancas,
         // si es false empieza el jugador nativo con negars
-        juego.turno = radioButtonBlancas.isChecked();
-
-        if(juego.turno) juego.juegoState = new EligiendoPieza();
-        else juego.juegoState = new EnEspera();
-
+        if( radioButtonBlancas.isChecked()) {
+            juego.turno = SessionUsuario.sessionUsuario.jugador.id;
+            juego.juegoState = new EligiendoPieza();
+        }else {
+            juego.turno = contrincante.usuario;
+            juego.juegoState = new EnEspera();
+        }
         return juego;
     }
 

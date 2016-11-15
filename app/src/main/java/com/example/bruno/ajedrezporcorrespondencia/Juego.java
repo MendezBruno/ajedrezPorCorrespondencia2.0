@@ -16,7 +16,7 @@ public class Juego implements Serializable{
    public String jugadorBlanco;
    public String jugadorNegro;
    public ArrayList<Pieza> piezas = new ArrayList<>();
-   public Boolean turno;
+   public String turno;
    public Pieza piezaSeleccionada;
    public ArrayList<Coordenada> casillasPintadas = new ArrayList<>();
    public JuegoState juegoState;

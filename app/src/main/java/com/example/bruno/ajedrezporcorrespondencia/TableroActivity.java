@@ -31,7 +31,7 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
         gridview.setAdapter(ia);
         gridview.setOnItemClickListener(this);
 
-        if (juego.turno) juego.juegoState = new EligiendoPieza();
+        if (juego.turno.equals(SessionUsuario.sessionUsuario.jugador.id) ) juego.juegoState = new EligiendoPieza();
         else juego.juegoState = new EnEspera();
 
 
