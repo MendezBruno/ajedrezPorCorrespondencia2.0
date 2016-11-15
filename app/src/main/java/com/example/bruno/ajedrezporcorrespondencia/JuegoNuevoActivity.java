@@ -62,7 +62,6 @@ public class JuegoNuevoActivity extends AppCompatActivity {
         miImagen = (ImageView) findViewById(R.id.imageViewLocalUser);
         retadorImagen = (ImageView) findViewById(R.id.imageViewOtherUser);
 
-
         /*Listeners de Para retar a un jugador */
 
         botonJuegoNuevo.setOnClickListener(new View.OnClickListener() {

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <ImageView
+        android:layout_width="59dp"
+        android:layout_height="60dp"
+        app:srcCompat="@drawable/userpancho"
+        android:id="@+id/contrincante" />
+
+    <TextView
+        android:text="contrincante"
+        android:layout_width="184dp"
+        android:layout_height="60dp"
+        android:id="@+id/nombreContrincante"
+        android:textAlignment="center"
+        tools:textAlignment="center" />
+
+    <TextView
+        android:text="turno"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/turno"
+        android:textAllCaps="false"
+        android:textAlignment="center" />
+</LinearLayout>

@@ -15,4 +15,8 @@ public class Jugador implements Serializable {
     public int partidasEmpatadas;
 
     public String imagenJugador;
+
+    public boolean esMiJuego(Juego unJuego) {
+        return (unJuego.jugadorNegro.equals(id) || unJuego.jugadorBlanco.equals(id));
+    }
 }
