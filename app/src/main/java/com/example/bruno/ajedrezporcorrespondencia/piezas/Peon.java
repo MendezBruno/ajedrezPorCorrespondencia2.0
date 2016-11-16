@@ -46,9 +46,9 @@ public class Peon  extends Pieza{
             return  coordenadas;
 
         }else { //Es negra
-            if (this.tienePiezaDiagonalAbajoDerecha(coordenada,piezasJuego)) coordenadas.add(coordenada.diagonalSupDerecha(1));
-            if (this.tienePiezaDiagonalAbajoIzquierda(coordenada,piezasJuego)) coordenadas.add(coordenada.diagonalSupIzquierda(1));
-            if (!this.tienePiezaAbajo(coordenada, piezasJuego)) {
+            if (this.tienePiezaDiagonalArribaDerecha(coordenada,piezasJuego)) coordenadas.add(coordenada.diagonalSupDerecha(1));
+            if (this.tienePiezaDiagonalArribaIzquierda(coordenada,piezasJuego)) coordenadas.add(coordenada.diagonalSupIzquierda(1));
+            if (!this.tienePiezaArriba(coordenada, piezasJuego)) {
                 if ((coordenada.getFila().equals("7"))) {
                     try {
                         coordenadas.add(coordenada.arriba(2));

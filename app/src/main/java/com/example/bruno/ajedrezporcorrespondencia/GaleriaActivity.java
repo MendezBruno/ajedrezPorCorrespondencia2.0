@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Pieza;
@@ -33,18 +35,16 @@ public class GaleriaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_galeria);
         final Jugador jugador = (Jugador)getIntent().getExtras().getSerializable("jugador");
-
-        //Este boton se usa para pasar el tablero activity con una partida activa
-        jugarButton = (Button) findViewById(R.id.buttonNuevoMovimiento);
-        jugarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(GaleriaActivity.this, TableroActivity.class);
-
-                startActivity(intent);
-            }
-        });
-
+        ImageView miPerfilFoto = (ImageView) findViewById(R.id.perfilGaleria);
+        Glide.with(this)
+                .load(jugador.imagenJugador)
+                .into(miPerfilFoto);
+        TextView ganadas = (TextView) findViewById(R.id.numGan);
+        TextView empatadas = (TextView) findViewById(R.id.numEmp);
+        TextView perdidas = (TextView) findViewById(R.id.numPerdidas);
+//        ganadas.setText( "0" );
+//        empatadas.setText("0");
+//        perdidas.setText("0");
 
         //Cargando list view con los followers
         lv = (ListView) findViewById(R.id.partidasGuardadas);
@@ -67,9 +67,7 @@ public class GaleriaActivity extends AppCompatActivity {
                 });
             }
         });
-//        Glide.with(this)
-//                .load(jugador.imagenJugador)
-//                .into(miImagen);
+
     }
 
 
