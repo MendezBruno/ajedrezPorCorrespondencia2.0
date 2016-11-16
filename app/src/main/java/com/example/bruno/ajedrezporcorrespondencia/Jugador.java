@@ -10,6 +10,7 @@ public class Jugador implements Serializable {
     public String id;
     public long idTwitter;
     public String nombre;
+    public String twitterName;
     public int ranking;
     public int partidasGanadas;
     public int partidasPerdidas;

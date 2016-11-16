@@ -17,7 +17,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import retrofit2.http.Url;
 
 /**
  * Created by maria on 31/10/2016.
@@ -69,6 +68,7 @@ public class TwitterWrapper {
                 jugador.idTwitter = user.id;
                 jugador.imagenJugador = user.profileImageUrl;
                 jugador.nombre = user.name;
+                jugador.twitterName = user.screenName;
                 callBack.aceptar();
             }
         });
@@ -84,7 +84,7 @@ public class TwitterWrapper {
             public void success(Result < Followers > result) {
                 for(User user:result.data.users){
                     String imagenUsuario = user.profileImageUrl;
-                    Contrincante contrincante = new Contrincante(imagenUsuario,user.name,user.screenName,user.id);
+                    Contrincante contrincante = new Contrincante(imagenUsuario,user.name,"",user.id,user.screenName);
                     contlist.add(contrincante);
                 }
                 callBack.aceptar();

@@ -114,15 +114,11 @@ public class JuegoNuevoActivity extends AppCompatActivity {
                             }
                         });
 
-
-
-
-
-
                         //Envio twitter a mi contrincante para avisarle que lo estoy retando a jugar
-                /*
-                todo: Poner codigo aca enviando un mensaje al tw del contrincante
-                */
+
+
+                        tw.enviarTweet(contrincante.usuarioTwitter," Quiero jugar con vos a Ajedrez por Correspondencia");
+
                         //Esto va para el activity siguiente
                         Intent intent = new Intent(JuegoNuevoActivity.this, TableroActivity.class);
                         intent.putExtra("juego", juego);
@@ -152,7 +148,7 @@ public class JuegoNuevoActivity extends AppCompatActivity {
                                     contrincante.usuario = jugadorDos.id;
                                     callBack.aceptar();
                                 }else {
-                                    //todo Avisar que el jugador no tiene la aplicacion, (invitarlo?)
+                                    tw.enviarTweet(contrincante.usuarioTwitter," Quiero jugar con vos a Ajedrez por Correspondencia pero no tienes la aplicación instalada!!!");
                                 }
 
 

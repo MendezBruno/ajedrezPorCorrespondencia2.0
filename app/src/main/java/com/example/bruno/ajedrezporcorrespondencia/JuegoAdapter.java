@@ -17,8 +17,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by bruno on 15/11/2016.
@@ -60,7 +58,7 @@ public class JuegoAdapter extends ArrayAdapter<Juego> {
 
         //todo cargar aca todos los datos como tambien el id de la partida de cada uno de mis contrincantes.
         final Juego juego = getItem(position);
-        final Contrincante contrincante = new Contrincante(null,null,null,11111111);
+        final Contrincante contrincante = new Contrincante(null,null,null,11111111,null);
         contrincante.usuario = SessionUsuario.sessionUsuario.jugador.id.equals(juego.jugadorBlanco) ? juego.jugadorNegro:juego.jugadorBlanco;
         leerConIdFirebase(contrincante, new CallBack() {
             @Override
