@@ -46,12 +46,12 @@ public class Peon  extends Pieza{
             return  coordenadas;
 
         }else { //Es negra
-            if (this.tienePiezaDiagonalArribaDerecha(coordenada,piezasJuego)) coordenadas.add(coordenada.diagonalSupDerecha(1));
-            if (this.tienePiezaDiagonalArribaIzquierda(coordenada,piezasJuego)) coordenadas.add(coordenada.diagonalSupIzquierda(1));
-            if (!this.tienePiezaArriba(coordenada, piezasJuego)) {
+            if (this.tienePiezaDiagonalAbajoDerecha(coordenada,piezasJuego)) coordenadas.add(coordenada.diagonalInfDerecha(1));
+            if (this.tienePiezaDiagonalAbajoIzquierda(coordenada,piezasJuego)) coordenadas.add(coordenada.diagonalInfIzquierda(1));
+            if (!this.tienePiezaAbajo(coordenada, piezasJuego)) {
                 if ((coordenada.getFila().equals("7"))) {
                     try {
-                        coordenadas.add(coordenada.arriba(2));
+                        coordenadas.add(coordenada.abajo(2));
                     } catch (CoordenadaAlgebraException e) {
                         e.printStackTrace();
                         coordenadas.add(coordenada);
@@ -59,7 +59,7 @@ public class Peon  extends Pieza{
                     }
                 }
                 try {
-                    coordenadas.add(coordenada.arriba(1));
+                    coordenadas.add(coordenada.abajo(1));
 
                     return coordenadas;
                 } catch (CoordenadaAlgebraException e) {

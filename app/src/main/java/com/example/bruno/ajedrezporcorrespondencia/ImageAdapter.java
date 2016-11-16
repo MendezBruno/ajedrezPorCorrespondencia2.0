@@ -87,7 +87,7 @@ public class ImageAdapter extends BaseAdapter implements Serializable{
         }
 
 
-        if (getmJuego().casillasPintadas.contains(Coordenada.getCoordenada(position)))
+        if (getmJuego().casillasPintadas.contains(Coordenada.getCoordenada(position,mJuego.soyElBlanco())))
             seleccion.setImageResource(R.drawable.select_blue);
         else seleccion.setImageDrawable(null);
 

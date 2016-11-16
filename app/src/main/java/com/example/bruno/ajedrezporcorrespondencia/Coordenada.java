@@ -176,4 +176,9 @@ public enum Coordenada {
     }
 
 
+    public static Coordenada getCoordenada(int position, boolean blanco) {
+        Coordenada coordenada = Coordenada.getCoordenada(position);
+        if (blanco) return coordenada;
+            else return Coordenada.getCoordenada(coordenada.getOpuesto());
+    }
 }

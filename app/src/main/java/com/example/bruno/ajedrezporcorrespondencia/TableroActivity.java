@@ -64,11 +64,7 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
             myRef.setValue(map);
 
 
-
-            /*
-        todo Actualizar base de datos firebase
-        */
-        /*
+/*
         todo Enviar twiter de que ya se realizo movimiento
         */
         /*
