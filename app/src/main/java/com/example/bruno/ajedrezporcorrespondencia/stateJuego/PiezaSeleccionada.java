@@ -20,22 +20,21 @@ public class PiezaSeleccionada implements JuegoState, Serializable {
                 juego.casillasPintadas = pieza.calcularMovimientoCoordenadas(juego.piezas);
                 juego.piezaSeleccionada = pieza;
             } else {
-                Coordenada coord = Coordenada.getCoordenada(position);
+                Coordenada coord = Coordenada.getCoordenada(position,juego.soyElBlanco());
                 if (juego.casillasPintadas.contains(coord)) {
                     Coordenada coordenada = juego.eliminarPieza(position);
                     juego.piezaSeleccionada.setCoordenada(coordenada);
-                    juego.piezaSeleccionada = null;
+                    juego.casillasPintadas.clear();
                     juego.juegoState = new EnEspera();
                     juego.cambiarTurno();
                 }
             }
         }
         else {
-            Coordenada coord = Coordenada.getCoordenada(position);
+            Coordenada coord = Coordenada.getCoordenada(position,juego.soyElBlanco());
             if (juego.casillasPintadas.contains(coord)){
                 if(!juego.esEnroqueCorto(coord, juego.piezas ) || !juego.esEnroqueLargo(coord, juego.piezas) ) {
-                    juego.piezaSeleccionada.setCoordenada(Coordenada.getCoordenada(position));
-//                  juego.piezaSeleccionada = null;
+                    juego.piezaSeleccionada.setCoordenada(Coordenada.getCoordenada(position,juego.soyElBlanco()));
                     juego.casillasPintadas.clear();
                   juego.juegoState = new EnEspera();
                     juego.cambiarTurno();

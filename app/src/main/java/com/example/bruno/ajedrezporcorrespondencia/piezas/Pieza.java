@@ -145,7 +145,7 @@ import java.util.ArrayList;
                 e.printStackTrace();
             }
             if (piezaEnPosSiguiente != null)
-                if (this.esBlanca && !piezaEnPosSiguiente.esBlanca && coordenadaDireccion != null) coordenadas.add(coordenadaDireccion);
+                if ( (this.esBlanca && !piezaEnPosSiguiente.esBlanca) || (!this.esBlanca && piezaEnPosSiguiente.esBlanca)  && coordenadaDireccion != null) coordenadas.add(coordenadaDireccion);
                 else return;
         }
     }

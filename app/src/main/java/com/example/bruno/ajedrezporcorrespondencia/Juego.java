@@ -37,7 +37,7 @@ public class Juego implements Serializable{
     }
 
     public Coordenada eliminarPieza(int position) {
-        Coordenada coord = Coordenada.getCoordenada(position);
+        Coordenada coord = Coordenada.getCoordenada(position,soyElBlanco());
         Pieza pieza = this.findByCoordenada(coord);
         piezas.remove(pieza);
         return coord;
