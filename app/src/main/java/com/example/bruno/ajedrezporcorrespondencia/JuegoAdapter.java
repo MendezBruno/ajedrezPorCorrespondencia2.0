@@ -1,6 +1,7 @@
 package com.example.bruno.ajedrezporcorrespondencia;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by bruno on 15/11/2016.
@@ -24,8 +26,8 @@ import java.util.List;
 public class JuegoAdapter extends ArrayAdapter<Juego> {
     private LayoutInflater inflater;
 
-    public  JuegoAdapter(Context context, List<Juego> objects) {
-        super(context, 0, objects);
+    public  JuegoAdapter(Context context, ArrayList objects) {
+        super(context, 0,  objects);
         inflater = LayoutInflater.from(context);
     }
 
@@ -57,20 +59,29 @@ public class JuegoAdapter extends ArrayAdapter<Juego> {
         // Lead actual.
 
         //todo cargar aca todos los datos como tambien el id de la partida de cada uno de mis contrincantes.
-        Juego juego = getItem(position);
+        final Juego juego = getItem(position);
         final Contrincante contrincante = new Contrincante(null,null,null,11111111);
         contrincante.usuario = SessionUsuario.sessionUsuario.jugador.id.equals(juego.jugadorBlanco) ? juego.jugadorNegro:juego.jugadorBlanco;
         leerConIdFirebase(contrincante, new CallBack() {
             @Override
             public void aceptar() {
 
-//        Glide.with(getContext())
-//                .load(contrincante.imagen)
-//                .into(vh.imageContrincante);
-//        vh.name.setText(contrincante.nombre);
+        Glide.with(getContext())
+                .load(contrincante.imagen)
+                .into(vh.imageContrincante);
+        String turno;
+        if(juego.esMiTurno()) {
+            turno = "Tu turno";
+            vh.turno.setText(turno);
+            vh.turno.setTextColor(Color.GREEN);
+        }else{
+            turno = "En Espera";
+            vh.turno.setText(turno);
+            vh.turno.setTextColor(Color.RED);
+        };
 //      todo hasta aca la carga
 
-
+        vh.nombreContrincante.setText(contrincante.nombre);
             }
         });
         return convertView;
@@ -94,7 +105,7 @@ public class JuegoAdapter extends ArrayAdapter<Juego> {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Jugador jugador = dataSnapshot.getValue(Jugador.class);
                         contrincante.imagen = jugador.imagenJugador;
-//                        contrincante.nombre = jugador
+                        contrincante.idTwitter = jugador.idTwitter;
                         callBack.aceptar();
 
                     }

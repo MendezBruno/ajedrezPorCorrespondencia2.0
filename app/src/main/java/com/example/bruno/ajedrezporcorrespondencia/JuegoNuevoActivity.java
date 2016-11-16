@@ -84,6 +84,7 @@ public class JuegoNuevoActivity extends AppCompatActivity {
                         //guardo el juego nuevo en firebase
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         final DatabaseReference myRef = database.getReference("juegos").push();
+                        juego.idJuego = myRef.getKey();
                         myRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {

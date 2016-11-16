@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                                        Jugador unJugador = dataSnapshot.getValue(Jugador.class);
                                       if (unJugador == null){
                                           jugador.id = user.getUid();
+                                          jugador.nombre = user.getDisplayName();
                                           myRef.setValue(jugador);
                                           SessionUsuario.sessionUsuario.jugador = jugador;
                                           //savedInstanceState.putSerializable("session",SessionUsuario.sessionUsuario);

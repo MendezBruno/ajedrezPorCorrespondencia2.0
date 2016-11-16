@@ -68,6 +68,7 @@ public class TwitterWrapper {
                 User user = userResult.data;
                 jugador.idTwitter = user.id;
                 jugador.imagenJugador = user.profileImageUrl;
+                jugador.nombre = user.name;
                 callBack.aceptar();
             }
         });

@@ -9,6 +9,7 @@ public class Contrincante {
     String usuario;
     public long idTwitter;
 
+
     Contrincante(String imagen,String nombre,String usuario,  long idTwitter) {
         this.imagen = imagen;
         this.nombre = nombre;

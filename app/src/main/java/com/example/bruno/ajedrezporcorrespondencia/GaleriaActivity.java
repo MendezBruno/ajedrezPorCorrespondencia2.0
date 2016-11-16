@@ -15,8 +15,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GaleriaActivity extends AppCompatActivity {
 
@@ -44,7 +48,7 @@ public class GaleriaActivity extends AppCompatActivity {
 
         //Cargando list view con los followers
         lv = (ListView) findViewById(R.id.partidasGuardadas);
-        final ArrayList<Juego> listaJuegos = new ArrayList<Juego>();
+        final ArrayList listaJuegos = new ArrayList<Juego>();
         final GaleriaActivity self = this;
         this.obtenerJuegosDeFirebase(listaJuegos, new CallBack() {
             @Override
@@ -66,7 +70,7 @@ public class GaleriaActivity extends AppCompatActivity {
     }
 
 
-    public void obtenerJuegosDeFirebase(ArrayList<Juego> listaJuegos, CallBack callBack) {
+    public void obtenerJuegosDeFirebase(final ArrayList<Juego> listaJuegos, final CallBack callBack) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("juegos");
         myRef.addListenerForSingleValueEvent(
@@ -75,14 +79,18 @@ public class GaleriaActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         // Get user value
                         // User user = dataSnapshot.getValue(User.class);
-                        ArrayList<Juego> juegos = new ArrayList<Juego>();
+                        String juego;
+                        GsonBuilder gsonBilder = new GsonBuilder();
+                        gsonBilder.registerTypeAdapter(Pieza.class, new AbstractAdapter());
+                        Gson gson = gsonBilder.create();
                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                            Juego unJuego = postSnapshot.getValue(Juego.class);
+                            juego = (String) postSnapshot.getValue().toString();
+                            Juego unJuego = gson.fromJson(juego, Juego.class);
                             if (SessionUsuario.sessionUsuario.jugador.esMiJuego(unJuego))
-                                juegos.add(unJuego);
+                                listaJuegos.add(unJuego);
                         }
-                        if (!juegos.isEmpty()) {
-                            //callBack.aceptar();
+                        if (!listaJuegos.isEmpty()) {
+                            callBack.aceptar();
                         } else {
                             //todo Avisar que el jugador no tiene juegos pendientes
                         }

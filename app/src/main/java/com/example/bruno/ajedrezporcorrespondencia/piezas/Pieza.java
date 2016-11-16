@@ -16,6 +16,8 @@ import java.util.ArrayList;
         public Boolean esBlanca;
         protected Coordenada coordenada = Coordenada.A8;
 
+    public Pieza(){}
+
     public Pieza(Coordenada coordenada, Boolean esBlanca) {
         this.coordenada = coordenada;
         this.esBlanca = esBlanca;

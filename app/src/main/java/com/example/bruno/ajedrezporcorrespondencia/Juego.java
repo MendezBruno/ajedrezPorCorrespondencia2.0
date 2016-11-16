@@ -13,6 +13,7 @@ import java.util.ArrayList;
  */
 
 public class Juego implements Serializable{
+   public String idJuego;
    public String jugadorBlanco;
    public String jugadorNegro;
    public ArrayList<Pieza> piezas = new ArrayList<>();
@@ -73,5 +74,10 @@ public class Juego implements Serializable{
 
     public boolean esEnroqueCorto(Coordenada coord, ArrayList<Pieza> piezas) {
         return piezaSeleccionada.esEnroqueCorto(coord, piezas);
+    }
+
+    public boolean esMiTurno() {
+        return SessionUsuario.sessionUsuario.jugador.id.equals(turno);
+
     }
 }
