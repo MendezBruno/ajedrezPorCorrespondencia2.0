@@ -40,7 +40,9 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
         if (juego.turno.equals(SessionUsuario.sessionUsuario.jugador.id) ) juego.juegoState = new EligiendoPieza();
         else juego.juegoState = new EnEspera();
 
-
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef = database.getReference("juegos");
+//        myRef.a
     }
 
     @Override

@@ -55,6 +55,7 @@ public class GaleriaActivity extends AppCompatActivity {
             public void aceptar() {
                 JuegoAdapter adapter = new JuegoAdapter(self,listaJuegos);
                 lv.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -74,7 +75,7 @@ public class GaleriaActivity extends AppCompatActivity {
     public void obtenerJuegosDeFirebase(final ArrayList<Juego> listaJuegos, final CallBack callBack) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("juegos");
-        myRef.addListenerForSingleValueEvent(
+        myRef.addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -84,6 +85,7 @@ public class GaleriaActivity extends AppCompatActivity {
                         GsonBuilder gsonBilder = new GsonBuilder();
                         gsonBilder.registerTypeAdapter(Pieza.class, new AbstractAdapter());
                         Gson gson = gsonBilder.create();
+                        listaJuegos.clear();
                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                             juego = (String) postSnapshot.getValue().toString();
                             Juego unJuego = gson.fromJson(juego, Juego.class);
@@ -104,6 +106,7 @@ public class GaleriaActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
 
 }
