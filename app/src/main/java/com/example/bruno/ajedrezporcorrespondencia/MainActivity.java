@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.SessionManager;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
@@ -55,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         jugador = new Jugador();
         //Tengo algo salvado
         if(savedInstanceState != null){
@@ -133,37 +137,8 @@ public class MainActivity extends AppCompatActivity {
                 tw.obtenerMisDatos(jugador, new CallBack() {
                     @Override
                     public void aceptar() {
-                final FirebaseUser user = mAuth.getCurrentUser();
-                          if (user != null) {
-                          // User is signed in
-                              // Obtener datos de firebase con el UID
-                              FirebaseDatabase database = FirebaseDatabase.getInstance();
-                              final DatabaseReference myRef = database.getReference("Usuarios").child(user.getUid());
-                              myRef.addValueEventListener(new ValueEventListener() {
-
-                                  @Override
-                                  public void onDataChange(DataSnapshot dataSnapshot) {
-                                       Jugador unJugador = dataSnapshot.getValue(Jugador.class);
-                                      if (unJugador == null){
-                                          jugador.id = user.getUid();
-                                          jugador.nombre = user.getDisplayName();
-                                          myRef.setValue(jugador);
-                                          SessionUsuario.sessionUsuario.jugador = jugador;
-                                          //savedInstanceState.putSerializable("session",SessionUsuario.sessionUsuario);
-                                      }
-                                      challegereButton.setEnabled(true);
-                                      galeriaButton.setEnabled(true);
-                                      progress.dismiss();
-                                  }
-                                  @Override
-                                  public void onCancelled(DatabaseError error) {
-                                      progress.dismiss();
-                                      // Failed to read value
-                                  }
-                              });
-                          } else {
-                            // User is signed out
-                        }
+                pedirDatosUsuario(jugador);
+                progress.dismiss();
                     }
                 });
             }
@@ -180,11 +155,31 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
             MainActivity.this.finish();
+            loginButton.setVisibility(View.VISIBLE);
+            Twitter.logOut();
+            Twitter.getSessionManager().clearActiveSession();
             }
         });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        session = Twitter.getSessionManager().getActiveSession();
+        if (session != null){
+            sessionID = session.getId();
+            final TwitterWrapper tw = new TwitterWrapper(sessionID);
+            tw.obtenerMisDatos(jugador, new CallBack() {
+                @Override
+                public void aceptar() {
+                    pedirDatosUsuario(jugador);
+                    challegereButton.setEnabled(true);
+                    galeriaButton.setEnabled(true);
+                    loginButton.setVisibility(View.INVISIBLE);
+                }
+            });
+
+        };
+
 
     }
 
@@ -211,6 +206,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void pedirDatosUsuario(final Jugador jugador){
+        progress = ProgressDialog.show(MainActivity.this, "Ajedrez Por Correspondencia", "Cargando");
+        final FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            // Obtener datos de firebase con el UID
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            final DatabaseReference myRef = database.getReference("Usuarios").child(user.getUid());
+            myRef.addValueEventListener(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Jugador unJugador = dataSnapshot.getValue(Jugador.class);
+                    if (unJugador == null){
+                        jugador.id = user.getUid();
+                        jugador.nombre = user.getDisplayName();
+                        myRef.setValue(jugador);
+                        SessionUsuario.sessionUsuario.jugador = jugador;
+                        //savedInstanceState.putSerializable("session",SessionUsuario.sessionUsuario);
+                    }
+                    challegereButton.setEnabled(true);
+                    galeriaButton.setEnabled(true);
+                    progress.dismiss();
+                }
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    progress.dismiss();
+                    // Failed to read value
+                }
+            });
+        } else {
+            // User is signed out
+        }
+    };
 
 
     private void handleTwitterAccessToken(Result<TwitterSession> result) {
