@@ -59,7 +59,10 @@ public class GaleriaActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Juego juego = (Juego)parent.getItemAtPosition(position);
-                        //todo algo con click en juego
+                        Intent intent = new Intent(GaleriaActivity.this, TableroActivity.class);
+                        intent.putExtra("juego", juego);
+                        intent.putExtra("idJugador",jugador.id);
+                        startActivity(intent);
                     }
                 });
             }
