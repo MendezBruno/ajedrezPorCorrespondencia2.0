@@ -51,7 +51,7 @@ public class Peon  extends Pieza{
             if (!this.tienePiezaAbajo(coordenada, piezasJuego)) {
                 if ((coordenada.getFila().equals("7"))) {
                     try {
-                        coordenadas.add(coordenada.abajo(2));
+                        coordenadas.add(coordenada.arriba(2));
                     } catch (CoordenadaAlgebraException e) {
                         e.printStackTrace();
                         coordenadas.add(coordenada);
@@ -59,7 +59,7 @@ public class Peon  extends Pieza{
                     }
                 }
                 try {
-                    coordenadas.add(coordenada.abajo(1));
+                    coordenadas.add(coordenada.arriba(1));
 
                     return coordenadas;
                 } catch (CoordenadaAlgebraException e) {
