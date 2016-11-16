@@ -23,11 +23,11 @@ public class Juego implements Serializable{
     public boolean esMiPieza(Pieza pieza) {
 
         //TODO:  UTILIZAR ESTO PARA JUEGO REAL
-       // if (pieza.esBlanca) return jugadorBlanco.equals(SessionUsuario.sessionUsuario.jugador);
-       // else return jugadorNegro.equals(SessionUsuario.sessionUsuario.jugador);
+        if (pieza.esBlanca) return jugadorBlanco.equals(SessionUsuario.sessionUsuario.jugador.id);
+        else return jugadorNegro.equals(SessionUsuario.sessionUsuario.jugador.id);
 
         //TODO UTILIZAR ESTO PARA JUGAR MUCHAS VECES MI TURNO (ES COMO UN MODO PRUEBA)
-        return pieza.esBlanca;
+//        return pieza.esBlanca;
 
     }
 
@@ -53,9 +53,9 @@ public class Juego implements Serializable{
     public boolean soyElBlanco() {
 
         //TODO:  UTILIZAR ESTO PARA JUEGO REAL
-      //   return jugadorBlanco.equals(SessionUsuario.sessionUsuario.jugador.id);
+         return jugadorBlanco.equals(SessionUsuario.sessionUsuario.jugador.id);
 
-        return true;
+//        return true;
     }
 
     public Pieza findPiezaByPosition(int position) {
@@ -77,5 +77,9 @@ public class Juego implements Serializable{
     public boolean esMiTurno() {
         return SessionUsuario.sessionUsuario.jugador.id.equals(turno);
 
+    }
+
+    public void cambiarTurno() {
+        this.turno = soyElBlanco()? jugadorNegro:jugadorBlanco;
     }
 }

@@ -26,6 +26,7 @@ public class PiezaSeleccionada implements JuegoState, Serializable {
                     juego.piezaSeleccionada.setCoordenada(coordenada);
                     juego.piezaSeleccionada = null;
                     juego.juegoState = new EnEspera();
+                    juego.cambiarTurno();
                 }
             }
         }
@@ -37,8 +38,10 @@ public class PiezaSeleccionada implements JuegoState, Serializable {
 //                  juego.piezaSeleccionada = null;
                     juego.casillasPintadas.clear();
                   juego.juegoState = new EnEspera();
+                    juego.cambiarTurno();
                 }
                 juego.juegoState = new EnEspera();
+                juego.cambiarTurno();
             }
         }
 
