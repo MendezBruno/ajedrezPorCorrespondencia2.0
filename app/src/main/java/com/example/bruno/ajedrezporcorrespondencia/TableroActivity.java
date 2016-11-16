@@ -5,12 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Pieza;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EligiendoPieza;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EnEspera;
-
-
-
 
 
 public class TableroActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -47,7 +45,7 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
         //verificar que jugó
         //El jugador Realiza la jugada cuando el juego pasa al state en espera
         if(juego.juegoState == new EnEspera()) {
-        /*
+            /*
         todo Actualizar base de datos firebase
         */
         /*

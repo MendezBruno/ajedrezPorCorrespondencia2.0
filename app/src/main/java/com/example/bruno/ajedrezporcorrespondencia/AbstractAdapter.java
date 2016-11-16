@@ -33,7 +33,7 @@ public class AbstractAdapter implements JsonSerializer<Pieza>, JsonDeserializer<
             String type = jsonObject.get("type").getAsString();
             JsonElement element = jsonObject.get("properties");
         try {
-            return context.deserialize(element, Class.forName("com.googlecode.whiteboard.model." + type));
+            return context.deserialize(element, Class.forName("com.example.bruno.ajedrezporcorrespondencia.piezas." + type));
             } catch (ClassNotFoundException cnfe) {
             throw new JsonParseException("Unknown element type: " + type, cnfe);
             }

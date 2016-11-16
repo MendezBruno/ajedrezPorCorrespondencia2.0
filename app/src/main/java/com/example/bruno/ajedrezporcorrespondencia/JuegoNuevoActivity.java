@@ -20,7 +20,6 @@ import com.example.bruno.ajedrezporcorrespondencia.piezas.Rey;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Torre;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EligiendoPieza;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EnEspera;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -84,13 +83,40 @@ public class JuegoNuevoActivity extends AppCompatActivity {
                         }
                         //guardo el juego nuevo en firebase
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        DatabaseReference myRef = database.getReference("juegos").push();
-                        GsonBuilder gsonBilder = new GsonBuilder();
-                        gsonBilder.registerTypeAdapter(Pieza.class, new AbstractAdapter());
-                        Gson gson = gsonBilder.create();
-                        String json = gson.toJson(juego);
-                        Map<String, Object> map = gson.fromJson(json, new TypeToken<HashMap<String, Object>>() {}.getType());
-                        myRef.setValue(map);
+                        final DatabaseReference myRef = database.getReference("juegos").push();
+                        myRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                if (dataSnapshot.getValue() == null)
+                                {
+
+                                    GsonBuilder gsonBilder = new GsonBuilder();
+                                    gsonBilder.registerTypeAdapter(Pieza.class, new AbstractAdapter());
+                                    Gson gson = gsonBilder.create();
+                                    String json = gson.toJson(juego);
+                                    Map<String, Object> map = gson.fromJson(json, new TypeToken<HashMap<String, Object>>() {}.getType());
+                                    myRef.setValue(map);
+
+                                }
+                                else {
+                                    String juego = (String) dataSnapshot.getValue().toString();
+                                    GsonBuilder gsonBilder = new GsonBuilder();
+                                    gsonBilder.registerTypeAdapter(Pieza.class, new AbstractAdapter());
+                                    Gson gson = gsonBilder.create();
+                                    Juego unJuego = gson.fromJson(juego, Juego.class);
+                                }
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError error) {
+                                // Failed to read value
+                            }
+                        });
+
+
+
+
+
 
                         //Envio twitter a mi contrincante para avisarle que lo estoy retando a jugar
                 /*
