@@ -129,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
-                progress = ProgressDialog.show(MainActivity.this, "Ajedrez Por Correspondencia", "Cargando");
                 handleTwitterAccessToken(result);
                 session = Twitter.getSessionManager().getActiveSession();
                 sessionID = session.getId();
@@ -228,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     challegereButton.setEnabled(true);
                     galeriaButton.setEnabled(true);
+                    loginButton.setVisibility(View.INVISIBLE);
                     progress.dismiss();
                 }
                 @Override
