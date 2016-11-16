@@ -1,8 +1,6 @@
 package com.example.bruno.ajedrezporcorrespondencia;
 
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Pieza;
-import com.example.bruno.ajedrezporcorrespondencia.piezas.Rey;
-import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EnEspera;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.JuegoState;
 
 import java.io.Serializable;
@@ -25,8 +23,8 @@ public class Juego implements Serializable{
     public boolean esMiPieza(Pieza pieza) {
 
         //TODO:  UTILIZAR ESTO PARA JUEGO REAL
-//        if (pieza.esBlanca) return jugadorBlanco.equals(SessionUsuario.sessionUsuario.jugador);
-//        else return jugadorNegro.equals(SessionUsuario.sessionUsuario.jugador);
+       // if (pieza.esBlanca) return jugadorBlanco.equals(SessionUsuario.sessionUsuario.jugador);
+       // else return jugadorNegro.equals(SessionUsuario.sessionUsuario.jugador);
 
         //TODO UTILIZAR ESTO PARA JUGAR MUCHAS VECES MI TURNO (ES COMO UN MODO PRUEBA)
         return pieza.esBlanca;
@@ -55,7 +53,7 @@ public class Juego implements Serializable{
     public boolean soyElBlanco() {
 
         //TODO:  UTILIZAR ESTO PARA JUEGO REAL
-//         return jugadorBlanco.equals(SessionUsuario.sessionUsuario.jugador.id);
+      //   return jugadorBlanco.equals(SessionUsuario.sessionUsuario.jugador.id);
 
         return true;
     }

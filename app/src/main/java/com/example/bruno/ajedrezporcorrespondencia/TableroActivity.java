@@ -9,6 +9,14 @@ import android.widget.GridView;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Pieza;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EligiendoPieza;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EnEspera;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class TableroActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -44,7 +52,19 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
 
         //verificar que jugó
         //El jugador Realiza la jugada cuando el juego pasa al state en espera
-        if(juego.juegoState == new EnEspera()) {
+        if(juego.juegoState.getClass() == EnEspera.class) {
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            final DatabaseReference myRef = database.getReference("juegos").child(juego.idJuego);
+            GsonBuilder gsonBilder = new GsonBuilder();
+            gsonBilder.registerTypeAdapter(Pieza.class, new AbstractAdapter());
+            Gson gson = gsonBilder.create();
+            String json = gson.toJson(juego);
+            Map<String, Object> map = gson.fromJson(json, new TypeToken<HashMap<String, Object>>() {}.getType());
+            myRef.setValue(map);
+
+
+
             /*
         todo Actualizar base de datos firebase
         */
