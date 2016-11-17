@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.TwitterAuthProvider;
@@ -56,12 +57,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         jugador = new Jugador();
+        mAuth = FirebaseAuth.getInstance();
         //Tengo algo salvado
         if(savedInstanceState != null){
             jugador = (Jugador) savedInstanceState.getSerializable("jugador");
             SessionUsuario.sessionUsuario = (SessionUsuario) savedInstanceState.getSerializable("session");
         }else{
-        SessionUsuario sessionUsuario = new SessionUsuario();
+            mAuth.signOut();
+            SessionUsuario sessionUsuario = new SessionUsuario();
         }
 
 
@@ -72,22 +75,26 @@ public class MainActivity extends AppCompatActivity {
         //Configuramos la interfaz con las aplicaciones
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
-        mAuth = FirebaseAuth.getInstance();
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            //if session es null salgo
+
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     jugador.id=user.getUid();
                     SessionUsuario.sessionUsuario.jugador = jugador;
+
+                    // Si el usuario de firebase existe => logguearlo
+                    // Si no => lo creo
+                    crear_o_cargarUsuarioFirebase();
                 } else {
                     // User is signed out
-
                 }
                 // ...
             }
         };
-
 
         //Generamos los botones principales
         setContentView(R.layout.activity_main);
@@ -122,23 +129,9 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
-                handleTwitterAccessToken(result, new CallBack(){
-
-                    @Override
-                    public void aceptar() {
-                        session = Twitter.getSessionManager().getActiveSession();
-                        sessionID = session.getId();
-                        TwitterWrapper tw = new TwitterWrapper(sessionID);
-                        tw.obtenerMisDatos(jugador, new CallBack() {
-                            @Override
-                            public void aceptar() {
-                                pedirDatosUsuario(jugador);
-
-                            }
-                        });
-                    }
-                } );
-
+                session = result.data;
+                sessionID = session.getId();
+                loguearUsuarioFirebase(session);
             }
             @Override
             public void failure(TwitterException exception) {
@@ -146,41 +139,43 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
         logOut = (Button) findViewById(R.id.buttonLogOut);
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            MainActivity.this.finish();
+//            MainActivity.this.finish();
+            session = null;
+            sessionID = null;
+            //todo hacer invisible los dos botones
             loginButton.setVisibility(View.VISIBLE);
             Twitter.logOut();
             Twitter.getSessionManager().clearActiveSession();
+            FirebaseAuth.getInstance().signOut();
             }
         });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        session = Twitter.getSessionManager().getActiveSession();
-//        if (session != null){
-//            sessionID = session.getId();
-//            final TwitterWrapper tw = new TwitterWrapper(sessionID);
-//            tw.obtenerMisDatos(jugador, new CallBack() {
-//                @Override
-//                public void aceptar() {
-//                    pedirDatosUsuario(jugador);
-//                    challegereButton.setEnabled(true);
-//                    galeriaButton.setEnabled(true);
-//                    loginButton.setVisibility(View.INVISIBLE);
-//                }
-//            });
-//
-//        };
+        session = Twitter.getSessionManager().getActiveSession();
+        if (session != null) {
+            loguearUsuarioFirebase(session);
+        }
+    }
 
+    private void loguearUsuarioFirebase(TwitterSession session) {
 
+        AuthCredential credential =  TwitterAuthProvider.getCredential(session.getAuthToken().token, session.getAuthToken().secret);
+        mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
+            @Override
+            public void onComplete(@NonNull Task task) {
 
+                if (!task.isSuccessful()) {
+                    Toast.makeText(getApplicationContext(), "Authentication failed.",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -205,61 +200,42 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    public void pedirDatosUsuario(final Jugador jugador){
-
-        final FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            // User is signed in
-            // Obtener datos de firebase con el UID
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            final DatabaseReference myRef = database.getReference("Usuarios").child(user.getUid());
-            myRef.addValueEventListener(new ValueEventListener() {
-
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Jugador unJugador = dataSnapshot.getValue(Jugador.class);
-                    if (unJugador == null){
-                        jugador.id = user.getUid();
-                        jugador.nombre = user.getDisplayName();
-                        myRef.setValue(jugador);
-                        SessionUsuario.sessionUsuario.jugador = jugador;
-
-                        //savedInstanceState.putSerializable("session",SessionUsuario.sessionUsuario);
-                    }
-                    challegereButton.setEnabled(true);
-                    galeriaButton.setEnabled(true);
-                    loginButton.setVisibility(View.INVISIBLE);
-
-                }
-                @Override
-                public void onCancelled(DatabaseError error) {
-
-                    // Failed to read value
-                }
-            });
-        } else {
-
-            // User is signed out
-        }
-
-    };
-
-
-    private void handleTwitterAccessToken(Result<TwitterSession> result, final CallBack callBack) {
-        AuthCredential credential =  TwitterAuthProvider.getCredential(result.data.getAuthToken().token, result.data.getAuthToken().secret);
-        mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener() {
+    public void crear_o_cargarUsuarioFirebase(){
+        // Obtener datos de firebase con el UID
+        progress = ProgressDialog.show(MainActivity.this, "Ajedrez Por Correspondencia", "Cargando");
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef = database.getReference("Usuarios").child(jugador.id);
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
-            public void onComplete(@NonNull Task task) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Jugador unJugador = dataSnapshot.getValue(Jugador.class);
 
-                if (!task.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), "Authentication failed.",Toast.LENGTH_SHORT).show();
+                CallBack callBack = new CallBack() {
+                    @Override
+                    public void aceptar() {
+                        SessionUsuario.sessionUsuario.jugador = jugador;
+                        //savedInstanceState.putSerializable("session",SessionUsuario.sessionUsuario);
+                        challegereButton.setEnabled(true);
+                        galeriaButton.setEnabled(true);
+                        loginButton.setVisibility(View.INVISIBLE);
+                        myRef.setValue(jugador);
+                        progress.dismiss();
+                    }
+                };
 
+                if (unJugador == null){
+                    TwitterWrapper tw = new TwitterWrapper(sessionID);
+                    tw.obtenerMisDatos(jugador, callBack);
+                } else {
+                    jugador = unJugador;
+                    callBack.aceptar();
                 }
-                callBack.aceptar();
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
             }
         });
     }
-
 }
