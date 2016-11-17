@@ -69,6 +69,29 @@ public class ReyTest {
 //
 //        assertTrue(!(rey.calcularMovimientoCoordenadas(piezas)).contains(Coordenada.C1));
 //    }
+    @Test
+    public void testEnroqueNegro(){
+    ArrayList<Pieza> piezas = new ArrayList<>();
+    Rey rey = new Rey(Coordenada.E8,false);
+    Torre torre = new Torre(Coordenada.A8,false);
+    piezas.add(rey);
+    piezas.add(torre);
+    rey.primerMovimiento = false;
+    rey.calcularMovimientoCoordenadas(piezas);
+    rey.esEnroqueLargo(Coordenada.C8,piezas);
+    assertEquals(Coordenada.C8,rey.coordenada);
+    assertEquals(Coordenada.D8,torre.coordenada);
+    }
 
+    @Test
+    public void movimientoPosiblesReyPrimerMOvimiento(){
+        ArrayList<Pieza> piezas = new ArrayList<>();
+        Rey rey = new Rey(Coordenada.E8,false);
+        Torre torre = new Torre(Coordenada.A8,false);
+        piezas.add(rey);
+        piezas.add(torre);
+        rey.primerMovimiento = true;
+        assertTrue(((rey.calcularMovimientoCoordenadas(piezas)).contains(Coordenada.C8)));
+    }
 
 }

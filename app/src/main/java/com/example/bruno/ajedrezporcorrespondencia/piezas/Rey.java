@@ -55,12 +55,12 @@ public class Rey extends Pieza {
         Boolean enroque = true;
 
         dameCasillasEnJaque(coordenadasJaqueadas, piezasJuego);
-        pieza = findByCoordenada(Coordenada.G1,piezasJuego);
-        if(!coordenadasJaqueadas.contains(Coordenada.G1) && pieza == null) coordenadas.add(Coordenada.G1) ;
+        pieza = findByCoordenada(Coordenada.G8,piezasJuego);
+        if(!coordenadasJaqueadas.contains(Coordenada.G8) && pieza == null) coordenadas.add(Coordenada.G8) ;
 
-        coordenadasEnroqueNegro.add(Coordenada.D1);
-        coordenadasEnroqueNegro.add(Coordenada.C1);
-        coordenadasEnroqueNegro.add(Coordenada.B1);
+        coordenadasEnroqueNegro.add(Coordenada.D8);
+        coordenadasEnroqueNegro.add(Coordenada.C8);
+        coordenadasEnroqueNegro.add(Coordenada.B8);
 
         for(Coordenada cord: coordenadasEnroqueNegro)
             if (coordenadasJaqueadas.contains(cord)  || pieza != null) enroque = false;   //todo verificar que torre no se movió

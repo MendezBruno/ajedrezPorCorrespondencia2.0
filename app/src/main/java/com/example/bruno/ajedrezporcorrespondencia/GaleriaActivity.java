@@ -62,7 +62,7 @@ public class GaleriaActivity extends AppCompatActivity {
                         Juego juego = (Juego)parent.getItemAtPosition(position);
                         Intent intent = new Intent(GaleriaActivity.this, TableroActivity.class);
                         intent.putExtra("juego", juego);
-                        Contrincante contrincante = (Contrincante) parent.getItemAtPosition(position);
+//                        Contrincante contrincante = (Contrincante) parent.getItemAtPosition(position);
                         intent.putExtra("idJugador",jugador.id);
                         intent.putExtra("sessionID",sessionID);
                         startActivity(intent);
