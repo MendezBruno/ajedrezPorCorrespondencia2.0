@@ -31,7 +31,7 @@ public class Rey extends Pieza {
                 else coordenadas.add(cord);
 
             } catch (CoordenadaAlgebraException e) {
-                e.printStackTrace();
+               // e.printStackTrace();
             }
 
         if (primerMovimiento) {
@@ -43,6 +43,10 @@ public class Rey extends Pieza {
 
 
     }
+
+//    private ArrayList<Coordenada>  dameTusPosiblesCasillasDestino(ArrayList<Pieza> piezasJuego){
+//
+//    }
 
     private void pedirEnroqueNegro(ArrayList<Coordenada> coordenadas, ArrayList<Pieza> piezasJuego) {
         ArrayList<Coordenada> coordenadasEnroqueNegro  = new ArrayList<>();
@@ -96,11 +100,13 @@ public class Rey extends Pieza {
 
     private ArrayList<Coordenada> filtrarCasillasEnJaque(ArrayList<Coordenada> coordenadas, ArrayList<Pieza> piezasJuego) {
         ArrayList<Coordenada> coordenadasJaqueadas = new ArrayList<>();
+        ArrayList<Coordenada> coordenadasFinal = new ArrayList<>();
 
         dameCasillasEnJaque(coordenadasJaqueadas, piezasJuego);
         for (Coordenada cord: coordenadas)
-                if(coordenadasJaqueadas.contains(cord)) coordenadas.remove(cord);
-        return coordenadas;
+                if(!coordenadasJaqueadas.contains(cord)) coordenadasFinal.add(cord);
+
+        return coordenadasFinal;
     }
 
     private void dameCasillasEnJaque(ArrayList<Coordenada> coordenadasJaqueadas, ArrayList<Pieza> piezasJuego) {
@@ -142,7 +148,7 @@ public class Rey extends Pieza {
         //todo: se podria pensar este movimiento con la posicion y matar un if?
 
         Pieza torre = findByCoordenada(Coordenada.A1,piezasJuego);
-        if( this.esBlanca && coord == Coordenada.B1 && torre != null){
+        if( this.esBlanca && coord == Coordenada.C1 && torre != null){
             this.setCoordenada(Coordenada.C1);
             torre.setCoordenada(Coordenada.D1);
             return true;
@@ -154,5 +160,12 @@ public class Rey extends Pieza {
             return true;
         }
         return  false;
+    }
+
+    public boolean estasEnJaque ( ArrayList<Pieza> piezasJuego){
+        ArrayList<Coordenada> coordenadasJaqueadas = new ArrayList<>();
+        dameCasillasEnJaque(coordenadasJaqueadas,piezasJuego);
+        return coordenadasJaqueadas.contains(this.coordenada);
+
     }
 }

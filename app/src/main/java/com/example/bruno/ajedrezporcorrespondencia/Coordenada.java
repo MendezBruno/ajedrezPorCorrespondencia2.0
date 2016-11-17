@@ -102,7 +102,7 @@ public enum Coordenada {
         try {
             return (this.abajo(i)).derecha(i);
         } catch (CoordenadaAlgebraException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
             return null;
         }
 
@@ -112,7 +112,7 @@ public enum Coordenada {
         try {
             return (this.abajo(i)).izquierda(i);
         } catch (CoordenadaAlgebraException e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
             return null;
         }
 
