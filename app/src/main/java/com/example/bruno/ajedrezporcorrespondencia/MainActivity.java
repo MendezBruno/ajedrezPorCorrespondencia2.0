@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 //            MainActivity.this.finish();
             session = null;
-            sessionID = null;
+            sessionID = Long.parseLong(null);
             //todo hacer invisible los dos botones
             loginButton.setVisibility(View.VISIBLE);
             Twitter.logOut();
