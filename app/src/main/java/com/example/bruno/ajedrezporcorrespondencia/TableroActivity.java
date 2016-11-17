@@ -9,8 +9,12 @@ import android.widget.GridView;
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Pieza;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EligiendoPieza;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EnEspera;
+import com.example.bruno.ajedrezporcorrespondencia.stateJuego.JuegoState;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -29,6 +33,7 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         juego = (Juego)getIntent().getExtras().getSerializable("juego");
+        juego.juegoState = getEstadoJuego();
         jugadorId = (String) getIntent().getExtras().getSerializable("idJugador");
         setContentView(R.layout.tablero_activity);
         GridView gridview = (GridView) findViewById(R.id.tablero);
@@ -37,12 +42,38 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
         gridview.setAdapter(ia);
         gridview.setOnItemClickListener(this);
 
-        if (juego.turno.equals(SessionUsuario.sessionUsuario.jugador.id) ) juego.juegoState = new EligiendoPieza();
-        else juego.juegoState = new EnEspera();
+
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference myRef = database.getReference("juegos");
-//        myRef.a
+        final DatabaseReference myRef = database.getReference("juegos").child(juego.idJuego);
+        GsonBuilder gsonBilder = new GsonBuilder();
+        gsonBilder.registerTypeAdapter(Pieza.class, new AbstractAdapter());
+        final Gson gson = gsonBilder.create();
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String juegoString = (String) dataSnapshot.getValue().toString();
+                Juego unJuego = gson.fromJson(juegoString, Juego.class);
+                if(juego.idJuego.equals(unJuego.idJuego)) {
+                    juego = unJuego;
+                    juego.juegoState = getEstadoJuego();
+                    ia.setmJuego(juego);
+                    ia.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //todo ver que pasa?
+            }
+        });
+
+
+    }
+
+    private JuegoState getEstadoJuego() {
+        return  (juego.turno.equals(SessionUsuario.sessionUsuario.jugador.id)) ?  new EligiendoPieza() :  new EnEspera();
     }
 
     @Override
@@ -60,13 +91,12 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
             final DatabaseReference myRef = database.getReference("juegos").child(juego.idJuego);
             GsonBuilder gsonBilder = new GsonBuilder();
             gsonBilder.registerTypeAdapter(Pieza.class, new AbstractAdapter());
-            Gson gson = gsonBilder.create();
+            final Gson gson = gsonBilder.create();
             String json = gson.toJson(juego);
             Map<String, Object> map = gson.fromJson(json, new TypeToken<HashMap<String, Object>>() {}.getType());
             myRef.setValue(map);
 
-
-/*
+            /*
         todo Enviar twiter de que ya se realizo movimiento
         */
         /*

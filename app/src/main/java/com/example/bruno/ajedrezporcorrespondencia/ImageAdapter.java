@@ -27,6 +27,10 @@ public class ImageAdapter extends BaseAdapter implements Serializable{
         mJuego = juego;
     }
 
+    public void setmJuego (Juego unJuego){
+        this.mJuego = unJuego;
+    }
+
     public int getCount() {
         return 64;
     }
