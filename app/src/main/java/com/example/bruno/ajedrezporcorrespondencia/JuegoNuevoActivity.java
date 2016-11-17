@@ -123,6 +123,8 @@ public class JuegoNuevoActivity extends AppCompatActivity {
                         Intent intent = new Intent(JuegoNuevoActivity.this, TableroActivity.class);
                         intent.putExtra("juego", juego);
                         intent.putExtra("idJugador",jugador.id);
+                        intent.putExtra("sessionID",sessionID);
+                        intent.putExtra("usuarioTwitterContrincante",contrincante.usuarioTwitter);
                         startActivity(intent);
                     }
                 });

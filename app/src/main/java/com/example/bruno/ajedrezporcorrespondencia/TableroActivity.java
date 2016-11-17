@@ -28,6 +28,15 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
     private Juego juego = new Juego();
     private ImageAdapter ia;
     private String jugadorId;
+    private long sessionID;
+    private TwitterWrapper tw;
+    private String usuarioTweetContrincante;
+
+    private Coordenada coordenadaA = null;
+
+    private Coordenada coordenadaB = null;
+
+    Pieza piezaMovida;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +44,15 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
         juego = (Juego)getIntent().getExtras().getSerializable("juego");
         juego.juegoState = getEstadoJuego();
         jugadorId = (String) getIntent().getExtras().getSerializable("idJugador");
+        sessionID = getIntent().getExtras().getLong("sessionID");
+        usuarioTweetContrincante = getIntent().getExtras().getString("usuarioTwitterContrincante");
+        tw = new TwitterWrapper(sessionID);
         setContentView(R.layout.tablero_activity);
         GridView gridview = (GridView) findViewById(R.id.tablero);
         ia = new ImageAdapter(this, juego);
         assert gridview != null;   //Asegura que gridview no sea null
         gridview.setAdapter(ia);
         gridview.setOnItemClickListener(this);
-
 
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -53,13 +64,18 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String juegoString = (String) dataSnapshot.getValue().toString();
-                Juego unJuego = gson.fromJson(juegoString, Juego.class);
-                if(juego.idJuego.equals(unJuego.idJuego)) {
-                    juego = unJuego;
-                    juego.juegoState = getEstadoJuego();
-                    ia.setmJuego(juego);
-                    ia.notifyDataSetChanged();
+                if (dataSnapshot.getValue()!=null)
+                {
+                    String juegoString = (String) dataSnapshot.getValue().toString();
+                    Juego unJuego = gson.fromJson(juegoString, Juego.class);
+                    if(juego.idJuego.equals(unJuego.idJuego)) {
+                        juego = unJuego;
+                        juego.juegoState = getEstadoJuego();
+                        ia.setmJuego(juego);
+                        ia.notifyDataSetChanged();
+
+                    }
+
                 }
             }
 
@@ -83,6 +99,20 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
         juego.jugada(pieza, position, jugadorId);
         ia.notifyDataSetChanged();
 
+        if (coordenadaA == null) {
+
+            piezaMovida = pieza;
+
+            coordenadaA = Coordenada.getCoordenada(position, juego.soyElBlanco());
+
+        }
+        else
+
+        {
+            coordenadaB = Coordenada.getCoordenada(position, juego.soyElBlanco());
+
+        }
+
         //verificar que jugó
         //El jugador Realiza la jugada cuando el juego pasa al state en espera
         if(juego.juegoState.getClass() == EnEspera.class) {
@@ -95,7 +125,9 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
             String json = gson.toJson(juego);
             Map<String, Object> map = gson.fromJson(json, new TypeToken<HashMap<String, Object>>() {}.getType());
             myRef.setValue(map);
-
+            tw.enviarTweet(usuarioTweetContrincante," Se movio la pieza " + piezaMovida.getClass().getSimpleName() + " desde la casilla " + coordenadaA + " hasta la casilla " + coordenadaB );
+            coordenadaA = null;
+            coordenadaB = null;
             /*
         todo Enviar twiter de que ya se realizo movimiento
         */

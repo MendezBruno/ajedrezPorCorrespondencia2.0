@@ -25,7 +25,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
-import com.twitter.sdk.android.core.SessionManager;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
@@ -162,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+/*
         session = Twitter.getSessionManager().getActiveSession();
         if (session != null){
             sessionID = session.getId();
@@ -178,6 +177,8 @@ public class MainActivity extends AppCompatActivity {
             });
 
         };
+
+        */
 
 
     }
