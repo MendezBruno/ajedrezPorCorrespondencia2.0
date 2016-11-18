@@ -158,4 +158,12 @@ public class Rey extends Pieza {
         return coordenadasJaqueadas.contains(this.coordenada);
 
     }
+
+    public boolean estaEnJaqueMate ( ArrayList<Pieza> piezasJuego ) {
+      return estasEnJaque( piezasJuego) && (this.calcularMovimientoCoordenadas(piezasJuego)).isEmpty() ;
+    }
+
+    public boolean estaAhogado ( ArrayList<Pieza> piezasJuego) {
+      return  !estasEnJaque(piezasJuego) && (this.calcularMovimientoCoordenadas(piezasJuego)).isEmpty()
+    }
 }
