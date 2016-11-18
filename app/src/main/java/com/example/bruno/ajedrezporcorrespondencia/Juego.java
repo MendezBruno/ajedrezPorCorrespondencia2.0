@@ -54,7 +54,8 @@ public class Juego implements Serializable{
     //Actualmente aplica mejor si es para piezas de un tipo o color
     private Pieza findByTipoYcolor (String tipo, Boolean esBlanco ){
 
-        for (Pieza pieza:piezas) if (pieza.getClass().getSimpleName().equals(tipo) && (pieza.esBlanca == esBlanco)) return pieza;
+        for (Pieza pieza:piezas) if (pieza.getClass().getSimpleName().equals(tipo) && (pieza.esBlanca == esBlanco.booleanValue()))   return pieza;
+
         return null;
     }
 

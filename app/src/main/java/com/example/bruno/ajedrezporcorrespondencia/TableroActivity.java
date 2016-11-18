@@ -94,7 +94,10 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
     }
 
     private JuegoState getEstadoJuego() {
-        return  (juego.turno.equals(SessionUsuario.sessionUsuario.jugador.id)) ?  new EligiendoPieza() :  new EnEspera();
+         JuegoState estado = (juego.turno.equals(SessionUsuario.sessionUsuario.jugador.id)) ?  new EligiendoPieza() :  new EnEspera();
+         if(juego.finDelJuego()) estado = new JuegoTerminado();
+
+        return estado;
     }
 
     @Override
@@ -164,20 +167,20 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
    public void actualizarDatosUsuarios(final Boolean ganoBlanco, final Boolean ganoNegro){
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference jugadorBlancoRef;
+        final DatabaseReference jugadorNegroRef;
 
-        final DatabaseReference jugadorBlanco;
-       final DatabaseReference jugadorNegro;
+       jugadorBlancoRef = database.getReference("Usuarios").child(juego.jugadorBlanco);
+       jugadorNegroRef = database.getReference("Usuarios").child(juego.jugadorNegro);
 
-       jugadorBlanco = database.getReference("Usuarios").child(juego.jugadorBlanco);
-       jugadorNegro = database.getReference("Usuarios").child(juego.jugadorNegro);
-
-        jugadorBlanco.addValueEventListener(new ValueEventListener() {
+       jugadorBlancoRef.addValueEventListener(new ValueEventListener() {
            @Override
            public void onDataChange(DataSnapshot dataSnapshot) {
                Jugador jugadorBlanco = dataSnapshot.getValue(Jugador.class);
                if(ganoNegro) jugadorBlanco.partidasPerdidas ++;
                else if (ganoBlanco) jugadorBlanco.partidasGanadas ++;
                else jugadorBlanco.partidasEmpatadas ++;
+               jugadorBlancoRef.setValue(jugadorBlanco);
            }
 
            @Override
@@ -186,13 +189,14 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
            }
        });
 
-       jugadorNegro.addValueEventListener(new ValueEventListener() {
+       jugadorNegroRef.addValueEventListener(new ValueEventListener() {
            @Override
            public void onDataChange(DataSnapshot dataSnapshot) {
                Jugador jugadorNegro = dataSnapshot.getValue(Jugador.class);
                if(ganoBlanco) jugadorNegro.partidasPerdidas ++;
                else if (ganoNegro) jugadorNegro.partidasGanadas ++;
                     else jugadorNegro.partidasEmpatadas ++;
+               jugadorNegroRef.setValue(jugadorNegro);
            }
 
            @Override

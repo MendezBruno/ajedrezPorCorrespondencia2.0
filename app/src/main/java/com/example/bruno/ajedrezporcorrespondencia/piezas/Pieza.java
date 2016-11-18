@@ -169,6 +169,13 @@ import java.util.ArrayList;
         return noEstaClavada;
     }
 
+    public boolean piezaProtegida (ArrayList<Pieza> piezas, Rey rey){
+        ArrayList<Pieza>  copyListPiezas = (ArrayList<Pieza>) piezas.clone();
+        ArrayList<Coordenada> coordenadas = new ArrayList<Coordenada>();
+        rey.dameCasillasEnJaque(coordenadas,copyListPiezas);
+
+        return coordenadas.contains(this.coordenada);
+    }
 
 //    /**
 //     * Obtiene item basado en su identificador

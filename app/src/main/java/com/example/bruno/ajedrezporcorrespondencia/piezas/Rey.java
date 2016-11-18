@@ -113,7 +113,7 @@ public class Rey extends Pieza {
         return coordenadasFinal;
     }
 
-    private void dameCasillasEnJaque(ArrayList<Coordenada> coordenadasJaqueadas, ArrayList<Pieza> piezasJuego) {
+    public void dameCasillasEnJaque(ArrayList<Coordenada> coordenadasJaqueadas, ArrayList<Pieza> piezasJuego) {
         ArrayList<Pieza> piezasRival = filtrarPiezasRival(piezasJuego);
 
         for (Pieza pieza : piezasRival){
@@ -159,7 +159,16 @@ public class Rey extends Pieza {
     }
 
     public boolean estaEnJaqueMate ( ArrayList<Pieza> piezasJuego ) {
-      return estasEnJaque( piezasJuego) && (this.calcularMovimientoCoordenadas(piezasJuego)).isEmpty() ;
+//      todo pieza Protegida   listaMOvimieto.filtrarPiezasProtegidas
+        ArrayList<Coordenada> coordenadasResultado = new ArrayList<>();
+        ArrayList<Coordenada> coordenadas = this.calcularMovimientoCoordenadas(piezasJuego);
+        for (Coordenada cord : coordenadas) {
+            Pieza pieza = findByCoordenada(cord,piezasJuego);
+            if (pieza != null)
+                if (pieza.piezaProtegida(piezasJuego, this)) coordenadasResultado.add(cord);
+        }
+
+      return estasEnJaque( piezasJuego) && coordenadasResultado.isEmpty() ;
     }
 
     public boolean estaAhogado ( ArrayList<Pieza> piezasJuego) {
