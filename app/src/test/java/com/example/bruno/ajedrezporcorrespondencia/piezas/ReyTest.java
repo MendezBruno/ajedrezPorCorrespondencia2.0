@@ -76,7 +76,7 @@ public class ReyTest {
     Torre torre = new Torre(Coordenada.A8,false);
     piezas.add(rey);
     piezas.add(torre);
-    rey.primerMovimiento = false;
+    rey.primerMovimiento = true;
     rey.calcularMovimientoCoordenadas(piezas);
     rey.esEnroqueLargo(Coordenada.C8,piezas);
     assertEquals(Coordenada.C8,rey.coordenada);

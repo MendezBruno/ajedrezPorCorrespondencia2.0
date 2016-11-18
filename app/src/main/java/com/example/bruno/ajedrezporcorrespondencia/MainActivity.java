@@ -76,11 +76,14 @@ public class MainActivity extends AppCompatActivity {
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
 
+        session = Twitter.getSessionManager().getActiveSession();
+        if (session != null) sessionID = session.getId();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
             //if session es null salgo
-
+            if (session == null) return;
+   //             if (progress.isShowing())return;
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     jugador.id=user.getUid();
@@ -145,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 //            MainActivity.this.finish();
             session = null;
-            sessionID = Long.parseLong(null);
+            sessionID = 0;
             //todo hacer invisible los dos botones
             loginButton.setVisibility(View.VISIBLE);
             Twitter.logOut();
@@ -202,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void crear_o_cargarUsuarioFirebase(){
         // Obtener datos de firebase con el UID
-        progress = ProgressDialog.show(MainActivity.this, "Ajedrez Por Correspondencia", "Cargando");
+        //progress = ProgressDialog.show(MainActivity.this, "Ajedrez Por Correspondencia", "Cargando");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("Usuarios").child(jugador.id);
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -220,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                         galeriaButton.setEnabled(true);
                         loginButton.setVisibility(View.INVISIBLE);
                         myRef.setValue(jugador);
-                        progress.dismiss();
+                //        progress.dismiss();
                     }
                 };
 
