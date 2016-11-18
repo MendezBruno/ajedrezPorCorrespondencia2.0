@@ -130,7 +130,11 @@ public class Juego implements Serializable{
     public boolean movimientoLegal(Coordenada coord) {
         Rey rey = (Rey) findByTipoYcolor("Rey",piezaSeleccionada.esBlanca);
         assert rey != null;
-        return (piezaSeleccionada.noEstaClavada(piezas,coord,rey) && (!rey.estasEnJaque(piezas)));
+        Coordenada actual = piezaSeleccionada.getCoordenada();
+        piezaSeleccionada.setCoordenada(coord);
+        Boolean reyEnJaque = rey.estasEnJaque(piezas);
+        piezaSeleccionada.setCoordenada(actual);
+        return (piezaSeleccionada.noEstaClavada(piezas,coord,rey) && (!reyEnJaque));
     }
 
     public boolean finDelJuego(){
