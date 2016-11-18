@@ -51,19 +51,21 @@ public class Rey extends Pieza {
     private void pedirEnroqueNegro(ArrayList<Coordenada> coordenadas, ArrayList<Pieza> piezasJuego) {
         ArrayList<Coordenada> coordenadasEnroqueNegro  = new ArrayList<>();
         ArrayList<Coordenada> coordenadasJaqueadas = new ArrayList<>();
-        Pieza pieza;
+        Pieza piezag8;
+        Pieza piezaf8;
         Boolean enroque = true;
 
         dameCasillasEnJaque(coordenadasJaqueadas, piezasJuego);
-        pieza = findByCoordenada(Coordenada.G8,piezasJuego);
-        if(!coordenadasJaqueadas.contains(Coordenada.G8) && pieza == null) coordenadas.add(Coordenada.G8) ;
+        piezag8 = findByCoordenada(Coordenada.G8,piezasJuego);
+        piezaf8 = findByCoordenada(Coordenada.F8,piezasJuego);
+        if(!coordenadasJaqueadas.contains(Coordenada.G8) && !coordenadasJaqueadas.contains(Coordenada.F8)  && piezag8 == null && piezaf8 == null) coordenadas.add(Coordenada.G8) ;
 
         coordenadasEnroqueNegro.add(Coordenada.D8);
         coordenadasEnroqueNegro.add(Coordenada.C8);
         coordenadasEnroqueNegro.add(Coordenada.B8);
 
         for(Coordenada cord: coordenadasEnroqueNegro)
-            if (coordenadasJaqueadas.contains(cord)  || pieza != null) enroque = false;   //todo verificar que torre no se movió
+            if (coordenadasJaqueadas.contains(cord)  || findByCoordenada(cord,piezasJuego) != null) enroque = false;   //todo verificar que torre no se movió
 
         if (enroque) coordenadas.addAll(coordenadasEnroqueNegro);
 
@@ -73,11 +75,13 @@ public class Rey extends Pieza {
         ArrayList<Coordenada> coordenadasEnroqueBlanco  = new ArrayList<>();
         ArrayList<Coordenada> coordenadasJaqueadas = new ArrayList<>();
         Pieza pieza;
+        Pieza piezaf1;
         Boolean enroque = true;
 
         dameCasillasEnJaque(coordenadasJaqueadas, piezasJuego);
         pieza = findByCoordenada(Coordenada.G1,piezasJuego);
-        if(!coordenadasJaqueadas.contains(Coordenada.G1) && pieza == null) coordenadas.add(Coordenada.G1) ;
+        piezaf1 = findByCoordenada(Coordenada.F1,piezasJuego);
+        if(!coordenadasJaqueadas.contains(Coordenada.G1) && !coordenadasJaqueadas.contains(Coordenada.F1)  && pieza == null && piezaf1 == null) coordenadas.add(Coordenada.G1) ;
 
         coordenadasEnroqueBlanco.add(Coordenada.D1);
         coordenadasEnroqueBlanco.add(Coordenada.C1);
@@ -121,19 +125,11 @@ public class Rey extends Pieza {
         //todo: se podria pensar este movimiento con la posicion y matar un if?
 
         Pieza torre = findByCoordenada(Coordenada.H1,piezasJuego);
-        if( this.esBlanca && coord == Coordenada.G1 && torre != null){
-            this.setCoordenada(Coordenada.G1);
-            torre.setCoordenada(Coordenada.F1);
-//          juegoState = new EnEspera();
-            return true;
-        }
+        if( this.esBlanca && coord == Coordenada.G1 && torre != null)  return true;
+
         torre = findByCoordenada(Coordenada.H8,piezasJuego);
-        if(!this.esBlanca && coord == Coordenada.G8){
-            this.setCoordenada(Coordenada.G8);
-            torre.setCoordenada(Coordenada.F8);
-//            juegoState = new EnEspera();
-            return true;
-        }
+        if(!this.esBlanca && coord == Coordenada.G8 && torre != null)  return true;
+
         return  false;
     }
 
@@ -148,17 +144,11 @@ public class Rey extends Pieza {
         //todo: se podria pensar este movimiento con la posicion y matar un if?
 
         Pieza torre = findByCoordenada(Coordenada.A1,piezasJuego);
-        if( this.esBlanca && coord == Coordenada.C1 && torre != null){
-            this.setCoordenada(Coordenada.C1);
-            torre.setCoordenada(Coordenada.D1);
-            return true;
-        }
+        if( this.esBlanca && (coord == Coordenada.B1 || coord == Coordenada.C1 ) && torre != null)   return true;
+
         torre = findByCoordenada(Coordenada.A8,piezasJuego);
-        if(!this.esBlanca && coord == Coordenada.B8){
-            this.setCoordenada(Coordenada.C8);
-            torre.setCoordenada(Coordenada.D8);
-            return true;
-        }
+        if(!this.esBlanca && (coord == Coordenada.B8 || coord == Coordenada.C8 ) && torre != null)   return true;
+
         return  false;
     }
 

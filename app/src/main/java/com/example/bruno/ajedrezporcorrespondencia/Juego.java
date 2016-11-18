@@ -66,11 +66,11 @@ public class Juego implements Serializable{
         else return this.findByCoordenada(Coordenada.getCoordenada(posicionOpuesta));
     }
 
-    public boolean esEnroqueLargo(Coordenada coord, ArrayList<Pieza> piezas) {
+    public boolean esEnroqueLargo(Coordenada coord) {
         return piezaSeleccionada.esEnroqueLargo(coord, piezas);
     }
 
-    public boolean esEnroqueCorto(Coordenada coord, ArrayList<Pieza> piezas) {
+    public boolean esEnroqueCorto(Coordenada coord) {
         return piezaSeleccionada.esEnroqueCorto(coord, piezas);
     }
 
@@ -81,5 +81,41 @@ public class Juego implements Serializable{
 
     public void cambiarTurno() {
         this.turno = soyElBlanco()? jugadorNegro:jugadorBlanco;
+    }
+
+    public void hacerEnroque(Coordenada coord) {
+        if ( piezaSeleccionada.esEnroqueLargo(coord,piezas)) hacerEnroqueLargo();
+        if ( piezaSeleccionada.esEnroqueCorto(coord,piezas)) hacerEnroqueCorto();
+    }
+
+    private void hacerEnroqueCorto() {
+        if(piezaSeleccionada.esBlanca){
+            Pieza torre = findByCoordenada(Coordenada.H1);
+            piezaSeleccionada.setCoordenada(Coordenada.G1);
+            assert torre != null;
+            torre.setCoordenada(Coordenada.E1);
+
+        }else{
+            Pieza torre = findByCoordenada(Coordenada.H8);
+            piezaSeleccionada.setCoordenada(Coordenada.G8);
+            assert torre != null;
+            torre.setCoordenada(Coordenada.E8);
+        }
+
+    }
+
+    private void hacerEnroqueLargo() {
+        if(piezaSeleccionada.esBlanca){
+            Pieza torre = findByCoordenada(Coordenada.A1);
+            piezaSeleccionada.setCoordenada(Coordenada.C1);
+            assert torre != null;
+            torre.setCoordenada(Coordenada.D1);
+
+        }else{
+            Pieza torre = findByCoordenada(Coordenada.A8);
+            piezaSeleccionada.setCoordenada(Coordenada.C8);
+            assert torre != null;
+            torre.setCoordenada(Coordenada.D8);
+        }
     }
 }

@@ -33,14 +33,14 @@ public class PiezaSeleccionada implements JuegoState, Serializable {
         else {
             Coordenada coord = Coordenada.getCoordenada(position,juego.soyElBlanco());
             if (juego.casillasPintadas.contains(coord)){
-                if(!juego.esEnroqueCorto(coord, juego.piezas ) || !juego.esEnroqueLargo(coord, juego.piezas) ) {
+                if(!juego.esEnroqueCorto(coord) && !juego.esEnroqueLargo(coord) ) {
                     juego.piezaSeleccionada.setCoordenada(Coordenada.getCoordenada(position,juego.soyElBlanco()));
-                    juego.casillasPintadas.clear();
-                  juego.juegoState = new EnEspera();
-                    juego.cambiarTurno();
+                }else {
+                    juego.hacerEnroque(coord);
                 }
                 juego.juegoState = new EnEspera();
                 juego.cambiarTurno();
+                juego.casillasPintadas.clear();
             }
         }
 
