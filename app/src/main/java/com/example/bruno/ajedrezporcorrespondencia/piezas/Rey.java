@@ -164,6 +164,6 @@ public class Rey extends Pieza {
     }
 
     public boolean estaAhogado ( ArrayList<Pieza> piezasJuego) {
-      return  !estasEnJaque(piezasJuego) && (this.calcularMovimientoCoordenadas(piezasJuego)).isEmpty()
+      return  !estasEnJaque(piezasJuego) && (this.calcularMovimientoCoordenadas(piezasJuego)).isEmpty();
     }
 }
