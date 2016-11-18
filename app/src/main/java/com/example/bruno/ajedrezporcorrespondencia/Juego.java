@@ -101,13 +101,13 @@ public class Juego implements Serializable{
             Pieza torre = findByCoordenada(Coordenada.H1);
             piezaSeleccionada.setCoordenada(Coordenada.G1);
             assert torre != null;
-            torre.setCoordenada(Coordenada.E1);
+            torre.setCoordenada(Coordenada.F1);
 
         }else{
             Pieza torre = findByCoordenada(Coordenada.H8);
             piezaSeleccionada.setCoordenada(Coordenada.G8);
             assert torre != null;
-            torre.setCoordenada(Coordenada.E8);
+            torre.setCoordenada(Coordenada.F8);
         }
 
     }
@@ -130,7 +130,7 @@ public class Juego implements Serializable{
     public boolean movimientoLegal(Coordenada coord) {
         Rey rey = (Rey) findByTipoYcolor("Rey",piezaSeleccionada.esBlanca);
         assert rey != null;
-        return (piezaSeleccionada.noEstaClavada(piezas,coord,rey) && !rey.estasEnJaque(piezas));
+        return (piezaSeleccionada.noEstaClavada(piezas,coord,rey) && (!rey.estasEnJaque(piezas)));
     }
 
     public boolean finDelJuego(){

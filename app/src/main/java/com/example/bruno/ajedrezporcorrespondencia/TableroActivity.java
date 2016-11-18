@@ -145,11 +145,14 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
              if (juego.ganoBlanco()){
                  Toast mens = Toast.makeText(this,"Gano EL Blanco", Toast.LENGTH_LONG);
                  mens.show();
+                 actualizarDatosUsuarios(true,false);
              }else{
                  if(juego.ganoNegro()){
                      (Toast.makeText(this,"Gano EL Negro", Toast.LENGTH_LONG)).show();
+                     actualizarDatosUsuarios(false,true);
                  }else{
                      (Toast.makeText(this,"Empato", Toast.LENGTH_LONG)).show();
+                     actualizarDatosUsuarios(false,false);
                  }
              }
 
@@ -157,5 +160,48 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
 
 
     }
+
+   public void actualizarDatosUsuarios(final Boolean ganoBlanco, final Boolean ganoNegro){
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        final DatabaseReference jugadorBlanco;
+       final DatabaseReference jugadorNegro;
+
+       jugadorBlanco = database.getReference("Usuarios").child(juego.jugadorBlanco);
+       jugadorNegro = database.getReference("Usuarios").child(juego.jugadorNegro);
+
+        jugadorBlanco.addValueEventListener(new ValueEventListener() {
+           @Override
+           public void onDataChange(DataSnapshot dataSnapshot) {
+               Jugador jugadorBlanco = dataSnapshot.getValue(Jugador.class);
+               if(ganoNegro) jugadorBlanco.partidasPerdidas ++;
+               else if (ganoBlanco) jugadorBlanco.partidasGanadas ++;
+               else jugadorBlanco.partidasEmpatadas ++;
+           }
+
+           @Override
+           public void onCancelled(DatabaseError databaseError) {
+               //todo ver que pasa?
+           }
+       });
+
+       jugadorNegro.addValueEventListener(new ValueEventListener() {
+           @Override
+           public void onDataChange(DataSnapshot dataSnapshot) {
+               Jugador jugadorNegro = dataSnapshot.getValue(Jugador.class);
+               if(ganoBlanco) jugadorNegro.partidasPerdidas ++;
+               else if (ganoNegro) jugadorNegro.partidasGanadas ++;
+                    else jugadorNegro.partidasEmpatadas ++;
+           }
+
+           @Override
+           public void onCancelled(DatabaseError databaseError) {
+               //todo ver que pasa?
+           }
+       });
+   }
+
+
 
 }

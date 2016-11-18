@@ -31,21 +31,24 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Ganadas:"
-                android:id="@+id/textView3" />
+                android:id="@+id/textView3"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Empatadas:"
-                android:id="@+id/textView2" />
+                android:id="@+id/textView2"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Perdidas:"
-                android:id="@+id/textView4" />
+                android:id="@+id/textView4"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
 
@@ -58,21 +61,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="num"
+                android:text="@string/num"
                 android:id="@+id/numGan" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="num"
+                android:text="@string/numPerd"
                 android:id="@+id/numEmp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="num"
+                android:text="@string/numEmp"
                 android:id="@+id/numPerdidas" />
         </LinearLayout>
 
@@ -82,7 +85,8 @@
         android:layout_width="234dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Contrincantes Actuales" />
+        android:text="Contrincantes Actuales"
+        tools:ignore="HardcodedText" />
 
     <ListView
         android:layout_width="wrap_content"

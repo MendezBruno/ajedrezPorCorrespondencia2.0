@@ -21,7 +21,7 @@ public class PiezaSeleccionada implements JuegoState, Serializable {
                 juego.piezaSeleccionada = pieza;
             } else {
                 Coordenada coord = Coordenada.getCoordenada(position,juego.soyElBlanco());
-                if (juego.casillasPintadas.contains(coord)) {
+                if (juego.casillasPintadas.contains(coord) && juego.movimientoLegal(coord)) {
                     Coordenada coordenada = juego.eliminarPieza(position);
                     juego.piezaSeleccionada.setCoordenada(coordenada);
                     juego.casillasPintadas.clear();

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="nombre_transicion_imagen">AppTheme</string>
     <string name="num">num</string>
     <string name="numEmp">num</string>
 </resources>

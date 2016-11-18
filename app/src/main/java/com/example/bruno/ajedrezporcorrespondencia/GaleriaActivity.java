@@ -42,9 +42,9 @@ public class GaleriaActivity extends AppCompatActivity {
         TextView ganadas = (TextView) findViewById(R.id.numGan);
         TextView empatadas = (TextView) findViewById(R.id.numEmp);
         TextView perdidas = (TextView) findViewById(R.id.numPerdidas);
-//        ganadas.setText( "0" );
-//        empatadas.setText("0");
-//        perdidas.setText("0");
+        ganadas.setText( String.valueOf(SessionUsuario.sessionUsuario.jugador.partidasGanadas) );
+        empatadas.setText( String.valueOf(SessionUsuario.sessionUsuario.jugador.partidasEmpatadas));
+        perdidas.setText( String.valueOf(SessionUsuario.sessionUsuario.jugador.partidasPerdidas));
         //Cargando list view con los followers
         lv = (ListView) findViewById(R.id.partidasGuardadas);
         final ArrayList listaJuegos = new ArrayList<Juego>();
