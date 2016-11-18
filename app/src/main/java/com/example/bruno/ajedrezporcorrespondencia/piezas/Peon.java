@@ -24,8 +24,9 @@ public class Peon  extends Pieza{
             if (this.tienePiezaDiagonalArribaIzquierda(coordenada,piezasJuego)) coordenadas.add(coordenada.diagonalSupIzquierda(1));
             //si no tiene una pieza en frente se puede mover 2 o 1
             if (!this.tienePiezaArriba(coordenada, piezasJuego)) {
-                if ((coordenada.getFila().equals("2"))) {
+                if ((coordenada.getFila().equals("2"))   ) {
                     try {
+                        if (findByCoordenada(coordenada.arriba(2),piezasJuego) == null)
                         coordenadas.add(coordenada.arriba(2));
                     } catch (CoordenadaAlgebraException e) {
                         e.printStackTrace();
@@ -51,6 +52,7 @@ public class Peon  extends Pieza{
             if (!this.tienePiezaAbajo(coordenada, piezasJuego)) {
                 if ((coordenada.getFila().equals("7"))) {
                     try {
+                        if (findByCoordenada(coordenada.abajo(2),piezasJuego) == null)
                         coordenadas.add(coordenada.abajo(2));
                     } catch (CoordenadaAlgebraException e) {
                         e.printStackTrace();

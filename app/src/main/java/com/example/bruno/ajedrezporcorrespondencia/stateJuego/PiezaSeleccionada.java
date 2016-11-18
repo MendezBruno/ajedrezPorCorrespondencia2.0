@@ -32,7 +32,7 @@ public class PiezaSeleccionada implements JuegoState, Serializable {
         }
         else {
             Coordenada coord = Coordenada.getCoordenada(position,juego.soyElBlanco());
-            if (juego.casillasPintadas.contains(coord)){
+            if (juego.casillasPintadas.contains(coord) && juego.movimientoLegal(coord)){
                 if(!juego.esEnroqueCorto(coord) && !juego.esEnroqueLargo(coord) ) {
                     juego.piezaSeleccionada.setCoordenada(Coordenada.getCoordenada(position,juego.soyElBlanco()));
                 }else {
@@ -44,5 +44,11 @@ public class PiezaSeleccionada implements JuegoState, Serializable {
             }
         }
 
+        if (juego.finDelJuego()){
+            juego.juegoState = new JuegoTerminado();
+        }
+
     }
+
+
 }

@@ -1,6 +1,7 @@
 package com.example.bruno.ajedrezporcorrespondencia;
 
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Pieza;
+import com.example.bruno.ajedrezporcorrespondencia.piezas.Rey;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.JuegoState;
 
 import java.io.Serializable;
@@ -47,6 +48,13 @@ public class Juego implements Serializable{
 
         for (Pieza pieza:piezas) if (pieza.getCoordenada() == coord) return pieza;
 
+        return null;
+    }
+
+    //Actualmente aplica mejor si es para piezas de un tipo o color
+    private Pieza findByTipoYcolor (String tipo, Boolean esBlanco ){
+
+        for (Pieza pieza:piezas) if (pieza.getClass().getSimpleName().equals(tipo) && (pieza.esBlanca == esBlanco)) return pieza;
         return null;
     }
 
@@ -118,4 +126,32 @@ public class Juego implements Serializable{
             torre.setCoordenada(Coordenada.D8);
         }
     }
+
+    public boolean movimientoLegal(Coordenada coord) {
+        Rey rey = (Rey) findByTipoYcolor("Rey",piezaSeleccionada.esBlanca);
+        assert rey != null;
+        return (piezaSeleccionada.noEstaClavada(piezas,coord,rey) && !rey.estasEnJaque(piezas));
+    }
+
+    public boolean finDelJuego(){
+        Rey reyBlanco = (Rey) findByTipoYcolor("Rey", true);
+        Rey reyNegro = (Rey) findByTipoYcolor("Rey", false);
+        assert reyBlanco != null;
+        assert reyNegro != null;
+        return reyBlanco.estaEnJaqueMate(piezas) || reyNegro.estaEnJaqueMate(piezas) || reyBlanco.estaAhogado(piezas) || reyNegro.estaAhogado(piezas);
+
+    }
+
+    public boolean ganoBlanco(){
+        Rey reyNegro = (Rey) findByTipoYcolor("Rey", false);
+        assert reyNegro != null;
+        return reyNegro.estaEnJaqueMate(piezas);
+
+    }
+
+    public boolean ganoNegro() {
+        Rey reyBlanco = (Rey) findByTipoYcolor("Rey", true);
+        assert reyBlanco != null;
+        return reyBlanco.estaEnJaqueMate(piezas);
+       }
 }

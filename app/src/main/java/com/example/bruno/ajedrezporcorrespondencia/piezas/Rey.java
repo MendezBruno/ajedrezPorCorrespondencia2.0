@@ -147,9 +147,8 @@ public class Rey extends Pieza {
         if( this.esBlanca && (coord == Coordenada.B1 || coord == Coordenada.C1 ) && torre != null)   return true;
 
         torre = findByCoordenada(Coordenada.A8,piezasJuego);
-        if(!this.esBlanca && (coord == Coordenada.B8 || coord == Coordenada.C8 ) && torre != null)   return true;
+        return !this.esBlanca && (coord == Coordenada.B8 || coord == Coordenada.C8) && torre != null;
 
-        return  false;
     }
 
     public boolean estasEnJaque ( ArrayList<Pieza> piezasJuego){

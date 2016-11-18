@@ -2,14 +2,17 @@ package com.example.bruno.ajedrezporcorrespondencia;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.example.bruno.ajedrezporcorrespondencia.piezas.Pieza;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EligiendoPieza;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EnEspera;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.JuegoState;
+import com.example.bruno.ajedrezporcorrespondencia.stateJuego.JuegoTerminado;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +24,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static android.widget.Toast.LENGTH_LONG;
 
 
 public class TableroActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -135,6 +140,21 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
         todo: Notifica al contrincante mediante firebase
         */
         }
+
+        if(juego.juegoState.getClass() == JuegoTerminado.class) {
+             if (juego.ganoBlanco()){
+                 Toast mens = Toast.makeText(this,"Gano EL Blanco", Toast.LENGTH_LONG);
+                 mens.show();
+             }else{
+                 if(juego.ganoNegro()){
+                     (Toast.makeText(this,"Gano EL Negro", Toast.LENGTH_LONG)).show();
+                 }else{
+                     (Toast.makeText(this,"Empato", Toast.LENGTH_LONG)).show();
+                 }
+             }
+
+        }
+
 
     }
 
