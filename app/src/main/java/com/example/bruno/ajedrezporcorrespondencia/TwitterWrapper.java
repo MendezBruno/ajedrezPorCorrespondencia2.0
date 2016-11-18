@@ -36,7 +36,7 @@ public class TwitterWrapper {
 
         StatusesService statusesService = TwitterCore.getInstance().getApiClient(session_abierta).getStatusesService();
 
-        statusesService.update("@" + persona + mensaje,null,null,null,null,null,null,null,null).enqueue(new Callback<Tweet>() {
+        statusesService.update("D @" + persona + mensaje,null,null,null,null,null,null,null,null).enqueue(new Callback<Tweet>() {
             @Override
             public void success(Result<Tweet> tweetResult) {
               //...

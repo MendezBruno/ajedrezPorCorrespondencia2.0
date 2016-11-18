@@ -45,7 +45,6 @@ public class GaleriaActivity extends AppCompatActivity {
 //        ganadas.setText( "0" );
 //        empatadas.setText("0");
 //        perdidas.setText("0");
-
         //Cargando list view con los followers
         lv = (ListView) findViewById(R.id.partidasGuardadas);
         final ArrayList listaJuegos = new ArrayList<Juego>();
@@ -60,12 +59,42 @@ public class GaleriaActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Juego juego = (Juego)parent.getItemAtPosition(position);
-                        Intent intent = new Intent(GaleriaActivity.this, TableroActivity.class);
+                        final Intent intent = new Intent(GaleriaActivity.this, TableroActivity.class);
                         intent.putExtra("juego", juego);
+
+                        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+                        final DatabaseReference myRef;
+
+                        if (juego.soyElBlanco()) {
+                            myRef = database.getReference("Usuarios").child(juego.jugadorNegro);
+                        }
+                        else
+                        {
+                            myRef = database.getReference("Usuarios").child(juego.jugadorBlanco);
+                        }
+                            myRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    Jugador contrincante = dataSnapshot.getValue(Jugador.class);
+                                    intent.putExtra("usuarioTwitterContrincante",contrincante.twitterName);
+                                    intent.putExtra("idJugador",jugador.id);
+                                    intent.putExtra("sessionID",sessionID);
+                                    startActivity(intent);
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    //todo ver que pasa?
+                                }
+                            });
+
+
+
+
 //                        Contrincante contrincante = (Contrincante) parent.getItemAtPosition(position);
-                        intent.putExtra("idJugador",jugador.id);
-                        intent.putExtra("sessionID",sessionID);
-                        startActivity(intent);
                     }
                 });
             }

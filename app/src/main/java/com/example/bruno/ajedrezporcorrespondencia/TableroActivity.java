@@ -125,9 +125,9 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
             String json = gson.toJson(juego);
             Map<String, Object> map = gson.fromJson(json, new TypeToken<HashMap<String, Object>>() {}.getType());
             myRef.setValue(map);
-//            tw.enviarTweet(usuarioTweetContrincante," Se movio la pieza " + piezaMovida.getClass().getSimpleName() + " desde la casilla " + coordenadaA + " hasta la casilla " + coordenadaB );
-//            coordenadaA = null;
-//            coordenadaB = null;
+            tw.enviarTweet(usuarioTweetContrincante," Se movio la pieza " + piezaMovida.getClass().getSimpleName() + " desde la casilla " + coordenadaA + " hasta la casilla " + coordenadaB );
+            coordenadaA = null;
+            coordenadaB = null;
             /*
         todo Enviar twiter de que ya se realizo movimiento
         */
