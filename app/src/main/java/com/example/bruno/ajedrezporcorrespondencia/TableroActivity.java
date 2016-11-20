@@ -12,6 +12,7 @@ import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EligiendoPieza;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.EnEspera;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.JuegoState;
 import com.example.bruno.ajedrezporcorrespondencia.stateJuego.JuegoTerminado;
+import com.example.bruno.ajedrezporcorrespondencia.stateJuego.PiezaSeleccionada;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,7 +38,7 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
     private Jugador jugadorNegro;
     DatabaseReference jugadorBlancoRef;
     DatabaseReference jugadorNegroRef;
-
+    private boolean flagEnEspera = true;
 
     private Coordenada coordenadaA = null;
 
@@ -98,7 +99,11 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
         GsonBuilder gsonBilder = new GsonBuilder();
         gsonBilder.registerTypeAdapter(Pieza.class, new AbstractAdapter());
         final Gson gson = gsonBilder.create();
+        if(juego.juegoState.getClass() == EnEspera.class)
+        {
+            flagEnEspera = false;
 
+        }
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -141,24 +146,32 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
         juego.jugada(pieza, position, jugadorId);
         ia.notifyDataSetChanged();
 
+
+        if(juego.juegoState.getClass() == PiezaSeleccionada.class) {
+
+            coordenadaA = null;
+
+         //   coordenadaB = null;
+
+            flagEnEspera = true;
+
+        }
+
         if (coordenadaA == null) {
 
             piezaMovida = pieza;
 
             coordenadaA = Coordenada.getCoordenada(position, juego.soyElBlanco());
 
-        }
-        else
-
-        {
-            coordenadaB = Coordenada.getCoordenada(position, juego.soyElBlanco());
+            return;
 
         }
 
         //verificar que jugó
         //El jugador Realiza la jugada cuando el juego pasa al state en espera
-        if(juego.juegoState.getClass() == EnEspera.class) {
+        if(juego.juegoState.getClass() == EnEspera.class && flagEnEspera) {
 
+            coordenadaB = Coordenada.getCoordenada(position, juego.soyElBlanco());
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             final DatabaseReference myRef = database.getReference("juegos").child(juego.idJuego);
             GsonBuilder gsonBilder = new GsonBuilder();
@@ -168,8 +181,8 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
             Map<String, Object> map = gson.fromJson(json, new TypeToken<HashMap<String, Object>>() {}.getType());
             myRef.setValue(map);
             tw.enviarTweet(usuarioTweetContrincante," Se movio la pieza " + piezaMovida.getClass().getSimpleName() + " desde la casilla " + coordenadaA + " hasta la casilla " + coordenadaB );
-            coordenadaA = null;
-            coordenadaB = null;
+            flagEnEspera = false;
+
             /*
         todo Enviar twiter de que ya se realizo movimiento
         */

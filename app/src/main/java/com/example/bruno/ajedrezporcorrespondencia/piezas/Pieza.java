@@ -7,6 +7,7 @@ import com.example.bruno.ajedrezporcorrespondencia.stateJuego.PiezaSeleccionada;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by bruno on 28/8/2016.
@@ -124,17 +125,17 @@ import java.util.ArrayList;
         try {
             return piezaEnLaPosicion(coordenada,piezasJuego,direccion) != null;
         } catch (CoordenadaAlgebraException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return false;
         }
     }
 
-    public void pedirProximaCasilla(ArrayList<Coordenada> coordenadas,Coordenada coordenada, ArrayList<Pieza> piezasJuego, Direccion dir) {
+    public void pedirProximaCasilla(ArrayList<Coordenada> coordenadas, Coordenada coordenada, ArrayList<Pieza> piezasJuego, Direccion dir) {
         Coordenada coordenadaDireccion = null;
         try {
             coordenadaDireccion = coordenada.dameCoordenada(dir);
         } catch (CoordenadaAlgebraException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         if (!this.tienePiezaEn(coordenada,piezasJuego,dir) && coordenadaDireccion != null ) {
             coordenadas.add(coordenadaDireccion);
@@ -144,7 +145,7 @@ import java.util.ArrayList;
             try {
                 piezaEnPosSiguiente = piezaEnLaPosicion(coordenada,piezasJuego,dir);
             } catch (CoordenadaAlgebraException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
             if (piezaEnPosSiguiente != null)
                 if ( (this.esBlanca && !piezaEnPosSiguiente.esBlanca) || (!this.esBlanca && piezaEnPosSiguiente.esBlanca)  && coordenadaDireccion != null) coordenadas.add(coordenadaDireccion);
@@ -172,10 +173,29 @@ import java.util.ArrayList;
     public boolean piezaProtegida (ArrayList<Pieza> piezas, Rey rey){
         ArrayList<Pieza>  copyListPiezas = (ArrayList<Pieza>) piezas.clone();
         ArrayList<Coordenada> coordenadas = new ArrayList<Coordenada>();
+        copyListPiezas.remove(this);
         rey.dameCasillasEnJaque(coordenadas,copyListPiezas);
 
         return coordenadas.contains(this.coordenada);
     }
+
+
+    public abstract List<Direccion> dameTusDirecciones ();
+
+    public abstract ArrayList<Coordenada> pedirTrayectoria(Coordenada coordenada, ArrayList<Pieza> piezasJuego , Direccion dir); //todo DO
+
+    public boolean sosCaballo(){
+       return this.getClass().getSimpleName().equals("Caballo");
+    }
+
+    public boolean sosPeon(){
+        return this.getClass().getSimpleName().equals("Peon");
+    }
+
+    public boolean estaHaciendoJaque(Coordenada coordenada, ArrayList<Pieza> piezasJuego){
+        return (this.calcularMovimientoCoordenadas(piezasJuego)).contains(coordenada);
+
+    };
 
 //    /**
 //     * Obtiene item basado en su identificador

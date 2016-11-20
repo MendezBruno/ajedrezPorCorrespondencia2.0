@@ -6,6 +6,8 @@ import com.example.bruno.ajedrezporcorrespondencia.Direccion;
 import com.example.bruno.ajedrezporcorrespondencia.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by bruno on 27/10/2016.
@@ -71,4 +73,16 @@ public class Caballo extends Pieza {
     public boolean esEnroqueCorto(Coordenada coord, ArrayList<Pieza> piezas) {
         return false;
     }
+
+    @Override
+    public List<Direccion> dameTusDirecciones() {
+        return Arrays.asList();
+    }
+
+    @Override
+    public ArrayList<Coordenada> pedirTrayectoria(Coordenada coordenada,ArrayList<Pieza> piezasJuego , Direccion dir) {
+       return new ArrayList<>();
+    }
+
+
 }

@@ -58,6 +58,62 @@ public class ReyTest {
         assertTrue(!((rey.calcularMovimientoCoordenadas(piezas)).contains(Coordenada.F1)));
     }
 
+    @Test
+    public void reyPuedeCapturarPiezaQueLeHaceJaqueTest(){
+        ArrayList<Pieza> piezas = new ArrayList<>();
+        Rey rey = new Rey(Coordenada.A1,true);
+        Dama dama = new Dama(Coordenada.B2, false);
+        piezas.add(rey);
+        piezas.add(dama);
+        rey.primerMovimiento = false;
+        assertEquals(rey.estaEnJaqueMate(piezas),false);
+    }
+
+    @Test
+    public void reyN0PuedeCapturarPiezaQueLeHaceJaqueTest(){
+        ArrayList<Pieza> piezas = new ArrayList<>();
+        Rey rey = new Rey(Coordenada.A1,true);
+        Dama dama = new Dama(Coordenada.B2, false);
+        Torre torre = new Torre(Coordenada.C2, false);
+        piezas.add(rey);
+        piezas.add(dama);
+        piezas.add(torre);
+        rey.primerMovimiento = false;
+        assertEquals(rey.estaEnJaqueMate(piezas),true);
+    }
+
+    @Test
+    public void puedoCapturarPiezaQueLeHaceJaqueTest(){
+        ArrayList<Pieza> piezas = new ArrayList<>();
+        Rey rey = new Rey(Coordenada.A1,true);
+        Alfil alfil = new Alfil(Coordenada.C3,true);
+        Dama dama = new Dama(Coordenada.B2, false);
+        Torre torre = new Torre(Coordenada.C2, false);
+        piezas.add(rey);
+        piezas.add(dama);
+        piezas.add(torre);
+        piezas.add(alfil);
+        rey.primerMovimiento = false;
+        assertEquals(rey.estaEnJaqueMate(piezas),false);
+    }
+
+
+    @Test
+    public void puedoCapturarCaballoQueLeHaceJaqueTest(){
+        ArrayList<Pieza> piezas = new ArrayList<>();
+        Rey rey = new Rey(Coordenada.A1,true);
+        Alfil alfil = new Alfil(Coordenada.C4,true);
+        Torre torre = new Torre(Coordenada.B2, false);
+        Torre torre2 = new Torre(Coordenada.F2, false);
+        Caballo caballo = new Caballo(Coordenada.B3, false);
+        piezas.add(rey);
+        piezas.add(caballo);
+        piezas.add(torre);
+        piezas.add(torre2);
+        piezas.add(alfil);
+        rey.primerMovimiento = false;
+        assertEquals(rey.estaEnJaqueMate(piezas),false);
+    }
 //    @Test
 //    public void testDisponibleEnroque() {
 //        ArrayList<Pieza> piezas = new ArrayList<>();
