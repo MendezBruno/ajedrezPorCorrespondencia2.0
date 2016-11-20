@@ -18,7 +18,7 @@ public class Caballo extends Pieza {
     }
 
     public enum DireccionCaballo {
-       ELEARRIBA, ELEABAJO, ELEDERECHA, ELEIZQUIERDA,
+       ELEARRIBAIZQ, ELEABAJOIZQ, ELEDERECHAARR, ELEIZQUIERDAARR,ELEARRIBADER, ELEABAJODER, ELEDERECHAABA, ELEIZQUIERDAABA,
     }
 
     @Override
@@ -36,7 +36,7 @@ public class Caballo extends Pieza {
         try {
             coordenadas.addAll(coordenada.dameCoordenadaCaballo(dir));
         } catch (CoordenadaAlgebraException e) {
-            e.printStackTrace();
+     //       e.printStackTrace();
         }
     }
 

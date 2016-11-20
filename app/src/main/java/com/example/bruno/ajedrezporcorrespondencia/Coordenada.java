@@ -152,21 +152,29 @@ public enum Coordenada {
     public ArrayList<Coordenada> dameCoordenadaCaballo(Caballo.DireccionCaballo direccion) throws CoordenadaAlgebraException {
         ArrayList<Coordenada> coordenadaDireccion = new ArrayList<>();
         switch (direccion) {
-            case ELEABAJO:
-                coordenadaDireccion.add((this.abajo(2)).derecha(1));
+            case ELEABAJOIZQ:
                 coordenadaDireccion.add((this.abajo(2)).izquierda(1));
                 break;
-            case ELEARRIBA:
-                coordenadaDireccion.add((this.arriba(2)).derecha(1));
+            case ELEARRIBAIZQ:
                 coordenadaDireccion.add((this.arriba(2)).izquierda(1));
                 break;
-            case ELEDERECHA:
-                coordenadaDireccion.add((this.derecha(2)).abajo(1));
+            case ELEDERECHAARR:
                 coordenadaDireccion.add((this.derecha(2)).arriba(1));
                 break;
-            case ELEIZQUIERDA:
-                coordenadaDireccion.add((this.izquierda(2)).abajo(1));
+            case ELEIZQUIERDAARR:
                 coordenadaDireccion.add((this.izquierda(2)).arriba(1));
+                break;
+            case ELEABAJODER:
+                coordenadaDireccion.add((this.abajo(2)).derecha(1));
+                break;
+            case ELEARRIBADER:
+                coordenadaDireccion.add((this.arriba(2)).derecha(1));
+                break;
+            case ELEDERECHAABA:
+                coordenadaDireccion.add((this.derecha(2)).abajo(1));
+                break;
+            case ELEIZQUIERDAABA:
+                coordenadaDireccion.add((this.izquierda(2)).abajo(1));
                 break;
         }
 
