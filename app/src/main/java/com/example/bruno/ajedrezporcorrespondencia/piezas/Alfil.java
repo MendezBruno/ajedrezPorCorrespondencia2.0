@@ -66,4 +66,6 @@ public class Alfil extends Pieza {
         trayectoria.add(coordenada);
         return trayectoria;
     }
+
+
 }

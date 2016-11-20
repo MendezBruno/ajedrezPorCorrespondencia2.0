@@ -120,7 +120,9 @@ public class Rey extends Pieza {
 
         for (Pieza pieza : piezasRival){
          if(pieza.getClass() != this.getClass())
-            coordenadasJaqueadas.addAll(pieza.calcularMovimientoCoordenadas(piezasJuego));}
+            coordenadasJaqueadas.addAll(pieza.calcularMovimientoCoordenadas(piezasJuego));
+
+        }
     }
 
     public boolean esEnroqueCorto(Coordenada coord, ArrayList<Pieza> piezasJuego) {
@@ -198,7 +200,7 @@ public class Rey extends Pieza {
         Pieza amenaza=null;
 
         for( Pieza piezaRival :piezasRivales ){
-            if (!sigoEnJaqueSin(piezaRival,piezasRivales) ) {
+            if (piezaRival.estaHaciendoJaque(this.coordenada, piezasJuego) ) {
                 amenaza = piezaRival;
                 cantidadAmenazas++;
             }

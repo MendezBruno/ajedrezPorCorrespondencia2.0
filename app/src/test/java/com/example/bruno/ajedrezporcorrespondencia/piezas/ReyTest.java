@@ -97,6 +97,23 @@ public class ReyTest {
         assertEquals(rey.estaEnJaqueMate(piezas),false);
     }
 
+
+    @Test
+    public void puedoCapturarCaballoQueLeHaceJaqueTest(){
+        ArrayList<Pieza> piezas = new ArrayList<>();
+        Rey rey = new Rey(Coordenada.A1,true);
+        Alfil alfil = new Alfil(Coordenada.C4,true);
+        Torre torre = new Torre(Coordenada.B2, false);
+        Torre torre2 = new Torre(Coordenada.F2, false);
+        Caballo caballo = new Caballo(Coordenada.B3, false);
+        piezas.add(rey);
+        piezas.add(caballo);
+        piezas.add(torre);
+        piezas.add(torre2);
+        piezas.add(alfil);
+        rey.primerMovimiento = false;
+        assertEquals(rey.estaEnJaqueMate(piezas),false);
+    }
 //    @Test
 //    public void testDisponibleEnroque() {
 //        ArrayList<Pieza> piezas = new ArrayList<>();

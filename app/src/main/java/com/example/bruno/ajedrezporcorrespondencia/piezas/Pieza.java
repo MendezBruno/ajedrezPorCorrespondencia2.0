@@ -185,12 +185,17 @@ import java.util.List;
     public abstract ArrayList<Coordenada> pedirTrayectoria(Coordenada coordenada, ArrayList<Pieza> piezasJuego , Direccion dir); //todo DO
 
     public boolean sosCaballo(){
-       return this.getClass().getSimpleName() == "Caballo";
+       return this.getClass().getSimpleName().equals("Caballo");
     }
 
     public boolean sosPeon(){
-        return this.getClass().getSimpleName() == "Peon";
+        return this.getClass().getSimpleName().equals("Peon");
     }
+
+    public boolean estaHaciendoJaque(Coordenada coordenada, ArrayList<Pieza> piezasJuego){
+        return (this.calcularMovimientoCoordenadas(piezasJuego)).contains(coordenada);
+
+    };
 
 //    /**
 //     * Obtiene item basado en su identificador
