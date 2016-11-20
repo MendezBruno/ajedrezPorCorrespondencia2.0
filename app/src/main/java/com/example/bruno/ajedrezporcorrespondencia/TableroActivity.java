@@ -2,7 +2,6 @@ package com.example.bruno.ajedrezporcorrespondencia;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -25,8 +24,6 @@ import com.google.gson.reflect.TypeToken;
 import java.util.HashMap;
 import java.util.Map;
 
-import static android.widget.Toast.LENGTH_LONG;
-
 
 public class TableroActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -36,6 +33,11 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
     private long sessionID;
     private TwitterWrapper tw;
     private String usuarioTweetContrincante;
+    private Jugador jugadorBlanco;
+    private Jugador jugadorNegro;
+    DatabaseReference jugadorBlancoRef;
+    DatabaseReference jugadorNegroRef;
+
 
     private Coordenada coordenadaA = null;
 
@@ -46,6 +48,9 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
         juego = (Juego)getIntent().getExtras().getSerializable("juego");
         juego.juegoState = getEstadoJuego();
         jugadorId = (String) getIntent().getExtras().getSerializable("idJugador");
@@ -60,7 +65,35 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
         gridview.setOnItemClickListener(this);
 
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        jugadorBlancoRef = database.getReference("Usuarios").child(juego.jugadorBlanco);
+        jugadorNegroRef = database.getReference("Usuarios").child(juego.jugadorNegro);
+
+        jugadorBlancoRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                jugadorBlanco = dataSnapshot.getValue(Jugador.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //todo ver que pasa?
+            }
+        });
+
+        jugadorNegroRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                jugadorNegro = dataSnapshot.getValue(Jugador.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //todo ver que pasa?
+            }
+        });
+
+
+        database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("juegos").child(juego.idJuego);
         GsonBuilder gsonBilder = new GsonBuilder();
         gsonBilder.registerTypeAdapter(Pieza.class, new AbstractAdapter());
@@ -89,6 +122,7 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
                 //todo ver que pasa?
             }
         });
+
 
 
     }
@@ -166,44 +200,25 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
 
    public void actualizarDatosUsuarios(final Boolean ganoBlanco, final Boolean ganoNegro){
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference jugadorBlancoRef;
-        final DatabaseReference jugadorNegroRef;
 
-       jugadorBlancoRef = database.getReference("Usuarios").child(juego.jugadorBlanco);
-       jugadorNegroRef = database.getReference("Usuarios").child(juego.jugadorNegro);
+       if(ganoNegro) {
+           jugadorBlanco.partidasPerdidas++;
+           jugadorNegro.partidasGanadas++;
+       }
 
-       jugadorBlancoRef.addValueEventListener(new ValueEventListener() {
-           @Override
-           public void onDataChange(DataSnapshot dataSnapshot) {
-               Jugador jugadorBlanco = dataSnapshot.getValue(Jugador.class);
-               if(ganoNegro) jugadorBlanco.partidasPerdidas ++;
-               else if (ganoBlanco) jugadorBlanco.partidasGanadas ++;
-               else jugadorBlanco.partidasEmpatadas ++;
-               jugadorBlancoRef.setValue(jugadorBlanco);
-           }
+       if(ganoBlanco) {
+           jugadorNegro.partidasPerdidas++;
+           jugadorBlanco.partidasGanadas++;
 
-           @Override
-           public void onCancelled(DatabaseError databaseError) {
-               //todo ver que pasa?
-           }
-       });
+       }
+       if(!ganoNegro && !ganoBlanco)
+       {
+           jugadorNegro.partidasEmpatadas ++;
+           jugadorBlanco.partidasEmpatadas ++;
+       }
+       jugadorBlancoRef.setValue(jugadorBlanco);
+       jugadorNegroRef.setValue(jugadorNegro);
 
-       jugadorNegroRef.addValueEventListener(new ValueEventListener() {
-           @Override
-           public void onDataChange(DataSnapshot dataSnapshot) {
-               Jugador jugadorNegro = dataSnapshot.getValue(Jugador.class);
-               if(ganoBlanco) jugadorNegro.partidasPerdidas ++;
-               else if (ganoNegro) jugadorNegro.partidasGanadas ++;
-                    else jugadorNegro.partidasEmpatadas ++;
-               jugadorNegroRef.setValue(jugadorNegro);
-           }
-
-           @Override
-           public void onCancelled(DatabaseError databaseError) {
-               //todo ver que pasa?
-           }
-       });
    }
 
 
