@@ -3,7 +3,6 @@ package com.example.bruno.ajedrezporcorrespondencia.piezas;
 import com.example.bruno.ajedrezporcorrespondencia.Coordenada;
 import com.example.bruno.ajedrezporcorrespondencia.CoordenadaAlgebraException;
 import com.example.bruno.ajedrezporcorrespondencia.Direccion;
-import com.example.bruno.ajedrezporcorrespondencia.stateJuego.PiezaSeleccionada;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -158,6 +157,8 @@ import java.util.List;
     public abstract boolean esEnroqueCorto(Coordenada coord, ArrayList<Pieza> piezas);
 
     public boolean noEstaClavada(ArrayList<Pieza> piezas, Coordenada coord, Rey rey)  {
+        Pieza rival = findByCoordenada(coord,piezas);
+        if(rival.sosCaballo() || rival.sosPeon()) return true;
         ArrayList<Pieza>  copyListPiezas = (ArrayList<Pieza>) piezas.clone();
         Coordenada cordAux = this.coordenada;
         Pieza piezaSeleccionada = this;

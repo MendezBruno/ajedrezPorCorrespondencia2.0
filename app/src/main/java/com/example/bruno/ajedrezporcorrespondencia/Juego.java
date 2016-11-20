@@ -129,11 +129,15 @@ public class Juego implements Serializable{
     }
 
     public boolean movimientoLegal(Coordenada coord) {
+
+        ArrayList<Pieza>  copyListPiezas = (ArrayList<Pieza>) piezas.clone();
+        Pieza rival = findByCoordenada(coord);
+        copyListPiezas.remove(rival);
         Rey rey = (Rey) findByTipoYcolor("Rey",piezaSeleccionada.esBlanca);
         assert rey != null;
         Coordenada actual = piezaSeleccionada.getCoordenada();
         piezaSeleccionada.setCoordenada(coord);
-        Boolean reyEnJaque = rey.estasEnJaque(piezas);
+        Boolean reyEnJaque = rey.estasEnJaque(copyListPiezas);
         piezaSeleccionada.setCoordenada(actual);
         return (piezaSeleccionada.noEstaClavada(piezas,coord,rey) && (!reyEnJaque));
     }
