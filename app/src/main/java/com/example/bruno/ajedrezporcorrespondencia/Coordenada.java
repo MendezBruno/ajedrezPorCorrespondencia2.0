@@ -80,7 +80,6 @@ public enum Coordenada {
         try {
             return (this.arriba(i)).derecha(i);
         } catch (CoordenadaAlgebraException e) {
-            e.printStackTrace();
             return null;
         }
 
@@ -90,7 +89,6 @@ public enum Coordenada {
         try {
             return (this.arriba(i)).izquierda(i);
         } catch (CoordenadaAlgebraException e) {
-            e.printStackTrace();
             return null;
         }
 

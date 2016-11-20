@@ -6,6 +6,8 @@ import com.example.bruno.ajedrezporcorrespondencia.Direccion;
 import com.example.bruno.ajedrezporcorrespondencia.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by bruno on 27/10/2016.
@@ -34,7 +36,7 @@ public class Rey extends Pieza {
                // e.printStackTrace();
             }
 
-        if (primerMovimiento) {
+        if (primerMovimiento || !this.estasEnJaque(piezasJuego)) {
             if (esBlanca) pedirEnroqueBlanco(coordenadas, piezasJuego);
             else pedirEnroqueNegro(coordenadas, piezasJuego);
         }
@@ -134,6 +136,16 @@ public class Rey extends Pieza {
     }
 
     @Override
+    public List<Direccion> dameTusDirecciones() {
+       return Arrays.asList(Direccion.values());
+    }
+
+    @Override
+    public ArrayList<Coordenada> pedirTrayectoria(Coordenada coordenada, Pieza piezaJuego, Direccion dir) {
+        return new ArrayList<>();
+    }
+
+    @Override
     public int getLayoutId() {
         if(esBlanca) return R.drawable.kw;
         return R.drawable.kb;
@@ -159,16 +171,85 @@ public class Rey extends Pieza {
     }
 
     public boolean estaEnJaqueMate ( ArrayList<Pieza> piezasJuego ) {
-//      todo pieza Protegida   listaMOvimieto.filtrarPiezasProtegidas
-        ArrayList<Coordenada> coordenadasResultado = new ArrayList<>();
+        if (!estasEnJaque( piezasJuego)) {
+            return false;
+        }
+
+        //ArrayList<Coordenada> coordenadasResultado = new ArrayList<>();
         ArrayList<Coordenada> coordenadas = this.calcularMovimientoCoordenadas(piezasJuego);
+        boolean puedoSalirMoviendoRey = false;
         for (Coordenada cord : coordenadas) {
             Pieza pieza = findByCoordenada(cord,piezasJuego);
             if (pieza != null)
-                if (pieza.piezaProtegida(piezasJuego, this)) coordenadasResultado.add(cord);
+                if (!pieza.piezaProtegida(piezasJuego, this)) {
+                    //coordenadasResultado.add(cord);
+                    puedoSalirMoviendoRey = true;
+                    break;
+                }
         }
 
-      return estasEnJaque( piezasJuego) && coordenadasResultado.isEmpty() ;
+      return !(puedoSalirMoviendoRey || puedoEliminarAmenaza(piezasJuego));
+    }
+
+    private boolean puedoEliminarAmenaza(ArrayList<Pieza> piezasJuego) {
+        ArrayList<Pieza> piezasRivales = filtrarPiezasRival(piezasJuego);
+        ArrayList<Pieza> misPiezas = filtrarMisPiezas(piezasJuego);
+        int cantidadAmenazas = 0;
+        Pieza amenaza=null;
+
+        for( Pieza piezaRival :piezasRivales ){
+            if (!sigoEnJaqueSin(piezaRival,piezasRivales) ) {
+                amenaza = piezaRival;
+                cantidadAmenazas++;
+            }
+        }
+        if (cantidadAmenazas >= 2) return false;
+
+        ArrayList<Coordenada> trayectoria = new ArrayList<>();
+        //todo Si amenza es caballo o peon solo ver si se puede eliminar
+        if (amenaza.sosCaballo() || amenaza.sosPeon() ) trayectoria.add(amenaza.coordenada);
+        else trayectoria = trayectoriaDelaAmenaza(amenaza);
+
+
+        for( Pieza miPieza :misPiezas )
+           if (contineAlgunaDe(miPieza.calcularMovimientoCoordenadas(piezasJuego) , trayectoria))  return true;
+
+        return false;
+    }
+
+    private boolean contineAlgunaDe(ArrayList<Coordenada> coordenadas, ArrayList<Coordenada> trayectoria) {
+
+        for (Coordenada cord: coordenadas ){
+            if (trayectoria.contains(cord)) return true;
+        }
+
+        return false;
+    }
+
+    private ArrayList<Coordenada> trayectoriaDelaAmenaza(Pieza amenaza) {
+        ArrayList<Coordenada> trayectoria = new ArrayList<>();
+
+        Pieza pieza = this;
+        for (Direccion dir: amenaza.dameTusDirecciones()) {
+            trayectoria = pieza.pedirTrayectoria(amenaza.coordenada, amenaza, dir);
+            if (trayectoria.contains(this.coordenada)) return trayectoria;
+        }
+
+        return trayectoria;
+    }
+
+    private ArrayList<Pieza> filtrarMisPiezas(ArrayList<Pieza> piezasJuego) {
+        ArrayList<Pieza> res = new ArrayList<>();
+
+        for (Pieza pieza : piezasJuego)
+            if (pieza.esBlanca == this.esBlanca) res.add(pieza);
+        return res;
+    }
+
+    private boolean sigoEnJaqueSin(Pieza piezaRival, ArrayList<Pieza> piezasRivales) {
+        ArrayList<Pieza>  copyListPiezas = (ArrayList<Pieza>) piezasRivales.clone();
+        copyListPiezas.remove(piezaRival);
+        return this.estasEnJaque(copyListPiezas);
     }
 
     public boolean estaAhogado ( ArrayList<Pieza> piezasJuego) {

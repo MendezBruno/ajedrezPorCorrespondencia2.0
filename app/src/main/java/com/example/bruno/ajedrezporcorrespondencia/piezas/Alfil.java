@@ -5,8 +5,8 @@ import com.example.bruno.ajedrezporcorrespondencia.Direccion;
 import com.example.bruno.ajedrezporcorrespondencia.R;
 
 import java.util.ArrayList;
-
-import static com.example.bruno.ajedrezporcorrespondencia.Direccion.DiagonalArribaDerecha;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by bruno on 27/10/2016.
@@ -49,5 +49,21 @@ public class Alfil extends Pieza {
     @Override
     public boolean esEnroqueCorto(Coordenada coord, ArrayList<Pieza> piezas) {
         return false;
+    }
+
+    @Override
+    public List<Direccion> dameTusDirecciones() {
+        return Arrays.asList(Direccion.DiagonalAbajoDerecha,
+                Direccion.DiagonalAbajoIzquierda,
+                Direccion.DiagonalArribaDerecha,
+                Direccion.DiagonalArribaIzquierda);
+    }
+
+    @Override
+    public ArrayList<Coordenada> pedirTrayectoria(Coordenada coordenada, Pieza piezasJuego, Direccion dir) {
+        ArrayList<Coordenada> trayectoria = new ArrayList<>();
+        this.pedirProximaCasilla(trayectoria,coordenada,piezasJuego,dir);
+        trayectoria.add(coordenada);
+        return trayectoria;
     }
 }

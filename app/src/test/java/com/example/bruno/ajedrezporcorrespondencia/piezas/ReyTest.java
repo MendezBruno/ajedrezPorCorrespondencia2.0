@@ -58,6 +58,17 @@ public class ReyTest {
         assertTrue(!((rey.calcularMovimientoCoordenadas(piezas)).contains(Coordenada.F1)));
     }
 
+    @Test
+    public void reyPuedeCapturarPiezaQueLeHaceJaqueTest(){
+        ArrayList<Pieza> piezas = new ArrayList<>();
+        Rey rey = new Rey(Coordenada.A1,true);
+        Dama dama = new Dama(Coordenada.B2, false);
+        piezas.add(rey);
+        piezas.add(dama);
+        rey.primerMovimiento = false;
+        assertEquals(rey.estaEnJaqueMate(piezas),false);
+    }
+
 //    @Test
 //    public void testDisponibleEnroque() {
 //        ArrayList<Pieza> piezas = new ArrayList<>();
