@@ -141,7 +141,7 @@ public class Rey extends Pieza {
     }
 
     @Override
-    public ArrayList<Coordenada> pedirTrayectoria(Coordenada coordenada, Pieza piezaJuego, Direccion dir) {
+    public ArrayList<Coordenada> pedirTrayectoria(Coordenada coordenada,ArrayList<Pieza> piezasJuego , Direccion dir) {
         return new ArrayList<>();
     }
 
@@ -208,7 +208,7 @@ public class Rey extends Pieza {
         ArrayList<Coordenada> trayectoria = new ArrayList<>();
         //todo Si amenza es caballo o peon solo ver si se puede eliminar
         if (amenaza.sosCaballo() || amenaza.sosPeon() ) trayectoria.add(amenaza.coordenada);
-        else trayectoria = trayectoriaDelaAmenaza(amenaza);
+        else trayectoria = trayectoriaDelaAmenaza(amenaza, piezasJuego);
 
 
         for( Pieza miPieza :misPiezas )
@@ -226,12 +226,12 @@ public class Rey extends Pieza {
         return false;
     }
 
-    private ArrayList<Coordenada> trayectoriaDelaAmenaza(Pieza amenaza) {
+    private ArrayList<Coordenada> trayectoriaDelaAmenaza(Pieza amenaza, ArrayList<Pieza> piezasJuego ) {
         ArrayList<Coordenada> trayectoria = new ArrayList<>();
 
-        Pieza pieza = this;
+
         for (Direccion dir: amenaza.dameTusDirecciones()) {
-            trayectoria = pieza.pedirTrayectoria(amenaza.coordenada, amenaza, dir);
+            trayectoria = amenaza.pedirTrayectoria(amenaza.coordenada,piezasJuego, dir);
             if (trayectoria.contains(this.coordenada)) return trayectoria;
         }
 

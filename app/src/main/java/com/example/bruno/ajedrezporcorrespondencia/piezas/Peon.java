@@ -101,7 +101,7 @@ public class Peon  extends Pieza{
 
 
     @Override
-    public ArrayList<Coordenada> pedirTrayectoria(Coordenada coordenada, Pieza piezasJuego, Direccion dir) {
+    public ArrayList<Coordenada> pedirTrayectoria(Coordenada coordenada,ArrayList<Pieza> piezasJuego , Direccion dir) {
         return new ArrayList<>();
     }
 

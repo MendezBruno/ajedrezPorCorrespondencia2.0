@@ -182,7 +182,7 @@ import java.util.List;
 
     public abstract List<Direccion> dameTusDirecciones ();
 
-    public abstract ArrayList<Coordenada> pedirTrayectoria(Coordenada coordenada, Pieza piezaJuego, Direccion dir); //todo DO
+    public abstract ArrayList<Coordenada> pedirTrayectoria(Coordenada coordenada, ArrayList<Pieza> piezasJuego , Direccion dir); //todo DO
 
     public boolean sosCaballo(){
        return this.getClass().getSimpleName() == "Caballo";

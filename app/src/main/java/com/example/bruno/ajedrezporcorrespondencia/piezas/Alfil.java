@@ -60,7 +60,7 @@ public class Alfil extends Pieza {
     }
 
     @Override
-    public ArrayList<Coordenada> pedirTrayectoria(Coordenada coordenada, Pieza piezasJuego, Direccion dir) {
+    public ArrayList<Coordenada> pedirTrayectoria(Coordenada coordenada, ArrayList<Pieza> piezasJuego , Direccion dir) {
         ArrayList<Coordenada> trayectoria = new ArrayList<>();
         this.pedirProximaCasilla(trayectoria,coordenada,piezasJuego,dir);
         trayectoria.add(coordenada);
