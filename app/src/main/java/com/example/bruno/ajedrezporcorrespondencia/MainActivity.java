@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.bruno.ajedrezporcorrespondencia.servicios.FCM_Helper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -23,6 +25,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -32,6 +37,8 @@ import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import io.fabric.sdk.android.Fabric;
+
+import static com.example.bruno.ajedrezporcorrespondencia.R.id.fab;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -164,6 +171,21 @@ public class MainActivity extends AppCompatActivity {
         if (session != null) {
             loguearUsuarioFirebase(session);
         }
+
+        FloatingActionButton fabButton = (FloatingActionButton) findViewById(fab);
+        fabButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Esto es a modo de ejemplo
+                FirebaseMessaging fm = FirebaseMessaging.getInstance();
+                String id = FirebaseInstanceId.getInstance().getToken();
+
+                //El verdadero problema sera tener el tokenid de mi contrincante
+                FCM_Helper.getInstance().sendMessage(id, "Titulo", "Ya es tu turno", "icono", "");
+            }
+        });
+
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
     }
 
     private void loguearUsuarioFirebase(TwitterSession session) {
