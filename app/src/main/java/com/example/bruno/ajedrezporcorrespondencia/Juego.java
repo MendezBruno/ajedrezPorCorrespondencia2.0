@@ -155,20 +155,19 @@ public class Juego implements Serializable {
     }
 
     public boolean ganoBlanco() {
-//        Rey reyNegro = (Rey) findByTipoYcolor("Rey", false);
-//        assert reyNegro != null;
-//        return reyNegro.estaEnJaqueMate(piezas);
-        if (finDelJuego && !esMiTurno()) return soyElBlanco();
-        else return !soyElBlanco();
+        Rey reyNegro = (Rey) findByTipoYcolor("Rey", false);
+        assert reyNegro != null;
+        return reyNegro.estaEnJaqueMate(piezas);
+//        if (finDelJuego && !esMiTurno()) return soyElBlanco();
+//        else return !soyElBlanco();
     }
 
     public boolean ganoNegro() {
-//        Rey reyBlanco = (Rey) findByTipoYcolor("Rey", true);
-//        assert reyBlanco != null;
-//        return reyBlanco.estaEnJaqueMate(piezas);
-//        if (finDelJuego && !esMiTurno())  return !soyElBlanco();
-//        else return  soyElBlanco();
-        if (finDelJuego && !esMiTurno()) return !soyElBlanco();
-        else return soyElBlanco();
+        Rey reyBlanco = (Rey) findByTipoYcolor("Rey", true);
+        assert reyBlanco != null;
+        return reyBlanco.estaEnJaqueMate(piezas);
+
+//        if (finDelJuego && !esMiTurno()) return !soyElBlanco();
+//        else return soyElBlanco();
     }
 }
