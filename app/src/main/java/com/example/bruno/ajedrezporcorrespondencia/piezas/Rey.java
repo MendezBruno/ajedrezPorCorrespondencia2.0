@@ -213,7 +213,10 @@ public class Rey extends Pieza {
         else trayectoria = trayectoriaDelaAmenaza(amenaza, piezasJuego);
 
 
-        for( Pieza miPieza :misPiezas )
+        // Me fijo si mis piezas se pueden interponer en la trayectoria de la amenaza
+        ArrayList<Pieza>  copyListPiezas = (ArrayList<Pieza>) misPiezas.clone();
+        copyListPiezas.remove(this);
+        for( Pieza miPieza :copyListPiezas )
            if (contineAlgunaDe(miPieza.calcularMovimientoCoordenadas(piezasJuego) , trayectoria))  return true;
 
         return false;

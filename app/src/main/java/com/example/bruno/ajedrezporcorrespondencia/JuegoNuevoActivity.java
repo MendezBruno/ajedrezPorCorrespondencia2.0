@@ -249,6 +249,7 @@ public class JuegoNuevoActivity extends AppCompatActivity {
 
         Juego juego = new Juego();
         juego.piezas = crearTablero();
+        juego.finDelJuego = false;
 
         RadioButton radioButtonBlancas = (RadioButton) findViewById(R.id.radioButtonBlancas);
         //Si es true empieza el jugador nativo con blancas,

@@ -34,10 +34,6 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
     private long sessionID;
     private TwitterWrapper tw;
     private String usuarioTweetContrincante;
-    private Jugador jugadorBlanco;
-    private Jugador jugadorNegro;
-    DatabaseReference jugadorBlancoRef;
-    DatabaseReference jugadorNegroRef;
     private boolean flagEnEspera = true;
 
     private Coordenada coordenadaA = null;
@@ -65,33 +61,6 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
         gridview.setAdapter(ia);
         gridview.setOnItemClickListener(this);
 
-
-        jugadorBlancoRef = database.getReference("Usuarios").child(juego.jugadorBlanco);
-        jugadorNegroRef = database.getReference("Usuarios").child(juego.jugadorNegro);
-
-        jugadorBlancoRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                jugadorBlanco = dataSnapshot.getValue(Jugador.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                //todo ver que pasa?
-            }
-        });
-
-        jugadorNegroRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                jugadorNegro = dataSnapshot.getValue(Jugador.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                //todo ver que pasa?
-            }
-        });
 
 
         database = FirebaseDatabase.getInstance();
@@ -129,12 +98,14 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
         });
 
 
-
     }
 
     private JuegoState getEstadoJuego() {
          JuegoState estado = (juego.turno.equals(SessionUsuario.sessionUsuario.jugador.id)) ?  new EligiendoPieza() :  new EnEspera();
-         if(juego.finDelJuego()) estado = new JuegoTerminado();
+         if(juego.finDelJuego) {
+             estado = new JuegoTerminado();
+             informarResultadoPartida();
+         }
 
         return estado;
     }
@@ -146,6 +117,7 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
         juego.jugada(pieza, position, jugadorId);
         ia.notifyDataSetChanged();
 
+        if(juego.finDelJuego)  informarResultadoPartida();
 
         if(juego.juegoState.getClass() == PiezaSeleccionada.class) {
 
@@ -191,47 +163,19 @@ public class TableroActivity extends AppCompatActivity implements AdapterView.On
         */
         }
 
-        if(juego.juegoState.getClass() == JuegoTerminado.class) {
-             if (juego.ganoBlanco()){
-                 Toast mens = Toast.makeText(this,"Gano EL Blanco", Toast.LENGTH_LONG);
-                 mens.show();
-                 actualizarDatosUsuarios(true,false);
-             }else{
-                 if(juego.ganoNegro()){
-                     (Toast.makeText(this,"Gano EL Negro", Toast.LENGTH_LONG)).show();
-                     actualizarDatosUsuarios(false,true);
-                 }else{
-                     (Toast.makeText(this,"Empato", Toast.LENGTH_LONG)).show();
-                     actualizarDatosUsuarios(false,false);
-                 }
-             }
-
-        }
 
 
     }
 
-   public void actualizarDatosUsuarios(final Boolean ganoBlanco, final Boolean ganoNegro){
 
 
-       if(ganoNegro) {
-           jugadorBlanco.partidasPerdidas++;
-           jugadorNegro.partidasGanadas++;
-       }
+   public void informarResultadoPartida(){
 
-       if(ganoBlanco) {
-           jugadorNegro.partidasPerdidas++;
-           jugadorBlanco.partidasGanadas++;
-
-       }
-       if(!ganoNegro && !ganoBlanco)
-       {
-           jugadorNegro.partidasEmpatadas ++;
-           jugadorBlanco.partidasEmpatadas ++;
-       }
-       jugadorBlancoRef.setValue(jugadorBlanco);
-       jugadorNegroRef.setValue(jugadorNegro);
-
+       if (juego.ganoBlanco())
+           (Toast.makeText(this,"Gano EL Blanco", Toast.LENGTH_LONG)).show();
+       else
+           if(juego.ganoNegro()) (Toast.makeText(this,"Gano EL Negro", Toast.LENGTH_LONG)).show();
+           else  (Toast.makeText(this,"Empato", Toast.LENGTH_LONG)).show();
    }
 
 
